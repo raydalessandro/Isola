@@ -1,64 +1,69 @@
 # assets/ — riferimenti visivi
 
-Materiale visivo del mondo. **Indicativo, non definitivo.** Generato con Grok
-Imagine come punto di partenza per fissare identità visiva e coerenza
-geografica.
+Materiale visivo del mondo. Immagini generate con Grok Imagine, **senza
+testo dentro**. I nomi dei luoghi saranno un layer SVG nella web app.
 
-Qualsiasi immagine qui può servire sia come **riferimento di stile** (per
-generazioni future) sia come **asset diretto** (se passa il vaglio di
-coerenza canonica).
-
-## Contenuto attuale
+## Stato attuale (L0–L1 coperti)
 
 ### `map/`
-- `atlante-isola.png` — **master map**, atlante completo vista dall'alto.
-  Mostra i 5 poli (centro + 4 quartieri cardinali), venti, zone non ancora
-  nominate (porte socchiuse), Guado di Pietre Piatte, Piccole Isole
-  all'orizzonte. **WIP**: alcuni testi sono misti italiano/inglese da
-  ripulire.
+- `paper-base.jpg` — L0a: pergamena + oceano + isola silhouette vuota.
+  Sfondo per assemblare i tile dei quartieri.
+- `island-master.jpg` — L0b: vista complessiva dell'isola con tutti i
+  landmark principali (montagne gemelle, orti, villaggio centrale con
+  albero, forno, pontile, cottage, barche). Nessun testo. Stile
+  illustrato hand-drawn con inchiostro + acquerello caldo.
 
-### `quartieri/`
-Vignette 3/4 vista per ogni polo. Nomi canonici dei luoghi sono corretti;
-alcuni label minori hanno refusi/ridondanze da ripulire.
+### `quartieri/` (tile L1)
+- `centro.jpg` — villaggio centrale: Albero Vecchio, Pozzo, Panca di
+  Pietra con riccio+tasso, volpe-Fiamma, cormorano-Amo, picchio-Nodo in
+  bottega, airone-Stria, scoiattolo, carriola dei Camminanti. **Stile
+  illustrato** (acquerello + inchiostro marrone), coerente con
+  `island-master.jpg`.
+- `forno.jpg` — forno di Fiamma al tramonto, volpe che inforna, camino
+  fumante, catasta legna, Casa del Mattino in lontananza. **Stile
+  cinematic/3D**, diverso da centro+master.
+- `pontile.jpg` — pontile di Bartolo, tartaruga sulla spiaggia,
+  cormorano sulla casetta, capanna a palafitta, barche, conchiglie.
+  **Stile cinematic/3D**.
+- `orti.jpg` — Orti del Cerchio concentrici, due casa-tana tipo burrow,
+  alberi in fiore, contadini al centro. **Stile cinematic/3D**.
+- `montagne.jpg` — Montagne Gemelle al tramonto, airone-Stria sulla
+  scogliera, pecore sui Pascoli Alti, grotta, sentiero. **Stile
+  cinematic/3D**.
 
-- `centro-villaggio.png` — piazza con Albero Vecchio, Pozzo, Panca di Pietra,
-  bottega di Nodo, casetta tonda di Mèmolo, Scuola di Stria. **Nota**: Zolla
-  compare doppio nel disegno (due label diversi sullo stesso personaggio) —
-  da correggere in rigenerazione.
-- `fuoco.png` — quartiere del Forno (est). Forno di Fiamma col camino
-  fumante, Via dell'Alba, Via del Pontile, Via che Sale, Casa del Mattino.
-  Scena notturna.
-- `acqua.png` — quartiere del Pontile (sud). Pontile di Bartolo, capanna di
-  Bartolo, La Bocca, Spiaggia delle Conchiglie, Casa di Amo, Case Basse dei
-  Pescatori.
-- `terra.png` — quartiere degli Orti (ovest). Orti del Cerchio a fasce
-  concentriche, Foresta Intrecciata, Casa-tana di Rovo, Casa-tana di Zolla.
-- `aria.png` — quartiere dei Pascoli (nord). Montagne Gemelle, Burrone,
-  Grotta di Grunto, Pascoli Alti. Via del Pontile e Via che Sale.
+### `drafts/`
+Materiale di lavoro, non asset definitivi.
 
-## Vincoli canonici rispettati dalle immagini
+- `atlante-isola-landscape.png` — primo master map in landscape con testo
+  inglese/italiano misto. Superseduto da `map/island-master.jpg`, ma
+  utile come reference di contenuto (ha più dettagli esplicitati).
+- `centro-cartoon-alt.jpg` — versione alternativa del villaggio in stile
+  cartoon/Disney. Scartata: non coerente con master illustrato né con
+  cinematic dei quartieri.
+- `master-v2-attempts/tentativo-01..03.jpg` — 3 tentativi di master
+  portrait con testo (fallito). Utili come reference di style.
 
-- Geografia mandala silenziosa: 5 poli presenti ma **mai nominati con label
-  elementali** (Fuoco/Acqua/Terra/Aria sono nomi interni — nei vignette
-  compaiono per landmark: "Forno", "Pontile", "Orti", "Pascoli").
-- Nomi canonici: Albero Vecchio, Pozzo, Panca di Pietra, Fiume che Gira,
-  Bocca, Grotta di Grunto, Montagne Gemelle, Orti del Cerchio, Foresta
-  Intrecciata, Roccia Alta tutti presenti.
-- Venti modellati con caratteristiche (Taglio alba/nitido, Intreccio
-  giorno/scambio, Mulinello sera/imprevedibile).
-- Zone non ancora nominate / Piccole Isole all'orizzonte / Guado di Pietre
-  Piatte: mantenute come porte socchiuse per espansione futura.
+## Nota aperta — coerenza stilistica
+
+Le immagini attuali sono in **tre stili diversi**:
+- **Stile A (illustrato hand-drawn)**: `island-master.jpg`,
+  `quartieri/centro.jpg`. Acquerello + inchiostro marrone, children's
+  book tradizione europea.
+- **Stile B (cartoon)**: `drafts/centro-cartoon-alt.jpg`. Non usato.
+- **Stile C (cinematic/3D)**: `quartieri/forno|pontile|orti|montagne.jpg`.
+  Quasi fotorealistici, cinematografici, molto evocativi ma di
+  "linguaggio" diverso da master.
+
+Stile A e C sono entrambi belli ma non parlano la stessa lingua. Questa è
+una decisione aperta: tenere tutto in A, tutto in C, o scegliere un ibrido.
+Vedi discussione in conversazione.
 
 ## Architettura tile (adottata)
 
-Dopo i primi tentativi di master-map monolitica si è visto che:
-- i diffusion model non scrivono italiano in modo affidabile (i nomi
-  risultano sempre leggermente sbagliati e diversi tra una run e l'altra)
-- una mappa unica non è rigenerabile per parti senza perdere la coerenza
-
-**Decisione**: le immagini sono **paesaggio dipinto senza testo**. I nomi
-dei luoghi, i label, gli hotspot interattivi sono **un layer SVG sopra
+Decisione: le immagini sono **paesaggio dipinto senza testo**. I nomi dei
+luoghi, i label, gli hotspot interattivi sono **un layer SVG sopra
 l'immagine** nella web app, con font Caveat (già caricato in `index.html`).
+
 Vantaggi: nomi sempre corretti, multilingua gratis, immagini rigenerabili
 senza rompere nulla, interattività nativa.
 
@@ -67,28 +72,19 @@ senza rompere nulla, interattività nativa.
 ```
 assets/
 ├── map/
-│   ├── paper-base.png              ← L0a: pergamena + oceano, isola vuota
-│   └── island-master.png           ← L0b: vista complessiva isola (fallback)
-├── quartieri/                      ← L1: 5 tile 3/4 perspective
-│   ├── centro.png
-│   ├── forno.png
-│   ├── pontile.png
-│   ├── orti.png
-│   └── montagne.png
-├── luoghi/                         ← L2: luoghi singoli (~26 da generare)
-├── personaggi/                     ← L3: ritratti (23)
-├── oggetti/                        ← L3-alt: icone oggetti-simbolo (13)
+│   ├── paper-base.jpg              ← L0a: pergamena + oceano, isola vuota  ✓
+│   └── island-master.jpg           ← L0b: vista complessiva isola          ✓
+├── quartieri/                      ← L1: 5 tile (stile da armonizzare)     ✓
+│   ├── centro.jpg                                                          ✓
+│   ├── forno.jpg                                                           ✓
+│   ├── pontile.jpg                                                         ✓
+│   ├── orti.jpg                                                            ✓
+│   └── montagne.jpg                                                        ✓
+├── luoghi/                         ← L2: luoghi singoli (~26 da generare)  ○
+├── personaggi/                     ← L3: ritratti (23)                     ○
+├── oggetti/                        ← L3-alt: icone oggetti-simbolo (13)    ○
 └── drafts/                         ← tentativi, non definitivi
-    └── master-v2-attempts/         ← 3 tentativi master portrait con Grok
 ```
-
-### Drafts correnti
-
-`drafts/master-v2-attempts/tentativo-01..03.jpg` — 3 generazioni Grok
-Imagine in portrait: stile e struttura promettenti, ma testo nelle
-immagini sempre garbled ("Canadu" invece di "Guado", "Cava del Mattino"
-invece di "Casa", ecc.). **Utili come reference di stile**, non come
-asset finali.
 
 ## Come rigenerare
 
