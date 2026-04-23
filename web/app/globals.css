@@ -71,10 +71,13 @@ canvas {
 }
 
 /* Location-name overlay mostrato durante il dwell. Nessun background,
-   nessuna struttura: solo il testo in Caveat con leggera ombra crema. */
+   nessuna struttura: solo il testo in Caveat con leggera ombra crema.
+   Dimensione alzata a 40px per leggibilità mobile; il componente
+   LocationName offsetta la posizione 50px sopra il pallino così il
+   dito non copre il nome. */
 .location-name {
   font-family: var(--font-caveat), "Caveat", cursive;
-  font-size: 28px;
+  font-size: 40px;
   font-weight: 600;
   color: var(--ink);
   text-shadow: 0 1px 2px rgba(245, 234, 213, 0.9),
@@ -83,8 +86,8 @@ canvas {
   white-space: nowrap;
   opacity: 0;
   transform: translateY(4px);
-  transition: opacity 300ms var(--ease-quiet),
-              transform 300ms var(--ease-quiet);
+  transition: opacity 500ms var(--ease-quiet),
+              transform 500ms var(--ease-quiet);
   pointer-events: none;
   user-select: none;
 }
@@ -95,3 +98,25 @@ canvas {
   transition: opacity 200ms var(--ease-quiet),
               transform 200ms var(--ease-quiet);
 }
+
+/* Pinch-out hint: due angoli curvi in Caveat che si allargano ai
+   bordi alto-sx/alto-dx per 2s dopo il primo descent della sessione. */
+.pinch-hint {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 56px);
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--cream);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 400ms var(--ease-quiet),
+              transform 900ms var(--ease-soft);
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+.pinch-hint.left  { left: 18px;  transform: translateX(-6px); }
+.pinch-hint.right { right: 18px; transform: translateX(6px);  }
+.pinch-hint.show.left  { opacity: 0.78; transform: translateX(-18px); }
+.pinch-hint.show.right { opacity: 0.78; transform: translateX(18px);  }

@@ -5,16 +5,21 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { MapControls, Sky } from "@react-three/drei";
 import { MapControls as MapControlsImpl } from "three-stdlib";
 import * as THREE from "three";
-import Island from "./Island";
 import Ocean from "./Ocean";
 import Hotspot, { hotspotYOffset } from "./Hotspot";
 import LocationName from "./LocationName";
 import FingerPresence from "./FingerPresence";
 import Breathing from "./Breathing";
+import TerrainHeightmap from "./TerrainHeightmap";
+import FiumeCheGira from "./FiumeCheGira";
+import QuartiereForno from "./QuartiereForno";
+import PinchOutHint from "./PinchOutHint";
 import type {
+  FeaturesDoc,
   IslandGeographyData,
   Location,
   Quartiere,
+  TerrainDoc,
 } from "@/lib/geography";
 import { PALETTE, metersToUnits } from "@/lib/geography";
 import { useWorldStore } from "@/lib/store";
@@ -30,9 +35,16 @@ import {
 type Props = {
   geography: IslandGeographyData;
   locations: Location[];
+  features: FeaturesDoc;
+  terrain: TerrainDoc;
 };
 
-export default function IslandScene({ geography, locations }: Props) {
+export default function IslandScene({
+  geography,
+  locations,
+  features,
+  terrain,
+}: Props) {
   const widthUnits =
     geography.island.bounds.width_m /
     geography.island.bounds.unit_scale_three;
@@ -72,12 +84,16 @@ export default function IslandScene({ geography, locations }: Props) {
         <color attach="background" args={[PALETTE.sea]} />
         <fog attach="fog" args={[PALETTE.sea, 140, 420]} />
 
-        {/* Lighting — warm sun + soft sky ambient */}
-        <ambientLight intensity={0.55} color={PALETTE.cream} />
-        <hemisphereLight args={[PALETTE.cream, PALETTE.sea, 0.35]} />
+        {/* Lighting — warm sun + soft sky ambient.
+            Il sole è spostato verso sud-est/basso così la luce radente
+            colpisce le facce sud delle Montagne Gemelle (quartiere nord,
+            z negativo), enfatizzandone il volume. Ambient più contenuto
+            per permettere alle ombre di disegnare i pendii. */}
+        <ambientLight intensity={0.42} color={PALETTE.cream} />
+        <hemisphereLight args={[PALETTE.cream, PALETTE.sea, 0.3]} />
         <directionalLight
-          position={[40, 80, 30]}
-          intensity={1.25}
+          position={[50, 70, 60]}
+          intensity={1.5}
           color={PALETTE.sun}
           castShadow
           shadow-mapSize-width={1024}
@@ -87,7 +103,7 @@ export default function IslandScene({ geography, locations }: Props) {
           shadow-camera-top={60}
           shadow-camera-bottom={-60}
           shadow-camera-near={1}
-          shadow-camera-far={220}
+          shadow-camera-far={260}
         />
 
         <Suspense fallback={null}>
@@ -98,10 +114,19 @@ export default function IslandScene({ geography, locations }: Props) {
             mieCoefficient={0.02}
             mieDirectionalG={0.85}
           />
-          <Island widthUnits={widthUnits} depthUnits={depthUnits} />
+          <TerrainHeightmap
+            widthUnits={widthUnits}
+            depthUnits={depthUnits}
+            geography={geography}
+            terrain={terrain}
+          />
           <Ocean widthUnits={widthUnits} depthUnits={depthUnits} />
 
-          <Breathing quartieri={geography.quartieri} />
+          <FiumeCheGira features={features} />
+
+          <QuartiereFornoGate locations={locations} />
+
+          <Breathing quartieri={geography.quartieri} locations={locations} />
 
           <HotspotLayer
             quartieri={geography.quartieri}
@@ -115,6 +140,8 @@ export default function IslandScene({ geography, locations }: Props) {
         <SceneCameraController />
         <PinchOutListener />
       </Canvas>
+
+      <PinchOutHint />
 
       {/* Title — paper-map style, discreet */}
       <div
@@ -255,6 +282,19 @@ function findQuartiereById(id: string | null): Quartiere | null {
 }
 
 // ---------------------------------------------------------------------------
+// QuartiereFornoGate: monta QuartiereForno solo se viewLevel === L1 sul
+// quartiere "forno". Smonta appena risaliamo o passiamo ad altro quartiere.
+// ---------------------------------------------------------------------------
+
+function QuartiereFornoGate({ locations }: { locations: Location[] }) {
+  const viewLevel = useWorldStore((s) => s.viewLevel);
+  const currentQuartiere = useWorldStore((s) => s.currentQuartiere);
+  if (viewLevel !== "quartiere") return null;
+  if (currentQuartiere !== "forno") return null;
+  return <QuartiereForno locations={locations} />;
+}
+
+// ---------------------------------------------------------------------------
 // HotspotLayer: decide cosa renderizzare in base a viewLevel/currentQuartiere.
 // Include nome-overlay durante dwell e registra i quartieri per camera lookup.
 // ---------------------------------------------------------------------------
@@ -297,7 +337,9 @@ function HotspotLayer({
     setDwellTarget(null);
   };
 
-  // L0: 5 quartieri, hotspot grandi.
+  // L0: 5 quartieri come ring-luminosi a filo del terreno. Il quartiere
+  // ha già identità visiva dal colore del terreno: il ring è un ancora
+  // discreta per il tap-and-hold, pulsante, non invasiva.
   if (viewLevel === "island") {
     return (
       <>
@@ -307,15 +349,16 @@ function HotspotLayer({
             id={q.id}
             position={[
               metersToUnits(q.center.x),
-              hotspotYOffset(q.elevation_m, 2.0),
+              hotspotYOffset(q.elevation_m, 0.25),
               metersToUnits(q.center.z),
             ]}
             color={q.color}
-            headRadius={0.75}
-            stemHeight={1.8}
-            hitRadius={2.2}
-            emissive={0.3}
-            floatAmp={0.18}
+            variant="ring"
+            headRadius={1.1}
+            stemHeight={0.25}
+            hitRadius={2.4}
+            emissive={0}
+            floatAmp={0}
             floatPhase={q.center.x * 0.01 + i}
             onDwell={handleQuartiereDwell}
           />

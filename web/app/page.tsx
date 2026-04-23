@@ -1,7 +1,9 @@
 import IslandScene from "@/components/IslandScene";
 import {
+  loadFeatures,
   loadIslandGeography,
   loadLocations,
+  loadTerrain,
   loadWorldIndex,
 } from "@/lib/world";
 
@@ -10,6 +12,8 @@ export const dynamic = "force-static";
 export default function Home() {
   const geography = loadIslandGeography();
   const locationsDoc = loadLocations();
+  const featuresDoc = loadFeatures();
+  const terrainDoc = loadTerrain();
   const world = loadWorldIndex();
 
   // world/_index.json is loaded to prove the pipeline works and to have
@@ -30,7 +34,12 @@ export default function Home() {
 
   return (
     <main data-char-count={charCount}>
-      <IslandScene geography={geography} locations={locations} />
+      <IslandScene
+        geography={geography}
+        locations={locations}
+        features={featuresDoc}
+        terrain={terrainDoc}
+      />
     </main>
   );
 }

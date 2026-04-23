@@ -39,6 +39,14 @@ type Props = {
   floatAmp?: number;
   /** Offset fase del float (per desync tra hotspot). */
   floatPhase?: number;
+  /**
+   * Variante visiva:
+   *   "pin" — stelo + testa icosaedrica (uso classico per le location L1).
+   *   "ring" — anello piatto pulsante a livello del terreno (uso per i
+   *            quartieri a L0: il colore del terreno dà già identità, il
+   *            ring è solo un'indicazione delicata del punto-di-presa).
+   */
+  variant?: "pin" | "ring";
   /** Chiamato quando il dwell è acquisito (≥500ms fermo). */
   onDwell: (id: string) => void;
   /** Chiamato al rilascio del puntatore dopo un dwell acquisito. */
@@ -58,10 +66,13 @@ export default function Hotspot({
   emissive = 0.25,
   floatAmp = 0.15,
   floatPhase = 0,
+  variant = "pin",
   onDwell,
   onDwellEnd,
 }: Props) {
   const groupRef = useRef<THREE.Group>(null!);
+  const ringMatRef = useRef<THREE.MeshBasicMaterial>(null);
+  const ringInnerRef = useRef<THREE.MeshBasicMaterial>(null);
   const [hover, setHover] = useState(false);
   const [dwellActive, setDwellActive] = useState(false);
 
@@ -85,10 +96,23 @@ export default function Hotspot({
 
   useFrame(({ clock }) => {
     if (!groupRef.current) return;
-    if (floatAmp <= 0) return;
     const t = clock.getElapsedTime();
-    groupRef.current.position.y =
-      position[1] + Math.sin(t * 1.2 + floatPhase) * floatAmp;
+
+    if (variant === "pin" && floatAmp > 0) {
+      groupRef.current.position.y =
+        position[1] + Math.sin(t * 1.2 + floatPhase) * floatAmp;
+    }
+
+    if (variant === "ring") {
+      // Pulse gentle: pulsazione d'opacità dell'alone + scala morbida
+      // del ring esterno. Pulse period ≈ 2.4s, mai sopra opacità 0.6.
+      const pulse = 0.5 + Math.sin(t * 1.8 + floatPhase) * 0.5; // 0..1
+      const outerOpacity = (dwellActive ? 0.85 : hover ? 0.7 : 0.45) * (0.55 + 0.45 * pulse);
+      const innerOpacity = (dwellActive ? 0.55 : hover ? 0.4 : 0.22) * (0.6 + 0.4 * pulse);
+      if (ringMatRef.current) ringMatRef.current.opacity = outerOpacity;
+      if (ringInnerRef.current) ringInnerRef.current.opacity = innerOpacity;
+      // Ring rimane a filo del terreno: non floatiamo y.
+    }
   });
 
   const cancelDwell = (runEnd: boolean) => {
@@ -170,6 +194,9 @@ export default function Hotspot({
   const visualScale = hover || dwellActive ? 1.25 : 1.0;
   const headR = headRadius * visualScale;
 
+  const outerRadius = headRadius * 1.9;
+  const innerRadius = headRadius * 0.55;
+
   return (
     <group
       ref={groupRef}
@@ -190,22 +217,68 @@ export default function Hotspot({
       onPointerLeave={handlePointerLeave}
       onPointerCancel={handlePointerLeave}
     >
-      {/* stelo */}
-      <mesh position={[0, -stemHeight / 2, 0]} castShadow>
-        <cylinderGeometry args={[0.12, 0.18, stemHeight, 8]} />
-        <meshStandardMaterial color="#2a2319" roughness={0.7} flatShading />
-      </mesh>
-      {/* testa */}
-      <mesh castShadow>
-        <icosahedronGeometry args={[headR, 0]} />
-        <meshStandardMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={dwellActive ? 0.9 : hover ? 0.6 : emissive}
-          roughness={0.45}
-          flatShading
-        />
-      </mesh>
+      {variant === "pin" ? (
+        <>
+          {/* stelo */}
+          <mesh position={[0, -stemHeight / 2, 0]} castShadow>
+            <cylinderGeometry args={[0.12, 0.18, stemHeight, 8]} />
+            <meshStandardMaterial color="#2a2319" roughness={0.7} flatShading />
+          </mesh>
+          {/* testa */}
+          <mesh castShadow>
+            <icosahedronGeometry args={[headR, 0]} />
+            <meshStandardMaterial
+              color={color}
+              emissive={color}
+              emissiveIntensity={dwellActive ? 0.9 : hover ? 0.6 : emissive}
+              roughness={0.45}
+              flatShading
+            />
+          </mesh>
+        </>
+      ) : (
+        <>
+          {/* Ring piatto orizzontale al livello del terreno.
+              renderOrder alto + depthTest off così resta visibile anche
+              se il terreno ha micro-dossi. Ampiezza d'opacità gestita
+              dall'useFrame sopra (pulse gentile). */}
+          <mesh
+            rotation={[-Math.PI / 2, 0, 0]}
+            position={[0, -stemHeight + 0.02, 0]}
+            renderOrder={50}
+          >
+            <ringGeometry args={[outerRadius * 0.75, outerRadius, 32]} />
+            <meshBasicMaterial
+              ref={ringMatRef}
+              color={color}
+              transparent
+              opacity={0.45}
+              depthWrite={false}
+              depthTest={false}
+              toneMapped={false}
+              side={THREE.DoubleSide}
+            />
+          </mesh>
+          {/* Alone interno — cerchio pieno morbido, più piccolo, stesso colore. */}
+          <mesh
+            rotation={[-Math.PI / 2, 0, 0]}
+            position={[0, -stemHeight + 0.01, 0]}
+            renderOrder={49}
+          >
+            <circleGeometry args={[innerRadius, 20]} />
+            <meshBasicMaterial
+              ref={ringInnerRef}
+              color={color}
+              transparent
+              opacity={0.22}
+              depthWrite={false}
+              depthTest={false}
+              toneMapped={false}
+              side={THREE.DoubleSide}
+            />
+          </mesh>
+        </>
+      )}
       {/* collider invisibile, dimensione generosa per il touch */}
       <mesh>
         <sphereGeometry args={[hitRadius, 8, 8]} />

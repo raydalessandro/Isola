@@ -3,7 +3,7 @@
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import type { Quartiere } from "@/lib/geography";
+import type { Location, Quartiere } from "@/lib/geography";
 import { metersToUnits, PALETTE } from "@/lib/geography";
 
 /**
@@ -21,18 +21,37 @@ import { metersToUnits, PALETTE } from "@/lib/geography";
 
 type Props = {
   quartieri: Quartiere[];
+  /**
+   * Locations (opzionale) — se presente, il fumo del forno viene agganciato
+   * alle coordinate del `forno_di_fiamma` invece che al centro del
+   * quartiere, così il fumo esce dal camino reale del building low-poly.
+   */
+  locations?: Location[];
 };
 
-export default function Breathing({ quartieri }: Props) {
+export default function Breathing({ quartieri, locations }: Props) {
   const byId = useMemo(() => {
     const m = new Map<string, Quartiere>();
     for (const q of quartieri) m.set(q.id, q);
     return m;
   }, [quartieri]);
 
+  const fornoAnchor = useMemo(() => {
+    if (!locations) return null;
+    const l = locations.find((x) => x.id === "forno_di_fiamma");
+    if (!l) return null;
+    return {
+      x: metersToUnits(l.coords.x),
+      y: metersToUnits(l.coords.y),
+      z: metersToUnits(l.coords.z),
+    };
+  }, [locations]);
+
   return (
     <group>
-      {byId.get("forno") && <Smoke quartiere={byId.get("forno")!} />}
+      {byId.get("forno") && (
+        <Smoke quartiere={byId.get("forno")!} anchorOverride={fornoAnchor} />
+      )}
       {byId.get("orti") && <WindWhispers quartiere={byId.get("orti")!} />}
       {byId.get("montagne") && <SlowCloud quartiere={byId.get("montagne")!} />}
     </group>
@@ -43,11 +62,24 @@ export default function Breathing({ quartieri }: Props) {
 // Forno: fumo
 // ---------------------------------------------------------------------------
 
-function Smoke({ quartiere }: { quartiere: Quartiere }) {
+function Smoke({
+  quartiere,
+  anchorOverride,
+}: {
+  quartiere: Quartiere;
+  anchorOverride: { x: number; y: number; z: number } | null;
+}) {
   const groupRef = useRef<THREE.Group>(null!);
-  const bx = metersToUnits(quartiere.center.x);
-  const bz = metersToUnits(quartiere.center.z);
-  const by = metersToUnits(quartiere.elevation_m);
+  // Se abbiamo l'anchor del forno reale (location forno_di_fiamma), fumiamo
+  // da lì (allineato col camino del building in QuartiereForno). Il camino
+  // è a retro del building (x+0.42, z-0.42 nel frame locale @ SCALE=10),
+  // applichiamo quel piccolo offset anche qui perché il building è renderizzato
+  // in group locale non ruotato.
+  const bx = anchorOverride ? anchorOverride.x + 0.42 : metersToUnits(quartiere.center.x);
+  const bz = anchorOverride ? anchorOverride.z - 0.42 : metersToUnits(quartiere.center.z);
+  const by = anchorOverride
+    ? anchorOverride.y + 1.0 + 0.8 // building base (1.0u) + chimney height (0.8u)
+    : metersToUnits(quartiere.elevation_m);
 
   // 4 particelle a fase sfalsata.
   const particles = useMemo(
@@ -162,42 +194,59 @@ function WindWhispers({ quartiere }: { quartiere: Quartiere }) {
 }
 
 // ---------------------------------------------------------------------------
-// Montagne: nuvola sottile che passa ogni 8s
+// Montagne: nuvola sottile che passa ogni 8s.
+// Precedentemente era un plane rettangolare che a schermo leggeva come
+// "quadratino bianco". Ora è un gruppo di 3 sfere low-poly sovrapposte con
+// trasparenza morbida → legge come volume nuvoloso anche a 120u di camera.
 // ---------------------------------------------------------------------------
 
 function SlowCloud({ quartiere }: { quartiere: Quartiere }) {
-  const meshRef = useRef<THREE.Mesh>(null!);
+  const groupRef = useRef<THREE.Group>(null!);
   const bx = metersToUnits(quartiere.center.x);
   const bz = metersToUnits(quartiere.center.z);
   const by = metersToUnits(quartiere.elevation_m);
 
   useFrame(({ clock }) => {
-    if (!meshRef.current) return;
+    if (!groupRef.current) return;
     const t = clock.getElapsedTime();
     const cycle = 8.0;
     const local = (t % cycle) / cycle; // 0..1
     // Attraversa da ovest (-10) a est (+10) sopra il picco.
     const xOffset = -10 + local * 20;
-    meshRef.current.position.x = bx + xOffset;
-    const mat = meshRef.current.material as THREE.MeshBasicMaterial;
-    // Fade-in/out sui bordi, piena visibilità al centro.
-    mat.opacity = Math.sin(local * Math.PI) * 0.5;
+    groupRef.current.position.x = bx + xOffset;
+    // Fade-in/out sui bordi, piena visibilità al centro. Applicato a
+    // ciascun blob perché ogni sfera ha il suo materiale (React non
+    // permette di mutare materiali condivisi dentro useFrame sotto
+    // react-hooks/immutability).
+    const opacity = Math.sin(local * Math.PI) * 0.55;
+    groupRef.current.children.forEach((child) => {
+      const m = (child as THREE.Mesh).material as THREE.MeshBasicMaterial;
+      if (m) m.opacity = opacity;
+    });
   });
 
+  // 3 sfere sovrapposte con offset leggero, scale diverse → leggibilità
+  // da nuvola soffice. Low segment count (10×8 = ~96 tri/sfera × 3 ≈ 288).
+  const blobs: Array<[number, number, number, number]> = [
+    [0, 0, 0, 1.4],
+    [1.0, 0.3, -0.2, 1.0],
+    [-1.1, -0.1, 0.25, 0.9],
+  ];
+
   return (
-    <mesh
-      ref={meshRef}
-      position={[bx, by + 4, bz]}
-      rotation={[-Math.PI / 2, 0, 0]}
-    >
-      <planeGeometry args={[6, 2, 1, 1]} />
-      <meshBasicMaterial
-        color={PALETTE.cream}
-        transparent
-        opacity={0}
-        depthWrite={false}
-        side={THREE.DoubleSide}
-      />
-    </mesh>
+    <group ref={groupRef} position={[bx, by + 4.5, bz]}>
+      {blobs.map(([dx, dy, dz, s], i) => (
+        <mesh key={i} position={[dx, dy, dz]} scale={s}>
+          <sphereGeometry args={[0.9, 10, 8]} />
+          <meshBasicMaterial
+            color={PALETTE.cream}
+            transparent
+            opacity={0}
+            depthWrite={false}
+            toneMapped={false}
+          />
+        </mesh>
+      ))}
+    </group>
   );
 }
