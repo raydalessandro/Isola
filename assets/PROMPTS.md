@@ -21,186 +21,206 @@ Beatrice Alemagna, Beatrix Potter, European picture-book tradition.
 
 ## Regole universali (SEMPRE)
 
-1. **Solo testo in italiano** in etichette visibili. Nessuna parola inglese.
+1. **NESSUN TESTO NELL'IMMAGINE.** Zero etichette, zero scritte, zero
+   lettere visibili in qualsiasi punto della composizione. Nemmeno finti
+   simboli runici o lettere fantasy. I modelli diffusion non scrivono
+   italiano in modo affidabile — tutti i nomi dei luoghi vengono applicati
+   come layer SVG sopra l'immagine nella web app. L'immagine è solo
+   paesaggio dipinto.
 2. **Nessun umano adulto in scena** (il mondo è abitato da animali
    antropomorfi). Unici umani: Gabriel, Elias, Noah — bambini — non in
    queste immagini.
-3. **Non etichettare i quartieri come "Fuoco/Acqua/Terra/Aria"** — se li
-   mostri, chiamali per landmark ("del Forno", "del Pontile", "degli Orti",
-   "dei Pascoli", "il Villaggio").
+3. **I 4 quartieri cardinali non sono simbolici** — disegnali per landmark
+   (forno, pontile, orti, pascoli) e non come aree elementali
+   (Fuoco/Acqua/Terra/Aria). Il mandala a 5 poli deve essere *leggibile*
+   ma mai *dichiarato*.
 4. **Nessun simbolo/rune/scritta esoterica** visibile.
 5. **La notte** è ambiente, non entità: niente occhi nel buio, niente
    personificazioni.
 6. **Niente pattern geometrici evidenti** (spirali, mandala, cerchi
    perfetti) nella composizione. Tutto deve sembrare organico.
+7. **Cornice carta/pergamena** può stare se è parte dello sfondo; ma
+   anche lì nessun testo, nessuna "compass rose" scritta.
 
 ---
 
-## L0 — Master map (atlante isola)
+## Architettura tile — approccio adottato
 
-### Prompt
+**Non si genera un'unica master map monolitica.** Si generano tile separati
+(1 paper-base + 5 quartieri + N luoghi) che la web app assembla + label/hot
+spot in overlay SVG. Ogni tile va chiesto **senza testo, senza scritte**.
+La coerenza visiva tra tile viene dallo style anchor condiviso + dalla
+pratica di passare un tile già approvato come reference image nelle
+generazioni successive.
+
+---
+
+## L0a — Paper base (sfondo mappa, 1 sola)
+
+La "pergamena" su cui poggiano i tile. Solo oceano + bordo, nessun
+landmark.
 
 ```
 [Style anchor]
 
-Top-down illustrated atlas map of an island, aspect ratio 9:16 (portrait
-for smartphone), painted on aged parchment with subtle fold lines and tea
-stains. Island shape: roughly oval with irregular coast, ~8km north-south,
-~7km east-west.
+Aspect ratio 9:16 portrait. Aged parchment sheet filling the frame,
+with subtle fold lines, small tea stains, softly worn edges. Centered on
+the parchment, a large empty oval-ish shape (island silhouette, no
+content inside — just an empty land-colored base, to be filled in
+another layer). Around the oval, painted sea-teal water with soft
+painted waves, a few scattered distant rocks near the southeast corner,
+a faint stepping-stone trail leading off the north edge of the parchment.
 
-Compose five named regions (but DO NOT label them as cardinal directions or
-elements — use only landmark names):
+Three small painted wind indicators in three different corners (tiny
+curling brushstrokes suggesting breeze direction) — no arrows, no text,
+no symbols. A painted sun motif half-rising from one edge.
 
-- CENTER: "Il Villaggio" — cluster of stone and wood thatched houses around
-  a central square with a huge old tree ("L'Albero Vecchio") and a stone
-  well ("Il Pozzo"). A stone bench ("Panca di Pietra") visible.
-
-- EAST: quarter of the oven — large stone bakery with smoking chimney
-  ("Il Forno di Fiamma"), isolated house ("Casa del Mattino") on a small
-  rise facing sunrise.
-
-- SOUTH: coastal quarter — wooden pier extending over water ("Il Pontile
-  di Bartolo"), a small hut ("La capanna di Bartolo"), pebble beach
-  ("La Spiaggia delle Conchiglie"), cliff house ("Casa di Amo"), low fisher
-  cottages ("Case Basse dei Pescatori"). River mouth where fresh water
-  meets sea ("La Bocca").
-
-- WEST: quarter of the gardens — concentric rings of cultivated fields
-  ("Gli Orti del Cerchio") transitioning into an intertwined forest
-  ("La Foresta Intrecciata") with burrow-houses at margins ("Casa-tana di
-  Rovo", "Casa-tana di Zolla").
-
-- NORTH: twin mountains ("Montagne Gemelle") with a visible cave
-  ("La Grotta di Grunto"), a steep ravine ("Il Burrone"), an elevated
-  rocky outcrop overlooking everything ("Roccia Alta"), high pastures
-  ("Pascoli Alti") with sheep and goats.
-
-A ring river flows around the center, connecting all quarters ("Il Fiume
-che Gira").
-
-Paths between quarters (use Italian names):
-- "Via dell'Alba" (east)
-- "Via del Pontile" (south)
-- "Via degli Orti" (west)
-- "Via che Sale" (north)
-
-Beyond the island, in the sea: a faint stepping-stone path north
-("Il Guado di Pietre Piatte"), small distant islands on the SE horizon
-("Piccole Isole all'orizzonte"). Mark two zones on the coast as "Zone
-non ancora nominate" (unexplored).
-
-Small wind indicators at three corners (dawn-east, midday-south, sunset-SW)
-with tiny painted arrows — no labels, no symbols.
-
-Labels in italic Italian serif, brown ink. Paper border with worn edges.
-No grid lines, no modern compass rose, no coordinates.
+ABSOLUTELY NO TEXT. NO LABELS. NO LETTERS. NO COMPASS ROSE. NO NUMBERS.
+NO FANTASY SCRIPT. NO RUNES. The island silhouette is visually blank.
 ```
 
 ---
 
-## L1 — Vignette quartieri (5 totali)
+## L0b — Master island composed (opzionale)
+
+Se si vuole una master-map complessiva generata (invece di assemblata dai
+5 tile), stesso prompt di L0a MA con l'isola già dipinta dentro (non
+vuota). Usato come fallback visivo.
+
+```
+[Style anchor]
+
+Aspect ratio 9:16 portrait. Aged parchment sheet. Centered: a painted
+top-down island, roughly oval, irregular coastline. Island internal
+features (visual only, NO names, NO text):
+
+- Center: a small cluster of thatched-roof stone houses around a wide
+  square with a very large old tree and a small circular well.
+- North (top): two tall twin mountain peaks with a dark cave mouth on
+  one slope, a ravine between peaks, a green grazing plateau with a
+  few small sheep shapes, a rocky lookout edge.
+- East (right): one large stone building with a smoking chimney, a
+  small solitary house uphill catching dawn light.
+- South (bottom): a wooden pier extending into the water, a tiny shore
+  hut, a sandy pebble beach, low fisher cottages.
+- West (left): concentric rings of cultivated patchwork fields
+  transitioning into dense intertwined forest with two small earth-mound
+  burrow-houses at the margin.
+- A ring river encircling the center village, connecting to all quarters.
+- Walking paths as faint painted lines connecting village to each
+  quarter.
+
+Around the island: painted sea with gentle waves, a stepping-stone
+trail off the north, small distant islands off the southeast. Three
+small wind-stroke indicators in corners. ABSOLUTELY NO TEXT. NO LABELS.
+NO LETTERS. NO COMPASS. The map is purely visual — every name will be
+applied later as an SVG overlay.
+```
+
+---
+
+## L1 — Tile quartieri (5 totali, 3/4 perspective)
 
 Framing consistente: vista 3/4 dall'alto (non top-down, non laterale). Orario
-dipende dal vento che domina il quartiere.
+cambia per quartiere. **Zero testo nelle immagini.**
 
-### L1.centro — Il Villaggio
-
-```
-[Style anchor]
-
-3/4 perspective illustrated scene, aspect ratio 9:16 portrait.
-
-Central village square of an island inhabited by animal characters. Huge
-old tree at center ("L'Albero Vecchio") with sprawling branches. A stone
-well ("Il Pozzo") beside it. Long stone bench ("Panca di Pietra") where
-two elderly female animals sit quietly (hedgehog, badger — "le Vecchie
-del Mercato"). Small thatched workshop ("La bottega di Nodo") with a
-woodpecker carpenter visible. Round thatched cottage ("La casetta tonda
-di Mèmolo"). School building ("La Scuola di Stria") visible toward one
-edge. Paths named "Via dell'Alba", "Via del Pontile", "Via degli Orti",
-"Via che Sale" diverging from the square.
-
-In the square, midday activity: a fox baker ("Fiamma") in terracotta
-flour-dusted apron; a cormorant fisher ("Amo"); a grey squirrel ("Zolla")
-with a soft leather pouch — SHOW ZOLLA ONLY ONCE. A small group of
-"Camminanti" with a wicker wheelbarrow.
-
-Italian labels only. Labels in italic Italian serif, brown ink.
-```
-
-### L1.forno — Quartiere del Forno (est)
+### L1.centro — Il Villaggio (usato per sapere cosa disegnare, non per scriverlo)
 
 ```
 [Style anchor]
 
-3/4 perspective, aspect ratio 9:16 portrait.
+3/4 perspective illustrated scene, aspect ratio 9:16 portrait. Midday
+light.
 
-Eastern quarter at first light. Large stone and wood bakery with a big
-smoking chimney ("Il Forno di Fiamma"), warm orange light spilling from
-the windows. Stacked firewood beside it. A small solitary house on a
-rise ("Casa del Mattino") catching first sun. Paths labeled "Via dell'Alba"
-(rising east), "Via del Pontile" (leaving south), "Via che Sale"
-(leaving north). A red fox in flour-dusted apron ("Fiamma") opening the
-bakery door. Sky: dawn gradient rose-peach-pale-gold.
+Central village square of an island inhabited by gentle animal characters.
+At the heart of the square: a huge old tree with wide spreading branches
+and a stone well beside it. A long stone bench nearby where two elderly
+female animals (a hedgehog and a badger) sit quietly watching. Around
+the square: a small thatched workshop where a woodpecker carpenter is
+working; a round thatched cottage; a low school building toward one
+edge with a grey heron (the teacher) visible at the door. Four dirt
+paths leaving the square in four directions.
 
-Italian labels only.
+In the square: a red fox in flour-dusted terracotta apron; a cormorant
+with a dark shell necklace; ONE grey squirrel (not two, only one) with
+a soft leather pouch; a small group of animals pushing a wicker
+wheelbarrow.
+
+ABSOLUTELY NO TEXT. NO SIGNS. NO WRITING. NO LETTERS ANYWHERE.
 ```
 
-### L1.pontile — Quartiere del Pontile (sud)
-
-```
-[Style anchor]
-
-3/4 perspective, aspect ratio 9:16 portrait.
-
-Southern coastal quarter at midday. Long wooden pier extending over
-shallow water ("Il Pontile di Bartolo"). A small hut at shore end
-("La capanna di Bartolo"), an old tortoise character ("Bartolo") with a
-scarred shell visible near the pier. River meeting sea in a brackish
-mouth ("La Bocca"). Pebble beach with scattered shells ("La Spiaggia
-delle Conchiglie"). Small cliff house with a cormorant on the porch
-("Casa di Amo"). Low fisher cottages ("Case Basse dei Pescatori").
-Paths: "Via del Pontile" entering from north. Sky: clear midday,
-sea teal-green.
-
-Italian labels only.
-```
-
-### L1.orti — Quartiere degli Orti (ovest)
+### L1.forno — Quartiere del Forno (est, alba)
 
 ```
 [Style anchor]
 
-3/4 perspective, aspect ratio 9:16 portrait.
+3/4 perspective, aspect ratio 9:16 portrait. First-light dawn, sky
+rose-peach-pale-gold gradient.
 
-Western quarter in late afternoon. Concentric rings of cultivated fields
-("Gli Orti del Cerchio") — outer ring fruit trees, middle ring grains
-and legumes, inner ring herbs and vegetables. Two small earth-mound
-burrow-houses at the forest margin ("Casa-tana di Rovo", "Casa-tana di
-Zolla"). Dense, leafy, intertwined-canopy forest in the background
-("La Foresta Intrecciata"). Working community visible ("Coltivatori
-del Cerchio") with curved-handle hoes. Paths: "Via degli Orti" entering
-from east. Sky: warm late-afternoon gold.
+Eastern quarter of a small island. Large stone-and-wood bakery building
+with a big smoking chimney, warm orange light spilling from the oven
+windows and open doorway. Stacked firewood against the wall. A solitary
+small house on a gentle rise in the distance, catching first sun. Three
+dirt paths converging near the bakery. A red fox in a flour-dusted
+terracotta apron standing at the bakery door.
 
-Italian labels only.
+ABSOLUTELY NO TEXT. NO SIGNS. NO SHOP LETTERING. NO WRITING.
 ```
 
-### L1.montagne — Quartiere dei Pascoli (nord)
+### L1.pontile — Quartiere del Pontile (sud, mezzogiorno)
 
 ```
 [Style anchor]
 
-3/4 perspective, aspect ratio 9:16 portrait.
+3/4 perspective, aspect ratio 9:16 portrait. Clear midday light, sea
+teal-green.
 
-Northern mountainous quarter at sunset. Two twin peaks ("Montagne
-Gemelle"). A deep ravine between ("Il Burrone"). A cave mouth halfway up
-one slope ("La Grotta di Grunto"). High grazing plateau with sheep and
-goats ("Pascoli Alti"). A steep rocky lookout ("Roccia Alta") with
-panoramic view over the island. Paths: "Via che Sale" climbing from
-south. A grey heron ("Stria") perched on Roccia Alta at sunset. Sky:
-sunset orange-violet-deep-blue gradient.
+Southern coastal quarter of a small island. A long wooden pier
+extending over shallow water with small painted boats moored to it. A
+small wooden-and-thatch hut at the shore end. An old tortoise character
+with visible scars on her shell standing near the pier. To one side: a
+river mouth where fresh water meets sea in a brackish fan of sand. A
+pebble beach with scattered shells. A small cliff-side cottage with a
+cormorant on the porch. Low fisher cottages clustered nearby.
 
-Italian labels only.
+ABSOLUTELY NO TEXT. NO SIGNS. NO WRITING. NO BOAT NAMES.
+```
+
+### L1.orti — Quartiere degli Orti (ovest, pomeriggio)
+
+```
+[Style anchor]
+
+3/4 perspective, aspect ratio 9:16 portrait. Warm late-afternoon gold
+light.
+
+Western quarter of a small island. Concentric rings of cultivated fields
+forming a patchwork circle: outer ring fruit trees in soft bloom, middle
+ring tall grains and beans, inner ring low herbs and vegetables in
+rows. Two small earth-mound burrow-houses set into the forest margin on
+one side — rounded turf-covered domes with wooden doors. Dense leafy
+forest with intertwined canopy in the background. A few animal workers
+in the fields with curved-handle hoes, engaged in quiet labor.
+
+ABSOLUTELY NO TEXT. NO SIGNS. NO CROP LABELS. NO WRITING.
+```
+
+### L1.montagne — Quartiere dei Pascoli (nord, tramonto)
+
+```
+[Style anchor]
+
+3/4 perspective, aspect ratio 9:16 portrait. Sunset sky:
+orange-violet-deep-blue gradient.
+
+Northern mountainous quarter of a small island. Two tall twin peaks
+with a deep ravine running between them. A dark cave mouth visible
+halfway up one slope. A wide high grazing plateau with a scatter of
+sheep and goats. A steep rocky outcrop overlooking the island below. A
+grey heron character standing on the rocky lookout at sunset, silhouetted
+against the colored sky. A climbing path winding up from below.
+
+ABSOLUTELY NO TEXT. NO SIGNS. NO WRITING.
 ```
 
 ---
@@ -306,14 +326,24 @@ Oggetti canonici dal mondo:
 
 ## Workflow consigliato
 
-1. **Prima genera UNA master map v2** (portrait, italiano pulito) — è il
-   master style reference.
-2. Una volta approvata la master, rigenera le **5 vignette quartieri** con
-   lo stesso style anchor + riferimento alla master per coerenza.
-3. Poi passa a **L2 luoghi singoli** uno per volta, con la relativa scena.
-4. **L3 personaggi** in batch: genera i 23 ritratti con lo stesso style
-   anchor per consistenza.
-5. **L3-alt oggetti**: icone batch, stesso trattamento.
+1. **Prima genera L0a paper-base** (pergamena + oceano + bordi, isola
+   vuota). Questa fissa il framing e la texture carta. 1-2 iterazioni per
+   ottenerla pulita.
+2. **Poi L1.centro** (village) come tile-anchor — è il polo con più densità
+   di elementi, se funziona funziona tutto.
+3. Con L1.centro approvata, **passa gli altri 4 quartieri** (forno, pontile,
+   orti, montagne) USANDO L1.centro come **reference image** in Grok
+   Imagine. Questo è il trucco di coerenza stilistica: invece di sperare
+   che lo style anchor basti, dai all'AI una sorgente visiva concreta.
+4. Poi passa a **L2 luoghi singoli** uno per volta, sempre con reference
+   image del quartiere di appartenenza.
+5. **L3 personaggi** in batch: genera i 23 ritratti con lo stesso style
+   anchor per consistenza + un personaggio già approvato come reference.
+6. **L3-alt oggetti**: icone batch, stesso trattamento.
+
+**Regola di ferro**: l'immagine non contiene mai testo. I nomi li
+applichiamo noi via SVG nella web app. Se compare anche solo una lettera
+nell'immagine, rigenera.
 
 Se un'immagine non soddisfa, regenera con variazioni di prompt — ma NON
 cambiare lo style anchor (quello è il collante visivo del progetto).

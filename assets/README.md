@@ -49,17 +49,48 @@ alcuni label minori hanno refusi/ridondanze da ripulire.
 - Zone non ancora nominate / Piccole Isole all'orizzonte / Guado di Pietre
   Piatte: mantenute come porte socchiuse per espansione futura.
 
-## Da sistemare (prima di trattarli come asset definitivi)
+## Architettura tile (adottata)
 
-1. Testi in immagine misti italiano/inglese — solo italiano.
-2. Refusi label (es. Zolla doppio in centro).
-3. Master map: versione portrait per smartphone (oggi è landscape).
-4. Consistenza palette e mano grafica tra le 6 immagini (sono di generazioni
-   diverse, si vede nella resa di alcuni dettagli).
-5. Mancano vignette per: scuole/botteghe singole, spiagge minori,
-   Guado, Casa del Mattino isolata, singoli scenari sensoriali per alba/giorno/sera/notte.
+Dopo i primi tentativi di master-map monolitica si è visto che:
+- i diffusion model non scrivono italiano in modo affidabile (i nomi
+  risultano sempre leggermente sbagliati e diversi tra una run e l'altra)
+- una mappa unica non è rigenerabile per parti senza perdere la coerenza
+
+**Decisione**: le immagini sono **paesaggio dipinto senza testo**. I nomi
+dei luoghi, i label, gli hotspot interattivi sono **un layer SVG sopra
+l'immagine** nella web app, con font Caveat (già caricato in `index.html`).
+Vantaggi: nomi sempre corretti, multilingua gratis, immagini rigenerabili
+senza rompere nulla, interattività nativa.
+
+### Struttura assets prevista
+
+```
+assets/
+├── map/
+│   ├── paper-base.png              ← L0a: pergamena + oceano, isola vuota
+│   └── island-master.png           ← L0b: vista complessiva isola (fallback)
+├── quartieri/                      ← L1: 5 tile 3/4 perspective
+│   ├── centro.png
+│   ├── forno.png
+│   ├── pontile.png
+│   ├── orti.png
+│   └── montagne.png
+├── luoghi/                         ← L2: luoghi singoli (~26 da generare)
+├── personaggi/                     ← L3: ritratti (23)
+├── oggetti/                        ← L3-alt: icone oggetti-simbolo (13)
+└── drafts/                         ← tentativi, non definitivi
+    └── master-v2-attempts/         ← 3 tentativi master portrait con Grok
+```
+
+### Drafts correnti
+
+`drafts/master-v2-attempts/tentativo-01..03.jpg` — 3 generazioni Grok
+Imagine in portrait: stile e struttura promettenti, ma testo nelle
+immagini sempre garbled ("Canadu" invece di "Guado", "Cava del Mattino"
+invece di "Casa", ecc.). **Utili come reference di stile**, non come
+asset finali.
 
 ## Come rigenerare
 
-Vedere `assets/PROMPTS.md` (WIP) per i prompt strutturati da usare con Grok
-Imagine o BFL FLUX Kontext Pro.
+Vedere `assets/PROMPTS.md` per prompt strutturati. Regola di ferro:
+**nessun testo nelle immagini**. Mai.
