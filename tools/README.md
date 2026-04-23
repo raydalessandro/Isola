@@ -120,6 +120,42 @@ Preset di velocità disponibili:
 | `bartolo_walk`  | 0.4  | tartaruga fuori dall'acqua       |
 | `child_run`     | 2.0  | gioco/fuga                       |
 
+### Tempi canonici (Bibbia §8.1) e fallback mechanical
+
+I tempi di percorrenza seguono due regole, per ciascun arco del cammino
+Dijkstra:
+
+1. **Canonico vince.** Se l'arco in `world/geography/paths.json` ha
+   `canonical_time_min`, quello è il tempo per `adult_walk` (baseline
+   1.2 m/s). Gli altri preset scalano per rapporto:
+   `child_walk` ×1.5, `bartolo_walk` ×3, `child_run` ×0.6.
+2. **Altrimenti mechanical + difficulty multiplier.**
+   `time_min = distance_m / speed_mps / 60 * DIFFICULTY_MULTIPLIER[difficulty]`.
+
+Moltiplicatori difficulty (solo fallback mechanical):
+
+| difficulty | multiplier | esempio                           |
+|------------|------------|-----------------------------------|
+| `easy`     | 1.0        | sentieri di fondovalle            |
+| `steep`    | 2.5        | Via che Sale, scogliera di Amo    |
+| `sandy`    | 1.3        | Spiaggia delle Conchiglie         |
+
+**Policy.** Quando un tempo della bibbia è end-to-end (es. "2 ore dal
+Villaggio alla Roccia Alta"), si proratizza sugli edges del path Dijkstra
+pesando per `distance_m`. Edges con `canonical_time_min` sono la fonte di
+verità; editarli richiede aggiornare anche i test in
+`tools/tests/test_geography.py`.
+
+Tempi canonici attualmente codificati (da §8.1 della bibbia):
+
+| percorso dal Villaggio           | tempo (adult) | allocato su |
+|----------------------------------|---------------|-------------|
+| → Forno di Fiamma                | 30 min        | 1 arco      |
+| → Pontile di Bartolo             | 40 min        | 1 arco      |
+| → Casa di Rovo                   | 35 min        | 3 archi     |
+| → Roccia Alta                    | 120 min       | 2 archi     |
+| → Grotta di Grunto (midpoint 4-5h) | 270 min     | 5 archi     |
+
 ### API Python
 
 ```python
@@ -160,7 +196,19 @@ semantica, stesso algoritmo Dijkstra). Il loader da disco sta in
 ### Test
 
 ```bash
-python -m unittest tools.tests.test_geography
+python -m unittest discover -s tools/tests -v
 ```
 
-29 test (stdlib `unittest`, pytest non richiesto).
+Suite stdlib `unittest` (pytest non richiesto). Oltre 70 test in
+`tools/tests/`:
+
+- `test_geography.py` — unitari sul modulo Python (tempi canonici,
+  integrità grafo, bounds coordinate, schema validation, edge-case API).
+- `test_parity.py` — verifica che il mirror TypeScript
+  (`web/lib/geography.ts`) produca gli stessi numeri del modulo Python
+  per un set di 10 query standard. Usa `node --experimental-strip-types`
+  per caricare il TS direttamente (Node ≥ 22). Se Node non è disponibile,
+  i test parity sono automaticamente skippati.
+
+CI: `.github/workflows/ci.yml` lancia la suite Python e `npm run lint` +
+`npm run build` del web app ad ogni push / pull request su `main`.

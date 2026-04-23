@@ -24,6 +24,19 @@ export const WALKING_SPEEDS_MPS = {
 
 export type SpeedPreset = keyof typeof WALKING_SPEEDS_MPS;
 
+/**
+ * Moltiplicatore sul tempo mechanical per difficulty del terreno.
+ * Applicato solo agli edges senza canonical_time_min (fallback).
+ */
+export const DIFFICULTY_MULTIPLIER: Record<string, number> = {
+  easy: 1.0,
+  steep: 2.5,
+  sandy: 1.3,
+};
+
+/** Velocità baseline usata per i tempi canonical (Bibbia §8.1 = adult_walk). */
+const BASELINE_SPEED: SpeedPreset = "adult_walk";
+
 // ---------------------------------------------------------------------------
 // Tipi dati (shape dei JSON in world/geography/)
 // ---------------------------------------------------------------------------
@@ -89,6 +102,7 @@ export type Edge = {
   via: string | null;
   distance_m: number;
   difficulty: "easy" | "steep" | "sandy";
+  canonical_time_min?: number | null;
 };
 
 export type NamedRoute = {
@@ -209,6 +223,7 @@ export class IslandGeography {
   private readonly locs: Map<string, Location>;
   private readonly edgesList: Edge[];
   private readonly adj: Map<string, Array<[string, number]>>;
+  private readonly edgeLookup: Map<string, Edge>;
   private readonly routes: NamedRoute[];
 
   constructor(
@@ -236,6 +251,7 @@ export class IslandGeography {
     }
     this.edgesList = paths.edges.map((e) => ({ ...e }));
     this.adj = new Map();
+    this.edgeLookup = new Map();
     for (const id of this.locs.keys()) {
       this.adj.set(id, []);
     }
@@ -244,6 +260,8 @@ export class IslandGeography {
       if (!this.adj.has(e.to)) this.adj.set(e.to, []);
       this.adj.get(e.from)!.push([e.to, e.distance_m]);
       this.adj.get(e.to)!.push([e.from, e.distance_m]);
+      this.edgeLookup.set(`${e.from} ${e.to}`, e);
+      this.edgeLookup.set(`${e.to} ${e.from}`, e);
     }
     this.routes = paths.named_routes.map((r) => ({ ...r }));
   }
@@ -313,13 +331,47 @@ export class IslandGeography {
     return total;
   }
 
+  /**
+   * Tempo di percorrenza in minuti, per-edge sul cammino Dijkstra.
+   * Policy (mirror di tools/geography.py::walking_time):
+   * 1. edge con canonical_time_min (Bibbia §8.1, baseline adult_walk) →
+   *    quel tempo scalato per il rapporto adult_walk / speed;
+   * 2. altrimenti fallback mechanical distance/speed moltiplicato
+   *    per DIFFICULTY_MULTIPLIER[difficulty].
+   */
   walkingTime(a: string, b: string, speed: SpeedPreset = "adult_walk"): number {
     if (!(speed in WALKING_SPEEDS_MPS)) {
       throw new Error(`Preset velocità sconosciuto: ${speed}`);
     }
+    if (!this.locs.has(a)) throw new Error(`Location sconosciuta: ${a}`);
+    if (!this.locs.has(b)) throw new Error(`Location sconosciuta: ${b}`);
+    if (a === b) return 0;
+
     const mps = WALKING_SPEEDS_MPS[speed];
-    const meters = this.pathDistance(a, b);
-    return meters / mps / 60; // minuti
+    const baselineMps = WALKING_SPEEDS_MPS[BASELINE_SPEED];
+    const speedRatio = baselineMps / mps;
+
+    const route = this.path(a, b);
+    if (route.length < 2) return 0;
+
+    let totalMin = 0;
+    for (let i = 0; i < route.length - 1; i++) {
+      const u = route[i];
+      const v = route[i + 1];
+      const edge = this.edgeLookup.get(`${u} ${v}`);
+      if (!edge) {
+        const d = this.distance(u, v);
+        totalMin += d / mps / 60;
+        continue;
+      }
+      if (edge.canonical_time_min != null) {
+        totalMin += edge.canonical_time_min * speedRatio;
+      } else {
+        const mult = DIFFICULTY_MULTIPLIER[edge.difficulty] ?? 1.0;
+        totalMin += (edge.distance_m / mps / 60) * mult;
+      }
+    }
+    return totalMin;
   }
 
   // ---------------- pathfinding ----------------

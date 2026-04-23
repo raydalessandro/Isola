@@ -1,6 +1,6 @@
 {
-  "version": "1",
-  "notes": "Rete di sentieri canonici dell'isola. Quattro vie escono dal Villaggio (Via dell'Alba, Via del Pontile, Via degli Orti, Via che Sale) + archi intra-quartiere. distance_m è distanza Euclidea 3D tra i due nodi. difficulty: 'easy' (sentieri di fondovalle), 'steep' (salita forte, come la Via che Sale verso le Montagne), 'sandy' (spiaggia, sabbia che affatica).",
+  "version": "2",
+  "notes": "Rete di sentieri canonici dell'isola. Quattro vie escono dal Villaggio (Via dell'Alba, Via del Pontile, Via degli Orti, Via che Sale) + archi intra-quartiere. distance_m è distanza Euclidea 3D tra i due nodi. difficulty: 'easy' (sentieri di fondovalle), 'steep' (salita forte, come la Via che Sale verso le Montagne), 'sandy' (spiaggia, sabbia che affatica). canonical_time_min (opzionale): tempo in minuti per adult_walk (1.2 m/s) derivato dalla Bibbia §8.1 — quando presente, vince sulla stima mechanical distance/speed * difficulty_multiplier. I tempi dell'atlante (Forno 30min, Pontile 40min, Rovo 35min, Roccia Alta 2h, Grotta 4-5h midpoint 270min) sono prorata sulle distance_m degli edges del percorso Dijkstra.",
   "named_routes": [
     {"id": "via_dellalba", "nome_canonico": "Via dell'Alba", "from_quartiere": "centro", "to_quartiere": "forno"},
     {"id": "via_del_pontile", "nome_canonico": "Via del Pontile", "from_quartiere": "centro", "to_quartiere": "pontile"},
@@ -14,28 +14,28 @@
     {"from": "albero_vecchio", "to": "casetta_tonda_di_memolo", "via": null, "distance_m": 51, "difficulty": "easy"},
     {"from": "albero_vecchio", "to": "scuola_di_stria", "via": null, "distance_m": 200, "difficulty": "easy"},
 
-    {"from": "albero_vecchio", "to": "forno_di_fiamma", "via": "via_dellalba", "distance_m": 1953, "difficulty": "easy"},
+    {"from": "albero_vecchio", "to": "forno_di_fiamma", "via": "via_dellalba", "distance_m": 1953, "difficulty": "easy", "canonical_time_min": 30},
     {"from": "forno_di_fiamma", "to": "casa_del_mattino", "via": null, "distance_m": 269, "difficulty": "easy"},
 
-    {"from": "albero_vecchio", "to": "pontile_di_bartolo", "via": "via_del_pontile", "distance_m": 2700, "difficulty": "easy"},
+    {"from": "albero_vecchio", "to": "pontile_di_bartolo", "via": "via_del_pontile", "distance_m": 2700, "difficulty": "easy", "canonical_time_min": 40},
     {"from": "pontile_di_bartolo", "to": "capanna_di_bartolo", "via": null, "distance_m": 22, "difficulty": "easy"},
     {"from": "pontile_di_bartolo", "to": "la_bocca", "via": null, "distance_m": 200, "difficulty": "easy"},
     {"from": "pontile_di_bartolo", "to": "case_basse_dei_pescatori", "via": null, "distance_m": 192, "difficulty": "easy"},
     {"from": "pontile_di_bartolo", "to": "spiaggia_delle_conchiglie", "via": null, "distance_m": 532, "difficulty": "sandy"},
     {"from": "spiaggia_delle_conchiglie", "to": "casa_di_amo", "via": null, "distance_m": 256, "difficulty": "steep"},
 
-    {"from": "albero_vecchio", "to": "orti_del_cerchio", "via": "via_degli_orti", "distance_m": 1500, "difficulty": "easy"},
+    {"from": "albero_vecchio", "to": "orti_del_cerchio", "via": "via_degli_orti", "distance_m": 1500, "difficulty": "easy", "canonical_time_min": 16.28},
     {"from": "orti_del_cerchio", "to": "casa_tana_di_salvia", "via": null, "distance_m": 250, "difficulty": "easy"},
     {"from": "orti_del_cerchio", "to": "casa_tana_di_zolla", "via": null, "distance_m": 583, "difficulty": "easy"},
     {"from": "casa_tana_di_salvia", "to": "casa_tana_di_zolla", "via": null, "distance_m": 335, "difficulty": "easy"},
-    {"from": "orti_del_cerchio", "to": "foresta_intrecciata", "via": null, "distance_m": 1300, "difficulty": "easy"},
-    {"from": "foresta_intrecciata", "to": "casa_tana_di_rovo", "via": null, "distance_m": 424, "difficulty": "easy"},
+    {"from": "orti_del_cerchio", "to": "foresta_intrecciata", "via": null, "distance_m": 1300, "difficulty": "easy", "canonical_time_min": 14.11},
+    {"from": "foresta_intrecciata", "to": "casa_tana_di_rovo", "via": null, "distance_m": 424, "difficulty": "easy", "canonical_time_min": 4.61},
 
-    {"from": "albero_vecchio", "to": "pascoli_alti", "via": "via_che_sale", "distance_m": 1830, "difficulty": "easy"},
-    {"from": "pascoli_alti", "to": "roccia_alta", "via": "via_che_sale", "distance_m": 812, "difficulty": "steep"},
-    {"from": "roccia_alta", "to": "montagne_gemelle", "via": "via_che_sale", "distance_m": 748, "difficulty": "steep"},
-    {"from": "montagne_gemelle", "to": "il_burrone", "via": null, "distance_m": 112, "difficulty": "steep"},
-    {"from": "il_burrone", "to": "grotta_di_grunto", "via": null, "distance_m": 62, "difficulty": "steep"},
+    {"from": "albero_vecchio", "to": "pascoli_alti", "via": "via_che_sale", "distance_m": 1830, "difficulty": "easy", "canonical_time_min": 83.12},
+    {"from": "pascoli_alti", "to": "roccia_alta", "via": "via_che_sale", "distance_m": 812, "difficulty": "steep", "canonical_time_min": 36.88},
+    {"from": "roccia_alta", "to": "montagne_gemelle", "via": "via_che_sale", "distance_m": 748, "difficulty": "steep", "canonical_time_min": 121.69},
+    {"from": "montagne_gemelle", "to": "il_burrone", "via": null, "distance_m": 112, "difficulty": "steep", "canonical_time_min": 18.22},
+    {"from": "il_burrone", "to": "grotta_di_grunto", "via": null, "distance_m": 62, "difficulty": "steep", "canonical_time_min": 10.09},
 
     {"from": "fiume_che_gira", "to": "guado_di_pietre_piatte", "via": null, "distance_m": 300, "difficulty": "easy"},
     {"from": "la_bocca", "to": "fiume_che_gira", "via": null, "distance_m": 4400, "difficulty": "easy"}

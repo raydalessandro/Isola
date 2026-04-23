@@ -38,6 +38,18 @@ WALKING_SPEEDS_MPS: dict[str, float] = {
 
 SpeedPreset = Literal["adult_walk", "child_walk", "bartolo_walk", "child_run"]
 
+# Moltiplicatore sul tempo mechanical per difficulty del terreno.
+# Applicato solo agli edges senza canonical_time_min (fallback).
+DIFFICULTY_MULTIPLIER: dict[str, float] = {
+    "easy": 1.0,
+    "steep": 2.5,
+    "sandy": 1.3,
+}
+
+# Velocità baseline per canonical_time_min: l'atlante Bibbia §8.1 quota
+# tempi "da adulto". Gli altri preset scalano in proporzione.
+_BASELINE_SPEED = "adult_walk"
+
 
 @dataclass(frozen=True)
 class Coords:
@@ -64,6 +76,7 @@ class Edge:
     via: str | None
     distance_m: float
     difficulty: str
+    canonical_time_min: float | None = None
 
 
 def _euclidean(a: Coords, b: Coords) -> float:
@@ -128,18 +141,24 @@ class IslandGeography:
         self._adj: dict[str, list[tuple[str, float]]] = {
             lid: [] for lid in self._locations
         }
+        # lookup rapido arco (u,v) -> Edge (entrambe le direzioni)
+        self._edge_lookup: dict[tuple[str, str], Edge] = {}
         for raw in path_doc["edges"]:
+            ct = raw.get("canonical_time_min")
             e = Edge(
                 from_id=raw["from"],
                 to_id=raw["to"],
                 via=raw.get("via"),
                 distance_m=float(raw["distance_m"]),
                 difficulty=raw.get("difficulty", "easy"),
+                canonical_time_min=(float(ct) if ct is not None else None),
             )
             self._edges.append(e)
             # grafo non direzionato
             self._adj.setdefault(e.from_id, []).append((e.to_id, e.distance_m))
             self._adj.setdefault(e.to_id, []).append((e.from_id, e.distance_m))
+            self._edge_lookup[(e.from_id, e.to_id)] = e
+            self._edge_lookup[(e.to_id, e.from_id)] = e
 
         self._named_routes: list[dict[str, Any]] = list(
             path_doc.get("named_routes", [])
@@ -198,20 +217,51 @@ class IslandGeography:
     def walking_time(
         self, a: str, b: str, speed: SpeedPreset = "adult_walk"
     ) -> float:
-        """Tempo di percorrenza in minuti, lungo la rete sentieri
-        (fallback: linea retta se i nodi non sono connessi).
+        """Tempo di percorrenza in minuti, lungo la rete sentieri.
 
-        Il preset controlla solo la velocità; non modella la difficoltà
-        degli archi (steep/sandy) — quella è informativa sull'arco.
+        Policy (per edge sul cammino Dijkstra):
+        1. se l'edge ha `canonical_time_min` (Bibbia §8.1, baseline adult_walk),
+           quel tempo vince — scalato per il rapporto fra adult_walk e speed;
+        2. altrimenti fallback mechanical: distance_m / speed_m_s / 60,
+           moltiplicato per DIFFICULTY_MULTIPLIER[difficulty].
+        Somma sui singoli edge del path. Fallback linea retta se non connessi.
         """
         if speed not in WALKING_SPEEDS_MPS:
             raise ValueError(
                 f"Preset velocità sconosciuto: {speed!r}. "
                 f"Valori ammessi: {sorted(WALKING_SPEEDS_MPS)}"
             )
+        if a not in self._locations:
+            raise KeyError(f"Location sconosciuta: {a!r}")
+        if b not in self._locations:
+            raise KeyError(f"Location sconosciuta: {b!r}")
+        if a == b:
+            return 0.0
+
         mps = WALKING_SPEEDS_MPS[speed]
-        meters = self.path_distance(a, b)
-        return (meters / mps) / 60.0  # secondi -> minuti
+        baseline_mps = WALKING_SPEEDS_MPS[_BASELINE_SPEED]
+        speed_ratio = baseline_mps / mps  # 1 per adult_walk, 1.5 per child_walk, ecc.
+
+        route = self.path(a, b)
+        if len(route) < 2:
+            # nodi coincidenti (già gestito sopra) — safety
+            return 0.0
+
+        total_min = 0.0
+        for i in range(len(route) - 1):
+            u, v = route[i], route[i + 1]
+            edge = self._edge_lookup.get((u, v))
+            if edge is None:
+                # cammino virtuale (nodi non connessi): linea retta, no difficulty
+                d = self.distance(u, v)
+                total_min += (d / mps) / 60.0
+                continue
+            if edge.canonical_time_min is not None:
+                total_min += edge.canonical_time_min * speed_ratio
+            else:
+                mult = DIFFICULTY_MULTIPLIER.get(edge.difficulty, 1.0)
+                total_min += (edge.distance_m / mps) / 60.0 * mult
+        return total_min
 
     # ------------------------------------------------------------------
     # Pathfinding
