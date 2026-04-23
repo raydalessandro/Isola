@@ -1,0 +1,337 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://isola-tre-venti.local/story_graph.schema.json",
+  "title": "Story Graph — L'Isola dei Tre Venti",
+  "description": "Schema formale del grafo narrativo della saga. Versione 0.3.0 (post-pulizia B3.0.5).",
+  "type": "object",
+
+  "required": [
+    "graph_version",
+    "last_updated",
+    "entities",
+    "stories",
+    "seeds",
+    "callbacks",
+    "quote_tracker"
+  ],
+
+  "properties": {
+    "graph_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "SemVer. Bump minor per aggiunte di campo, major per breaking schema."
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "entities": {
+      "type": "object",
+      "required": ["characters", "locations", "objects", "winds"],
+      "properties": {
+        "characters": {
+          "type": "object",
+          "additionalProperties": {"$ref": "#/$defs/character_entity"}
+        },
+        "locations": {
+          "type": "object",
+          "additionalProperties": {"$ref": "#/$defs/location_entity"}
+        },
+        "objects": {
+          "type": "object",
+          "additionalProperties": {"$ref": "#/$defs/object_entity"}
+        },
+        "winds": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "stories": {
+      "type": "object",
+      "patternProperties": {
+        "^s\\d{2}$": {"$ref": "#/$defs/story_node"}
+      },
+      "additionalProperties": false
+    },
+    "seeds": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/seed"}
+    },
+    "callbacks": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/callback"}
+    },
+    "quote_tracker": {"$ref": "#/$defs/quote_tracker"},
+    "migration_log": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/migration_log_entry"}
+    }
+  },
+
+  "$defs": {
+
+    "seed_type": {
+      "enum": [
+        "fisico",
+        "gesto",
+        "capacita",
+        "relazionale",
+        "ritmo",
+        "spatial_echo",
+        "pattern",
+        "fenomeno",
+        "paura",
+        "frame",
+        "luogo"
+      ]
+    },
+
+    "seed_status": {
+      "enum": ["active", "seminato", "maturing", "bloomed", "closed"]
+    },
+
+    "pattern_a_active": {
+      "enum": ["none", "pre_eco", "seminato", "attivo", "bloomed"],
+      "description": "Stato del Pattern A ('cose rotte arrivano lo stesso') nella storia. none=assente; pre_eco=immagine anticipatoria non contabilizzata; seminato=seme piantato; attivo=pattern visibile in scena; bloomed=pattern manifestato pienamente."
+    },
+
+    "character_entity": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {"type": "string"},
+        "species": {"type": "string"},
+        "home_location": {"type": "string"},
+        "quadrant": {"type": "string"},
+        "role_saga": {"type": "string"},
+        "sub_groups": {"type": "object"},
+        "state_by_story": {"type": "object"},
+        "fear_arc": {"type": "object"},
+        "fragments_budget": {"type": "object"},
+        "note": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+
+    "location_entity": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {"type": "string"},
+        "quadrant": {"type": "string"},
+        "position": {"type": "string"},
+        "features": {"type": "array", "items": {"type": "string"}},
+        "role_saga": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+
+    "object_entity": {
+      "type": "object",
+      "properties": {
+        "type": {"type": "string"},
+        "owner": {"type": "string"},
+        "introduced_in_story": {"type": "string", "pattern": "^s\\d{2}$"}
+      },
+      "additionalProperties": true
+    },
+
+    "story_node": {
+      "type": "object",
+      "required": [
+        "id",
+        "location_primary",
+        "pattern_a_active",
+        "characters_in_scene",
+        "seeds_planted"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^s\\d{2}$"},
+        "title": {"type": ["string", "null"]},
+        "block": {"type": ["string", "null"]},
+        "season": {"type": ["string", "null"]},
+        "season_passage": {"type": ["string", "boolean", "null"]},
+        "location_primary": {
+          "type": "object",
+          "required": ["id"],
+          "properties": {
+            "id": {"type": "string"},
+            "note": {"type": "string"}
+          },
+          "additionalProperties": true
+        },
+        "locations_secondary": {"type": "array"},
+        "wind_active": {"type": ["string", "null"]},
+        "wind_transition": {"type": "string"},
+        "pattern_a_active": {"$ref": "#/$defs/pattern_a_active"},
+        "pattern_a_notes": {"type": "string"},
+        "night_scene": {"type": "boolean"},
+        "night_scene_notes": {"type": "string"},
+        "characters_in_scene": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/character_in_scene"}
+        },
+        "characters_offscreen_or_background": {"type": "array"},
+        "seeds_planted": {"type": "array", "items": {"type": "string"}},
+        "seeds_picked_up": {"type": "array", "items": {"type": "string"}},
+        "seeds_maturing_here": {"type": "array", "items": {"type": "string"}},
+        "seeds_bloomed_here": {"type": "array", "items": {"type": "string"}},
+        "callbacks_made": {"type": "array", "items": {"$ref": "#/$defs/callback"}},
+        "debts_opened": {"type": "array"},
+        "debts_closed": {"type": "array"},
+        "key_phrase_indicative": {"type": ["string", "null"]},
+        "key_phrase_attributed_to": {"type": "string"},
+        "key_phrase_notes": {"type": "string"},
+        "visual_anchors": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+
+    "character_in_scene": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {"type": "string"},
+        "role": {"type": "string"},
+        "mode": {"type": "string"},
+        "detti_count": {"type": "integer", "minimum": 0},
+        "fragment_used": {"type": "boolean"},
+        "tok_tok_tok": {"type": "boolean"},
+        "client_current": {"type": "string"},
+        "distinct_from_sNN": {"type": "string"},
+        "plant_named": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+
+    "seed": {
+      "type": "object",
+      "required": ["seed_id", "type", "status", "origin_story"],
+      "properties": {
+        "seed_id": {"type": "string"},
+        "type": {"$ref": "#/$defs/seed_type"},
+        "status": {"$ref": "#/$defs/seed_status"},
+        "origin_story": {"type": "string", "pattern": "^s\\d{2}$"},
+        "brother": {
+          "enum": ["gabriel", "elias", "noah"],
+          "description": "Obbligatorio se type='paura'"
+        },
+        "resolution_mode": {
+          "enum": ["dire", "accettare", "tenere"],
+          "description": "Obbligatorio se type='paura'. Terna strato 3 architrave."
+        },
+        "strato": {"type": "string"},
+        "object_ref": {"type": "string"},
+        "location_ref": {"type": "string"},
+        "related_seed": {
+          "oneOf": [
+            {"type": "string"},
+            {"type": "array", "items": {"type": "string"}}
+          ]
+        },
+        "materiale_associato": {"type": "string"},
+        "pattern_a_first_active_scene": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string"}
+          ],
+          "description": "Se boolean true, marca il seme come prima scena attiva del Pattern A. Se stringa, riferimento allo story_id della prima scena attiva."
+        },
+        "related_to_saga_architecture": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string"}
+          ],
+          "description": "Se boolean, flag architetturale. Se stringa, descrizione della valenza architetturale."
+        },
+        "bloom_target_stories": {"type": "array", "items": {"type": "string"}},
+        "maturing_planned_stories": {"type": "array", "items": {"type": "string"}},
+        "maturing_in_stories": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {"type": "string"},
+              {
+                "type": "object",
+                "required": ["story"],
+                "properties": {
+                  "story": {"type": "string", "pattern": "^s\\d{2}$"},
+                  "note": {"type": "string"}
+                }
+              }
+            ]
+          }
+        },
+        "bloomed_in_story": {"type": "string", "pattern": "^s\\d{2}$"},
+        "bloom_type": {"type": "string"},
+        "bloom_notes": {"type": "string"},
+        "closed_in_story": {"type": "string"},
+        "close_reason": {"type": "string"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"type": {"const": "paura"}}},
+          "then": {"required": ["brother", "resolution_mode"]}
+        },
+        {
+          "if": {"properties": {"status": {"const": "bloomed"}}},
+          "then": {"required": ["bloomed_in_story"]}
+        },
+        {
+          "if": {"properties": {"status": {"const": "maturing"}}},
+          "then": {"required": ["maturing_in_stories"]}
+        }
+      ],
+      "additionalProperties": true
+    },
+
+    "callback": {
+      "type": "object",
+      "required": ["callback_id"],
+      "properties": {
+        "callback_id": {"type": "string"},
+        "from_story": {"type": "string", "pattern": "^s\\d{2}$"},
+        "to_story": {"type": "string", "pattern": "^s\\d{2}$"},
+        "type": {"type": "string"},
+        "description": {"type": "string"},
+        "registered_in_story": {"type": "string", "pattern": "^s\\d{2}$"}
+      },
+      "additionalProperties": true
+    },
+
+    "quote_tracker": {
+      "type": "object",
+      "properties": {
+        "grunto_fragments_used": {"type": "integer", "minimum": 0, "maximum": 2},
+        "fiamma_detti_per_storia": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0, "maximum": 2}
+        },
+        "pattern_a_stories": {"type": "array"},
+        "pattern_a_seminato_stories": {"type": "array"},
+        "pattern_a_pre_eco_stories": {"type": "array"},
+        "when_water_trembles_stories": {"type": "array"},
+        "night_scenes": {"type": "array"},
+        "tok_tok_tok_stories": {"type": "array"}
+      },
+      "additionalProperties": true
+    },
+
+    "migration_log_entry": {
+      "type": "object",
+      "required": ["from_version", "to_version", "date", "changes"],
+      "properties": {
+        "from_version": {"type": "string"},
+        "to_version": {"type": "string"},
+        "date": {"type": "string"},
+        "phase": {"type": "string"},
+        "scope": {"type": "string"},
+        "changes": {"type": "array", "items": {"type": "string"}},
+        "whitelist_updates": {"type": "object"},
+        "deferred_decisions": {"type": "array", "items": {"type": "string"}},
+        "archived_rename_history": {"type": "array"}
+      }
+    }
+  }
+}

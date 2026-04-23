@@ -1,0 +1,197 @@
+================================================================
+  AUDIT FINAL REPORT — post pulizia B3.0.5
+  grafo: story_graph_v0_3_0.json
+  schema: story_graph.schema.json
+  script: add_story_node.py v0.2
+  data: 2026-04-22
+================================================================
+
+
+ESITO SINTETICO:
+
+Le 10 issue originali del PIANO_PULIZIA_GRAFO_B3_0_5.md sono tutte
+chiuse. Il grafo valida contro JSON Schema formale. Le referenze
+interne sono tutte integre. Il drift tra chat A/B (S1-S3 vs S4-S5)
+resta visibile perché è drift di CONTENUTO (campi opzionali scelti
+diversamente in scrittura narrativa), non drift di SCHEMA: lo
+schema v0.3.0 documenta formalmente quali campi sono opzionali
+contestuali, quindi entrambi i set di nodi validano.
+
+
+================================================================
+AUDIT 1 — INTEGRITÀ REFERENZIALE
+================================================================
+
+===========================================================================
+AUDIT TECNICO — story_graph_v0_3_0.json
+===========================================================================
+
+ID totali censiti:
+  characters: 23
+  sub_groups: 1 (dentro characters)
+  locations:  26
+  objects:    11
+  winds:      3
+  stories:    5
+  seeds:      24
+  callbacks:  11
+
+===========================================================================
+1. INTEGRITÀ REFERENZIALE
+===========================================================================
+
+  ✓ Tutti gli ID citati nei nodi-storia e nei semi esistono come entità.
+
+
+================================================================
+AUDIT 2 — COERENZA SCHEMA
+================================================================
+
+===========================================================================
+2. COERENZA SCHEMA TRA NODI-STORIA
+===========================================================================
+
+Campi totali visti nei nodi-storia: 40
+Campi universali (presenti in tutte le 5 storie): 34
+Campi variabili (presenti solo in alcune): 6
+
+--- CAMPI NON UNIFORMI TRA STORIE ---
+  'characters_offscreen_or_background' → presente in: ['s02', 's03', 's04', 's05']
+  'key_phrase_attributed_to' → presente in: ['s03']
+  'night_scene_notes' → presente in: ['s01', 's03']
+  'seeds_bloomed_here' → presente in: ['s02', 's03', 's04', 's05']
+  'seeds_maturing_here' → presente in: ['s03', 's04', 's05']
+  'wind_transition' → presente in: ['s03']
+
+--- TIPI INCONSISTENTI (stesso campo, tipi diversi tra storie) ---
+  'season_passage': {'s01': 'NoneType', 's02': 'NoneType', 's03': 'str', 's04': 'NoneType', 's05': 'NoneType'}
+  'wind_active': {'s01': 'str', 's02': 'str', 's03': 'NoneType', 's04': 'str', 's05': 'str'}
+  'key_phrase_indicative': {'s01': 'NoneType', 's02': 'NoneType', 's03': 'str', 's04': 'NoneType', 's05': 'NoneType'}
+
+--- NAMING CONVENTION (snake_case uniforme?) ---
+  ✓ naming convention consistente
+
+--- NAMING SEED ID ---
+  seed_*: 23
+  seed_sNN_*: 1
+
+--- NAMING STORY ID ---
+  's01' → ✓ conforme
+  's02' → ✓ conforme
+  's03' → ✓ conforme
+  's04' → ✓ conforme
+  's05' → ✓ conforme
+
+
+================================================================
+AUDIT 3 — NAVIGABILITÀ & TRACKING (con whitelist post-B3.0.5)
+================================================================
+
+===========================================================================
+3. NAVIGABILITÀ & SIMMETRIA TRACKING
+===========================================================================
+
+--- A. Seed con status='bloomed' devono comparire in seeds_bloomed_here di qualche storia ---
+  ✓ seed_s01_bastoncino_noah bloomed in s02, registrato nella storia
+  ✓ seed_gabriel_sa_la_strada_senza_vedere bloomed in s04, registrato nella storia
+  ✓ seed_fermarsi_come_gesto_attivo bloomed in s04, registrato nella storia
+  ✓ seed_bru_presenza_che_custodisce bloomed in s05, registrato nella storia
+  ✓ seed_foresta_tempi_modi_propri bloomed in s04, registrato nella storia
+
+--- B. Seed con status='maturing' ---
+Totale: 1
+  seed_paura_noah_buio
+    maturato in storie: ['s03']
+      ✓ s03.seeds_maturing_here lo contiene
+
+--- C. Seed status (whitelist: active/seminato/maturing/bloomed/closed) ---
+  ✓ tutti gli status seme sono nella whitelist
+
+--- D. Seed type (whitelist estesa con 'luogo', senza 'frame_pattern_a') ---
+  ✓ tutti i type seme sono nella whitelist
+
+--- E. QUOTE TRACKER vs stato dichiarato nelle storie ---
+  grunto_fragments_used: qt=0 actual=0 ✓
+  fiamma_detti totali: qt=1 actual=1 ✓
+  night_scenes: qt=['s01'] actual=['s01'] ✓
+  pattern_a_stories (attivo/bloomed): qt=[] actual=[] ✓
+  pattern_a_seminato_stories: qt=['s05'] actual=['s05'] ✓
+  pattern_a_pre_eco_stories: qt=['s02'] actual=['s02'] ✓
+
+--- F. DEBT TRACKING ---
+  s01: +6 aperti, -0 chiusi → saldo cumulativo aperti=6
+  s02: +4 aperti, -1 chiusi → saldo cumulativo aperti=9
+  s03: +7 aperti, -0 chiusi → saldo cumulativo aperti=16
+  s04: +8 aperti, -3 chiusi → saldo cumulativo aperti=21
+  s05: +8 aperti, -1 chiusi → saldo cumulativo aperti=28
+  Totale: 33 aperti, 5 chiusi, saldo=28
+  (Saldo alto è normale a metà saga — dovrebbe diminuire da S6 in poi)
+
+--- G. CALLBACK REGISTRY ---
+  Registry g['callbacks']: 11 voci
+  Callback inline nei nodi-storia: 11
+
+
+================================================================
+AUDIT 4 — DRIFT TRA CHAT
+================================================================
+
+===========================================================================
+4. DRIFT — confronto nodi S1-S3 (chat A) vs S4-S5 (chat B)
+===========================================================================
+
+--- TOP-LEVEL FIELDS ---
+  ✓ Nessun nuovo campo top-level introdotto in chat B
+  Campi spariti in chat B: ['key_phrase_attributed_to', 'night_scene_notes', 'wind_transition']
+
+--- HOOK FIELDS (visual_anchors.scene_hooks) ---
+  Chat A — campi hook: ['atmosphere', 'characters_present', 'focal_action', 'focal_object', 'hook_id', 'location_precise', 'palette_local', 'quadrant', 'time_of_day', 'wind_notes', 'wind_visible', 'wind_visual_details']
+  Chat B — campi hook: ['atmosphere', 'characters_present', 'focal_action', 'focal_object', 'hook_id', 'location_precise', 'palette_local', 'quadrant', 'time_of_day', 'wind_visible']
+  Nuovi campi hook introdotti in B: []
+  Campi hook spariti in B: ['wind_notes', 'wind_visual_details']
+
+--- CHARACTERS_IN_SCENE FIELDS ---
+  Chat A: ['constraints_active', 'detti_count', 'detti_notes', 'familial_role_episodic', 'fragment_used', 'id', 'key_actions', 'mode', 'narrative_weight', 'quote_count_estimate', 'role']
+  Chat B: ['client_current', 'constraints_active', 'distinct_from_s08', 'familial_role_episodic', 'id', 'key_actions', 'mode', 'narrative_weight', 'plant_named', 'quote_count_estimate', 'role']
+  Nuovi in B: ['client_current', 'distinct_from_s08', 'plant_named']
+  Spariti in B: ['detti_count', 'detti_notes', 'fragment_used']
+
+--- SEED FIELDS ---
+  Chat A — campi seme: ['bloom_notes', 'bloom_target_stories', 'bloom_type', 'bloomed_in_story', 'brother', 'description', 'location_ref', 'maturing_in_stories', 'maturing_planned_stories', 'maturing_type_legacy', 'note', 'object_ref', 'origin_story', 'related_seed', 'resolution_mode', 'seed_id', 'status', 'strato', 'type', 'voice_constraint']
+  Chat B — campi seme: ['bloom_target_stories', 'bloom_type', 'description', 'location_ref', 'materiale_associato', 'note', 'origin_story', 'pattern_a_first_active_scene', 'related_seed', 'related_to_saga_architecture', 'seed_id', 'status', 'strato', 'type', 'voice_constraint']
+  Nuovi in B: ['materiale_associato', 'pattern_a_first_active_scene', 'related_to_saga_architecture']
+  Spariti in B: ['bloom_notes', 'bloomed_in_story', 'brother', 'maturing_in_stories', 'maturing_planned_stories', 'maturing_type_legacy', 'object_ref', 'resolution_mode']
+
+--- CALLBACK FIELDS (inline nei nodi) ---
+  Chat A: ['callback_id', 'element', 'from_story', 'note', 'type']
+  Chat B: ['callback_id', 'element', 'from_story', 'note', 'type']
+  Nuovi in B: []
+  Spariti in B: []
+
+
+================================================================
+VALIDAZIONE JSON SCHEMA FORMALE
+================================================================
+
+  ✓ Grafo v0.3.0 valida contro story_graph.schema.json (zero errori)
+
+
+================================================================
+CHECKLIST 10 ISSUE ORIGINALI
+================================================================
+
+  ✓ Issue 1: pastori non esistente → CREATO in entities.characters
+  ✓ Issue 2: torrente_affluente_foresta non esistente → CREATO in entities.locations
+  ✓ Issue 3: pattern_a_active tipo incoerente → MIGRATO a stringa con whitelist
+  ✓ Issue 4: status='seminato' → RATIFICATO in whitelist
+  ✓ Issue 5: type='luogo' → RATIFICATO in whitelist
+  ✓ Issue 6: type='frame_pattern_a' → GENERALIZZATO a 'frame'
+  ✓ Issue 7: 4 campi seme chat B → RATIFICATI come opzionali nello schema
+  ✓ Issue 8: 3 campi characters_in_scene chat B → RATIFICATI come opzionali
+  ✓ Issue 9: campi seme spariti → bloom_form→bloom_notes, maturing_type→legacy,
+             rename_history→migration_log, related_gesture_seed→related_seed
+  ✓ Issue 10: campi top-level spariti → CLASSIFICATI opzionali contestuali nello schema
+
+================================================================
+FINE REPORT
+================================================================

@@ -1,0 +1,2816 @@
+{
+  "schema_version": "0.1",
+  "graph_version": "0.3.0",
+  "last_updated": "2026-04-22",
+  "phase": "B3",
+  "description": "Grafo narrativo saga Isola dei Tre Venti. Entita' anagrafiche = costanti strutturali. Dettagli di scena nei nodi-storia (visual_anchors, characters_in_scene.role/mode). Layer 0 visivo/comportamentale da estrarre in B3.5 (post-S12). Stato: S1-S5 complete, S6 in chat nuova.",
+  "entities": {
+    "characters": {
+      "gabriel": {
+        "species": "umano",
+        "type": "protagonista",
+        "attribute_ear": "delta",
+        "age_band": "maggiore_dei_tre",
+        "birth": "2021-10-28",
+        "role_saga": "protagonista",
+        "narrative_function": "vede i pericoli, fa domande giuste, decide",
+        "voice_notes": "frasi piene, verbi riflessivi, 'forse'/'non so'; quando decide è netto",
+        "fear_arc": {
+          "fear_id": "fratelli_crescono_diversi",
+          "first_emergence_planned": "s09",
+          "resolution_story": "s12",
+          "resolution_mode": "tenere"
+        },
+        "state_by_story": {
+          "s01": "apertura saga: Δ in azione (si ferma, decide). Capacità 'sa la strada senza vedere' istituita. Paura non ancora toccata.",
+          "s02": "distingue il riflesso dalla verità. Δ in azione: 'quello che vedi nello specchio è solo come ti guardi adesso'. Paura sua: non ancora toccata.",
+          "s03": "sente il limite senza saperlo spiegare. Δ che matura: sa il 'non si fa' senza il 'perché'. Chiede a Rovo — accetta di non avere risposta sua."
+        }
+      },
+      "elias": {
+        "species": "umano",
+        "type": "protagonista",
+        "attribute_ear": "connettere",
+        "age_band": "medio",
+        "birth": "2024-02-08",
+        "role_saga": "protagonista",
+        "narrative_function": "ponte tra gli altri due, risolve con azioni non parole",
+        "voice_notes": "frasi che aprono ad altri ('Possiamo...', 'E se...'), cita altri, ricorda cose dette",
+        "fear_arc": {
+          "fear_id": "non_essere_abbastanza",
+          "first_emergence_planned": "s02",
+          "resolution_story": "s11",
+          "resolution_mode": "accettare"
+        },
+        "state_by_story": {
+          "s01": "ponte in funzione base: tiene la mano di Noah. Paura non ancora toccata (prima semina sarà S2).",
+          "s02": "SEMINA della paura: si vede 'piccolo'. Mormora 'Voi siete grandi davvero'. Non piange, non lo dichiara. Micro-eco da S1: tiene la mano di Noah.",
+          "s03": "trova il modo terzo: chiamare nel buio. ⇄ in funzione pratica. Paura: non toccata direttamente, ma la tenuta tra Gabriel e Noah lo posiziona come ponte."
+        }
+      },
+      "noah": {
+        "species": "umano",
+        "type": "protagonista",
+        "attribute_ear": "cambiare",
+        "age_band": "piccolo",
+        "birth": "2026-06-06",
+        "role_saga": "protagonista",
+        "narrative_function": "rompe equilibri, imprevisto, percezione sensoriale",
+        "voice_notes": "frasi spezzate, esclamative, percezione fisica prima, ripete parole",
+        "fear_arc": {
+          "fear_id": "buio",
+          "first_emergence_planned": "s01",
+          "resolution_story": "s10",
+          "resolution_mode": "dire"
+        },
+        "state_by_story": {
+          "s01": "piccolo sente il freddo bianco (paura del buio in nuce). Raccoglie bastoncino — gesto-firma istituito. Paura seminata (implicita).",
+          "s02": "getta il bastoncino per rabbia — gesto irriflesso che diventa momento-soglia. Il suo gesto-firma (S1) ora ha peso narrativo. Paura buio: ancora implicita.",
+          "s03": "sente il buio Foresta sera, fa due passi, torna indietro senza dirlo. Resta arrabbiato. Paura buio: maturing (seconda variante)."
+        }
+      },
+      "fiamma": {
+        "species": "volpe_rossa",
+        "type": "abitante_maggiore",
+        "role_saga": "cammeo_ricorrente_cornice_s1_s12",
+        "home_location": "forno",
+        "quadrant": "fuoco_est",
+        "narrative_function": "calore del villaggio",
+        "voice_modes": [
+          "chiacchiera",
+          "ferma",
+          "brace"
+        ],
+        "constraints": [
+          "unica_detentrice_detti_popolari",
+          "detti_solo_in_modalita_chiacchiera",
+          "max_2_detti_per_storia",
+          "non_madre_default",
+          "mai_morale_in_corsivo",
+          "mai_sotto_albero_vecchio_solenne"
+        ],
+        "familial_role_episodic": "madre_episodica_sopratutto_per_noah"
+      },
+      "bartolo": {
+        "species": "tartaruga_di_mare_anziana",
+        "type": "abitante_maggiore",
+        "role_saga": "dilatazione_del_tempo",
+        "home_location": "pontile_bocca",
+        "quadrant": "acqua_sud",
+        "narrative_function": "abbassa il battito delle storie, traghettatore",
+        "constraints": [
+          "mai_morale",
+          "mai_correre",
+          "mai_arrabbiato_visibile",
+          "mai_traghetta_abitanti_nominati_con_fratelli"
+        ],
+        "familial_role_episodic": "nonno"
+      },
+      "rovo": {
+        "species": "tasso",
+        "type": "abitante_maggiore",
+        "role_saga": "resistenza_che_protegge",
+        "home_location": "tana_margini_foresta",
+        "quadrant": "terra_ovest",
+        "narrative_function": "guardiano scontroso, fonte informazione data male",
+        "constraints": [
+          "tenerezza_sempre_mediata",
+          "mai_confidenza_calorosa",
+          "mai_compagno_viaggio_prolungato_fratelli",
+          "mai_spiegare_perche_bru_con_lui"
+        ],
+        "familial_role_episodic": "zio_severo",
+        "related_to": [
+          "bru"
+        ]
+      },
+      "stria": {
+        "species": "airone_cenerino",
+        "type": "abitante_maggiore",
+        "role_saga": "autorita_calma_scambio_asimmetrico",
+        "home_location": "casa_stretta_alta_vicino_scuola",
+        "quadrant": "centro_villaggio",
+        "narrative_function": "maestra, memoria del villaggio",
+        "constraints": [
+          "mai_lezione_morale_esplicita",
+          "mai_due_risposte_stessa_scena",
+          "mai_sopra_o_sotto_albero_vecchio",
+          "mai_commuovere_visibilmente"
+        ],
+        "familial_role_episodic": "maestra_zia"
+      },
+      "memolo": {
+        "species": "riccio",
+        "type": "abitante_maggiore",
+        "role_saga": "cambio_di_registro_colpo_di_coda",
+        "home_location": "casetta_tonda_piazza_centrale",
+        "quadrant": "centro_villaggio",
+        "narrative_function": "abbassa quando serio, dice intuizione precisa una volta a storia",
+        "constraints": [
+          "mai_sapiente_confuso_didattico",
+          "mai_due_frasi_precise_stessa_storia",
+          "mai_risolve_trama_chiudendo"
+        ],
+        "familial_role_episodic": "zio_buffo",
+        "related_to": [
+          "pun"
+        ]
+      },
+      "grunto": {
+        "species": "stambecco_verde_vecchio",
+        "type": "testimone_unico_pre_vento",
+        "role_saga": "architrave_strato_3",
+        "home_location": "grotta_burrone_montagne_gemelle",
+        "quadrant": "aria_nord",
+        "narrative_function": "ponte unico tra Epoca Mitica e Presente",
+        "constraints": [
+          "no_nomi_propri_ariete_ondina_tempesta",
+          "mai_racconto_pieno_pre_vento",
+          "mai_nostalgia",
+          "mai_apertura_storia",
+          "mai_chiusura_storia",
+          "mai_preannunciare_rivelazione"
+        ],
+        "fragments_budget": {
+          "total_saga": 2,
+          "used": 0,
+          "planned_stories": [
+            "s12"
+          ]
+        },
+        "familial_role_episodic": "ombra_dello_zio_misterioso"
+      },
+      "salvia": {
+        "species": "lepre",
+        "type": "abitante_minore_mestiere",
+        "role_saga": "cura_concreta_che_educa",
+        "home_location": "casa_tana_inizio_orti",
+        "quadrant": "terra_ovest",
+        "narrative_function": "cura con piante, micro-azione replicabile a casa",
+        "constraints": [
+          "max_1_pianta_nominata_per_apparizione",
+          "mai_spiega_perche_pianta_funziona",
+          "mai_risolve_emotivamente"
+        ],
+        "familial_role_episodic": "madre_pratica"
+      },
+      "nodo": {
+        "species": "picchio",
+        "type": "abitante_minore_mestiere",
+        "role_saga": "mano_che_fa",
+        "home_location": "casetta_bottega_villaggio_centrale",
+        "quadrant": "centro_villaggio",
+        "narrative_function": "ripara, costruisce, insegna facendo",
+        "signature_sound": "TOK-TOK-TOK",
+        "constraints": [
+          "mai_spiega_perche_nodo_funziona",
+          "mai_fa_nodo_al_posto_di_chi_impara",
+          "mai_parla_di_sentimenti",
+          "tok_tok_tok_quota_4_5_storie_saga"
+        ],
+        "familial_role_episodic": "padre_pratico_zio_pratico"
+      },
+      "amo": {
+        "species": "cormorano",
+        "type": "abitante_minore_mestiere",
+        "role_saga": "pazienza_acqua_silenzio_che_insegna",
+        "home_location": "casa_scogliera_spiaggia_conchiglie",
+        "quadrant": "acqua_sud",
+        "narrative_function": "pesca, insegna col silenzio",
+        "constraints": [
+          "mai_spiega_pesca_a_parole",
+          "mai_in_scene_villaggio_salvo_mercato",
+          "mai_nostalgico_o_malinconico",
+          "mai_conflitto_aperto"
+        ],
+        "familial_role_episodic": "zio_silenzioso"
+      },
+      "zolla": {
+        "species": "scoiattolo_grigio_anziano",
+        "type": "abitante_minore_mestiere",
+        "role_saga": "stagione_e_parsimonia",
+        "home_location": "casa_tana_margini_orti_bosco",
+        "quadrant": "terra_ovest",
+        "narrative_function": "raccoglie, conta in stagioni, educa al cibo che cresce",
+        "constraints": [
+          "mai_lezioni_ecologia",
+          "mai_nostalgia_ambientalista",
+          "mai_scene_veloci_o_concitate"
+        ],
+        "familial_role_episodic": "nonno_pratico"
+      },
+      "pun": {
+        "species": "riccino",
+        "type": "cucciolo_scuola",
+        "role_saga": "memoria_pratica_intuizione_laterale",
+        "related_to": [
+          "memolo"
+        ],
+        "constraints": [
+          "mai_corregge_padre_con_tono_adulto",
+          "mai_sapientello"
+        ]
+      },
+      "toba": {
+        "species": "tartarughina",
+        "type": "cucciolo_scuola",
+        "role_saga": "domanda_che_apre",
+        "related_to": [
+          "bartolo"
+        ],
+        "constraints": [
+          "mai_domanda_filosofica",
+          "mai_sola_al_pontile",
+          "mai_corre"
+        ]
+      },
+      "bru": {
+        "species": "tassino",
+        "type": "cucciolo_scuola",
+        "role_saga": "presenza_silenziosa_che_custodisce",
+        "related_to": [
+          "rovo"
+        ],
+        "constraints": [
+          "mai_racconta_sua_storia",
+          "mai_centro_attenzione_in_gruppo",
+          "mai_piange_visibile",
+          "mai_eroe"
+        ]
+      },
+      "cardo": {
+        "species": "lupacchiotto",
+        "type": "cucciolo_scuola",
+        "role_saga": "frizione_necessaria",
+        "constraints": [
+          "mai_modalita_predatore",
+          "mai_si_redime_visibile",
+          "mai_punito",
+          "mai_tradisce_davvero",
+          "punzecchia_max_2_3_storie_su_12"
+        ]
+      },
+      "liu": {
+        "species": "libellulina",
+        "type": "cucciolo_scuola",
+        "role_saga": "presenza_aerea_discreta",
+        "constraints": []
+      },
+      "coltivatori_del_cerchio": {
+        "type": "gruppo_istituzione",
+        "home_location": "orti_del_cerchio",
+        "quadrant": "terra_ovest",
+        "signature_object": "zappa_col_manico_curvo",
+        "signature_sound": "TUM-tum",
+        "role_saga": "coralita_del_lavoro_agricolo"
+      },
+      "mercato_del_mezzogiorno": {
+        "type": "gruppo_istituzione",
+        "home_location": "piazza_centrale_villaggio",
+        "quadrant": "centro_villaggio",
+        "role_saga": "luogo_di_scambio_voci_e_cose",
+        "note": "nessun oggetto simbolo — il Mercato è luogo",
+        "sub_groups": {
+          "vecchie_del_mercato": {
+            "type": "sotto_gruppo_episodico",
+            "species": "umane",
+            "role_saga": "riconoscimento_muto_per_elias_s11",
+            "representation_constraint": "sono umane come i fratelli ma NON devono sembrare umane come personaggi — funzionano come istituzione corale silente. Mai trattate come vecchiette-personaggio individuali, sempre come presenza di gruppo.",
+            "constraints": [
+              "mai_risolutrici_esplicite",
+              "cornice_non_agenti_per_paura_elias",
+              "mai_antropomorfizzate_come_vecchiette_personaggio",
+              "sempre_coralita_non_individualita"
+            ]
+          }
+        }
+      },
+      "mantenitori": {
+        "type": "gruppo_istituzione",
+        "signature_object": "scala_a_pioli",
+        "role_saga": "cura_delle_cose_del_villaggio"
+      },
+      "camminanti": {
+        "type": "gruppo_istituzione",
+        "signature_object": "carriola_di_vimini",
+        "role_saga": "movimento_tra_quartieri"
+      },
+      "pastori": {
+        "type": "gruppo_istituzione",
+        "species": "animali_misti_pastori_stagionali",
+        "home_location": "pascoli_alti",
+        "quadrant": "aria_nord",
+        "role_saga": "sfondo_stagionale_coltivatori_del_vento_nord",
+        "note": "Gruppo-istituzione come coltivatori_del_cerchio. Scendono con greggi in autunno (S11). Non individuati."
+      }
+    },
+    "winds": {
+      "_shared": {
+        "canonical_reference": "MITI_FONDATORI_BREVI_v1.md",
+        "ontological_role": "spiriti_fondatori_ritirati_in_respiro_saga_presente",
+        "when_asleep": {
+          "context": "scena_notturna",
+          "visual_constraint": "aria_ferma_fumo_dritto_foglie_immobili_capelli_fermi"
+        },
+        "scene_presence_rule": "i venti sono sempre presenti come ambiente secondo fascia oraria, ma risaltano visivamente solo quando la scena lo richiede narrativamente (es. Taglio che pulisce la nebbia in S1). Non forzarli in ogni illustrazione."
+      },
+      "vento_taglio": {
+        "time_of_day": "alba",
+        "direction": "da_est",
+        "effect": "taglia_la_nebbia_rende_nitido",
+        "origin_spirit": "ariete",
+        "attribute_ear": "delta",
+        "mirrors_brother": "gabriel",
+        "visual_profile": {
+          "color_canonical": "giallo",
+          "manifestation": "luce_netta_che_taglia_nebbia_ombre_lunghe_definite_linee_dritte",
+          "when_visible": "linee_di_luce_gialla_tra_nebbia_o_in_controluce_alba",
+          "canonical_source": "mito_stampato_libro_0"
+        }
+      },
+      "vento_intreccio": {
+        "time_of_day": "giorno",
+        "direction": "diffuso",
+        "effect": "caldo_avvolgente_porta_odori_e_notizie",
+        "origin_spirit": "ondina",
+        "attribute_ear": "connettere",
+        "mirrors_brother": "elias",
+        "visual_profile": {
+          "color_canonical": "azzurro",
+          "manifestation": "movimento_caldo_diffuso_foglie_sospese_capelli_mossi_piu_direzioni",
+          "when_visible": "velature_azzurre_nell_aria_tra_rami_e_tra_case_odori_come_sfumature",
+          "canonical_source": "mito_stampato_libro_0"
+        }
+      },
+      "vento_mulinello": {
+        "time_of_day": "sera",
+        "direction": "imprevedibile",
+        "effect": "sposta_cose_cambia_direzione",
+        "origin_spirit": "tempesta",
+        "attribute_ear": "cambiare",
+        "mirrors_brother": "noah",
+        "visual_profile": {
+          "color_canonical": "viola",
+          "manifestation": "vortici_foglie_in_spirale_capelli_scompigliati_oggetti_che_si_muovono_imprevedibili",
+          "when_visible": "screziature_viola_nel_cielo_della_sera_o_nei_vortici_di_polvere_e_foglie",
+          "canonical_source": "mito_stampato_libro_0"
+        }
+      }
+    },
+    "locations": {
+      "villaggio_centrale": {
+        "type": "zona",
+        "quadrant": "centro",
+        "contains": [
+          "albero_vecchio",
+          "piazza_centrale",
+          "casa_memolo",
+          "bottega_nodo",
+          "scuola_stria"
+        ],
+        "role_saga": "centro_mandala_silenzioso"
+      },
+      "albero_vecchio": {
+        "type": "landmark",
+        "quadrant": "centro",
+        "role_saga": "centro_mandala",
+        "constraints": [
+          "nessun_abitante_sotto_o_sopra_in_modo_solenne"
+        ]
+      },
+      "forno": {
+        "type": "edificio",
+        "quadrant": "fuoco_est",
+        "inhabitant": "fiamma",
+        "features": [
+          "camino_fuma_prima_alba",
+          "cortile_legna_catastata_retro"
+        ],
+        "role_saga": "cornice_s1_s12"
+      },
+      "case_del_mattino": {
+        "type": "quartiere_parziale",
+        "quadrant": "fuoco_est",
+        "features": [
+          "fabbro",
+          "conceria",
+          "essiccatoio_frutta_autunno"
+        ]
+      },
+      "via_dell_alba": {
+        "type": "via",
+        "quadrant": "fuoco_est"
+      },
+      "pontile_bocca": {
+        "type": "struttura",
+        "quadrant": "acqua_sud",
+        "inhabitant": "bartolo",
+        "features": [
+          "assi_scure",
+          "pali_nell_acqua",
+          "capanna_in_cima"
+        ]
+      },
+      "bocca": {
+        "type": "foce",
+        "quadrant": "acqua_sud",
+        "description": "foce del Fiume che Gira nel mare"
+      },
+      "spiaggia_conchiglie": {
+        "type": "spiaggia",
+        "quadrant": "acqua_sud",
+        "position": "costa_mare_oltre_bocca"
+      },
+      "casa_amo": {
+        "type": "casa",
+        "quadrant": "acqua_sud",
+        "inhabitant": "amo",
+        "features": [
+          "legno_scavato_roccia",
+          "scaletta_pietra_fino_acqua"
+        ]
+      },
+      "case_basse_pescatori": {
+        "type": "quartiere_parziale",
+        "quadrant": "acqua_sud"
+      },
+      "via_del_pontile": {
+        "type": "via",
+        "quadrant": "acqua_sud"
+      },
+      "orti_del_cerchio": {
+        "type": "zona_coltivata",
+        "quadrant": "terra_ovest",
+        "features": [
+          "tre_fasce_concentriche"
+        ]
+      },
+      "foresta_intrecciata": {
+        "type": "foresta",
+        "quadrant": "terra_ovest",
+        "features": [
+          "tracce_non_sentieri",
+          "radici_connesse_sotto_terra",
+          "entrata_graduale"
+        ]
+      },
+      "tana_rovo": {
+        "type": "tana",
+        "quadrant": "terra_ovest",
+        "inhabitant": "rovo",
+        "features": [
+          "sotto_ceppo_coperto_muschio",
+          "tre_uscite"
+        ]
+      },
+      "casa_salvia": {
+        "type": "casa_tana",
+        "quadrant": "terra_ovest",
+        "inhabitant": "salvia",
+        "features": [
+          "giardino_erbe_ordinate_per_file"
+        ]
+      },
+      "casa_zolla": {
+        "type": "casa_tana",
+        "quadrant": "terra_ovest",
+        "inhabitant": "zolla",
+        "features": [
+          "tre_dispense"
+        ]
+      },
+      "via_degli_orti": {
+        "type": "via",
+        "quadrant": "terra_ovest"
+      },
+      "pascoli_alti": {
+        "type": "prato_in_pendenza",
+        "quadrant": "aria_nord",
+        "features": [
+          "capre_pecore",
+          "capanne_stagionali_pastori_estate"
+        ]
+      },
+      "roccia_alta": {
+        "type": "sperone_panoramico",
+        "quadrant": "aria_nord",
+        "features": [
+          "due_ore_cammino",
+          "vista_tutta_isola"
+        ]
+      },
+      "montagne_gemelle": {
+        "type": "rilievo",
+        "quadrant": "aria_nord",
+        "features": [
+          "due_cime",
+          "burrone_profondo_tra_loro"
+        ]
+      },
+      "burrone": {
+        "type": "gola",
+        "quadrant": "aria_nord",
+        "position": "tra_montagne_gemelle"
+      },
+      "grotta_grunto": {
+        "type": "grotta",
+        "quadrant": "aria_nord",
+        "inhabitant": "grunto",
+        "position": "cengia_burrone"
+      },
+      "via_che_sale": {
+        "type": "via",
+        "quadrant": "aria_nord"
+      },
+      "fiume_che_gira": {
+        "type": "fiume_anello",
+        "position": "perimetro_terra_interna",
+        "features": [
+          "sorgente_montagne",
+          "foce_bocca_sud",
+          "anello_quasi_chiuso"
+        ]
+      },
+      "fascia_costiera": {
+        "type": "fascia",
+        "features": [
+          "tra_fiume_e_mare",
+          "larga_500_800m"
+        ]
+      },
+      "torrente_affluente_foresta": {
+        "type": "corso_acqua_minore",
+        "quadrant": "terra_ovest",
+        "position": "attraversa_foresta_intrecciata_sfocia_fiume_che_gira",
+        "features": [
+          "piena_primaverile_porta_via_passaggi_precari",
+          "tronco_ponte_di_stagione"
+        ],
+        "role_saga": "luogo_di_s05_ponte_di_rami",
+        "_note": "Dettagliato in Bible §8 ma non presente come entità registrata fino a S5."
+      }
+    },
+    "objects": {
+      "pagnotta_forno": {
+        "category": "oggetto_ricorrente",
+        "origin_location": "forno",
+        "saga_role": "cornice_s1_s12"
+      },
+      "braccialetto_s9": {
+        "category": "oggetto_significativo_nascosto",
+        "origin_story": "s09",
+        "description_constraint": "mai_descritto_dopo_s09",
+        "appears_in_stories_planned": [
+          "s09",
+          "s12"
+        ]
+      },
+      "grembiule_fiamma": {
+        "category": "firma_visiva_personaggio",
+        "owner": "fiamma",
+        "description": "tela ruvida color terracotta sempre infarinato"
+      },
+      "bandana_rovo": {
+        "category": "firma_visiva_personaggio",
+        "owner": "rovo",
+        "description": "scura marrone-grigio legata sulla fronte"
+      },
+      "scialle_stria": {
+        "category": "firma_visiva_personaggio",
+        "owner": "stria",
+        "description": "color cenere chiaro sulle spalle, lungo le ali"
+      },
+      "sciarpa_memolo": {
+        "category": "firma_visiva_personaggio",
+        "owner": "memolo",
+        "description": "annodata male sul collo, sistemata di continuo"
+      },
+      "cesto_salvia": {
+        "category": "firma_visiva_personaggio",
+        "owner": "salvia",
+        "description": "tracolla vimini sottile piccolo con erbe"
+      },
+      "corda_nodo": {
+        "category": "firma_visiva_personaggio",
+        "owner": "nodo",
+        "description": "arrotolata sul braccio, sempre, spessore variabile"
+      },
+      "conchiglia_amo": {
+        "category": "firma_visiva_personaggio",
+        "owner": "amo",
+        "description": "collana una sola conchiglia conica scura"
+      },
+      "bisaccia_zolla": {
+        "category": "firma_visiva_personaggio",
+        "owner": "zolla",
+        "description": "pelle morbida di traverso, sempre piena"
+      },
+      "cicatrice_grunto": {
+        "category": "firma_visiva_personaggio",
+        "owner": "grunto",
+        "description": "lunga sul fianco sinistro, striscia senza pelo",
+        "constraint": "mai_spiegata_mai_nominata_nel_testo"
+      }
+    },
+    "visual_signatures": {
+      "_note": "Firme visive di saga non legate ai venti. Questo blocco è aperto: nuove firme si aggiungono quando emergono durante la scrittura. I profili visivi dei Tre Venti sono in entities.winds, non qui.",
+      "quando_acqua_trema": {
+        "type": "firma_visiva_saga",
+        "description": "immagine ricorrente legata al Pattern A",
+        "constraint": "mai_dichiarata_nel_testo",
+        "pattern_a_linked": true
+      }
+    }
+  },
+  "seeds": {
+    "seed_s01_bastoncino_noah": {
+      "seed_id": "seed_s01_bastoncino_noah",
+      "type": "fisico",
+      "origin_story": "s01",
+      "description": "Noah raccoglie un bastoncino in cammino sui Pascoli. Nominato una sola volta en passant, mai annunciato come oggetto.",
+      "voice_constraint": "ci_si_appoggiava_un_po_come_fanno_i_grandi_o_simile",
+      "bloom_target_stories": [
+        "s02"
+      ],
+      "bloom_type": "oggetto_fantasma_congelato_pozza",
+      "status": "bloomed",
+      "bloomed_in_story": "s02",
+      "related_seed": "seed_noah_raccoglie_oggetti",
+      "bloom_notes": "Noah lo getta nell'acqua della pozza per rabbia. L'acqua si increspa. Il bastoncino galleggia un attimo, si inclina, sparisce sotto. Resta congelato dentro il velo che si richiude al calare del sole — oggetto-fantasma per il rilettore, MAI dichiarato nel testo."
+    },
+    "seed_noah_raccoglie_oggetti": {
+      "seed_id": "seed_noah_raccoglie_oggetti",
+      "type": "gesto",
+      "origin_story": "s01",
+      "description": "Gesto-firma di Noah: cammina e raccoglie cose (bastoncini, rametti). Mai dichiarato come abitudine, emerge per accumulo en passant.",
+      "bloom_target_stories": [
+        "s02",
+        "s06",
+        "s07"
+      ],
+      "bloom_type": "gesto_firma_diffuso",
+      "status": "active"
+    },
+    "seed_pagnotta_grunto_rito": {
+      "seed_id": "seed_pagnotta_grunto_rito",
+      "type": "frame",
+      "origin_story": "s01",
+      "description": "Fiamma consegna pagnotta ai fratelli da portare a Grunto. Piccolo rituale ricorrente: Fiamma sa che Grunto c'è, si ricorda di lui senza dirglielo, da prima dei fratelli.",
+      "bloom_target_stories": [
+        "s12"
+      ],
+      "bloom_type": "cornice_s1_s12_simmetria_chiusura_saga",
+      "status": "active",
+      "strato": "strato_3_silenzioso",
+      "object_ref": "pagnotta_forno"
+    },
+    "seed_grunto_prima_apparizione": {
+      "seed_id": "seed_grunto_prima_apparizione",
+      "type": "relazionale",
+      "origin_story": "s01",
+      "description": "Prima apparizione di Grunto come incontro vero. Una sola parola ('Buono'). ZERO frammenti pre-Vento. Stabilisce modo: grunt→zampa→smette_di_guardare→permesso→una_parola.",
+      "bloom_target_stories": [
+        "s12"
+      ],
+      "bloom_type": "cornice_grunto_s1_s12_simmetria",
+      "status": "active",
+      "strato": "strato_3_apre_porta_verso_s12"
+    },
+    "seed_due_passi_dal_burrone": {
+      "seed_id": "seed_due_passi_dal_burrone",
+      "type": "spatial_echo",
+      "origin_story": "s01",
+      "description": "Posizione fisica precisa: la cengia a due passi dal bordo del Burrone dove il Vento Taglio apre la nebbia. Micro-eco per S12 quando i fratelli passeranno di nuovo lassù cresciuti, lo sapranno senza vederlo.",
+      "bloom_target_stories": [
+        "s12"
+      ],
+      "bloom_type": "memoria_spaziale_conosciuta_senza_vedere",
+      "status": "active",
+      "location_ref": "burrone",
+      "strato": "strato_3"
+    },
+    "seed_gabriel_sa_la_strada_senza_vedere": {
+      "seed_id": "seed_gabriel_sa_la_strada_senza_vedere",
+      "type": "capacita",
+      "origin_story": "s01",
+      "description": "Gabriel, Δ del personaggio, sa fermarsi e sa la strada anche senza vedere. Capacità caratteriale, si trasferirà al buio in S10.",
+      "bloom_target_stories": [
+        "s04",
+        "s10"
+      ],
+      "bloom_type": "capacita_trasferita_al_buio_in_s10",
+      "status": "bloomed",
+      "bloomed_in_story": "s04",
+      "bloom_notes": "Gabriel dice 'Gridiamo no. Pensiamo.' ed esegue: cammina nella direzione del battito di Noah, segue il suono che trafila dal terreno, non l'aria. Sa la strada anche senza vederla. Il bloom si estende ancora in S10 (buio puro)."
+    },
+    "seed_fermarsi_come_gesto_attivo": {
+      "seed_id": "seed_fermarsi_come_gesto_attivo",
+      "type": "gesto",
+      "origin_story": "s01",
+      "description": "Fermarsi quando non si distingue = gesto attivo, non passivo. Gabriel lo istituisce nella nebbia. Sarà trasferito a Noah in S4 (siede tra le radici). In S7 verrà invertito (continuare).",
+      "bloom_target_stories": [
+        "s04",
+        "s07"
+      ],
+      "bloom_type": "pattern_fermarsi_trasferito_tra_fratelli",
+      "status": "bloomed",
+      "maturing_in_stories": [
+        {
+          "story": "s03",
+          "note": "Eco strutturale: il fermarsi prima del buio Foresta è eco del fermarsi nella nebbia (S1). Chiusura del ciclo Δ per accumulo."
+        }
+      ],
+      "bloomed_in_story": "s04",
+      "bloom_notes": "Noah si siede tra le radici del grande albero quando si perde — non piange, si ferma da solo. Il pattern del fermarsi istituito da Gabriel in S1 si trasferisce a Noah in S4. Il gesto circola tra fratelli."
+    },
+    "seed_paura_elias_piccolo": {
+      "seed_id": "seed_paura_elias_piccolo",
+      "type": "paura",
+      "origin_story": "s02",
+      "description": "Elias si vede 'piccolo' nel riflesso della pozza — molto piccolo, tra i fratelli che nello specchio risultano più grandi di quanto siano. Mormora 'Voi siete grandi davvero'. Seme FORTE della sua paura: non essere abbastanza, 'quello in mezzo'. Mai detta come tale.",
+      "bloom_target_stories": [
+        "s11"
+      ],
+      "bloom_type": "paura_elias_accettata_via_riconoscimento_muto_vecchie",
+      "maturing_planned_stories": [
+        "s04",
+        "s05",
+        "s06",
+        "s09"
+      ],
+      "status": "active",
+      "brother": "elias",
+      "resolution_mode": "accettare",
+      "maturing_in_stories": [
+        {
+          "story": "s04",
+          "note": "Maturing basso: micro-sguardo storto di Elias al momento dell'abbraccio dei fratelli post-ritrovamento, dopo che lui ha tenuto fisicamente l'ancora del ritmo. La paura matura VERSO IL BASSO (piu' sommersa) rispetto a S2 dove affiorava quasi in parola. Mai nominata, mai mostrata visibilmente ai fratelli."
+        },
+        {
+          "story": "s05",
+          "note": "Maturing in forma precisa: fare-la-fatica-tecnica-senza-avere-il-centro-del-silenzio. Elias ha ricevuto la corda di Nodo, ha imparato il marinaro, ha legato tutti i nodi del ponte, ha passato per primo — ha fatto tutta la fatica tecnica. Eppure e' Bru a sedersi al centro della radura per primo. Elias si prende il ponte, Bru si prende il silenzio. Il conflitto sottile: fare le cose non e' la stessa cosa di averle. Modulazione nel blocco B: fare-senza-avere (S5) evolvera' in capire-senza-avere (S6)."
+        }
+      ],
+      "maturing_type_legacy": "micro_sguardi_distribuiti_mai_nominati"
+    },
+    "seed_stria_vede_prima": {
+      "seed_id": "seed_stria_vede_prima",
+      "type": "relazionale",
+      "origin_story": "s02",
+      "description": "Stria rilancia invece di rispondere ('Tu cosa pensi?'). Vola via senza spiegare dove va. Archetipo di Stria come figura che vede in anticipo ma non dichiara — sa cose dei cuccioli prima che loro stessi.",
+      "bloom_target_stories": [
+        "s11"
+      ],
+      "bloom_type": "stria_sa_e_da_quattro_coni_a_elias_perche_sa_che_ne_dara_uno",
+      "maturing_planned_stories": [
+        "s06",
+        "s09"
+      ],
+      "status": "active"
+    },
+    "seed_oggetto_fantasma_congelato": {
+      "seed_id": "seed_oggetto_fantasma_congelato",
+      "type": "gesto",
+      "origin_story": "s02",
+      "description": "Meccanica del mondo: un oggetto caduto nell'acqua poco prima del calar del sole resta congelato dentro il velo che si richiude. Mai dichiarato nel testo. Istituisce il concetto di oggetto-fantasma visibile solo al rilettore.",
+      "bloom_target_stories": [],
+      "bloom_type": "meccanica_istituita_per_strato_3_rilettore",
+      "status": "active",
+      "note": "Seme di tipo gesto per tracciare meccanica ricorrente possibile (non obbligatorio bloom)."
+    },
+    "seed_paura_noah_buio": {
+      "seed_id": "seed_paura_noah_buio",
+      "type": "paura",
+      "origin_story": "s01",
+      "description": "Paura di Noah del buio. Declinazioni: S1 bianco totale (nebbia, perdita di riferimenti); S3 buio della Foresta di sera (variante geografica); S10 buio puro notturno (bloom, risolta con modo 'dire').",
+      "bloom_target_stories": [
+        "s10"
+      ],
+      "bloom_type": "paura_noah_buio_risolta_dire",
+      "status": "maturing",
+      "brother": "noah",
+      "maturing_in_stories": [
+        {
+          "story": "s03",
+          "note": "Seconda variante: buio della Foresta di sera. Noah fa due passi dentro, si ferma, torna indietro senza dirlo. Variante geografica del buio puro che esploderà in S10."
+        }
+      ],
+      "resolution_mode": "dire"
+    },
+    "seed_rovo_resistenza_che_protegge": {
+      "seed_id": "seed_rovo_resistenza_che_protegge",
+      "type": "relazionale",
+      "origin_story": "s03",
+      "description": "Prima apparizione di Rovo come maggiore. Modo istituito: brontola, protegge senza ammetterlo, posa l'oggetto al margine dagli Orti (non lancia). Registro 'guardiano del confine' qui.",
+      "bloom_target_stories": [
+        "s04"
+      ],
+      "bloom_type": "rovo_registro_diverso_abitante_foresta_non_guardiano_confine",
+      "status": "active"
+    },
+    "seed_bru_presenza_che_custodisce": {
+      "seed_id": "seed_bru_presenza_che_custodisce",
+      "type": "relazionale",
+      "origin_story": "s03",
+      "description": "Prima apparizione di Bru. Intravisto dietro Rovo, occhi che brillano, poi si ritira. Nessuna parola. Seme della presenza silenziosa che custodisce.",
+      "bloom_target_stories": [
+        "s11"
+      ],
+      "bloom_type": "bru_riconosciuto_da_elias_come_quello_solo_porta_a_rovo",
+      "maturing_planned_stories": [
+        "s04",
+        "s05"
+      ],
+      "status": "bloomed",
+      "bloomed_in_story": "s05",
+      "bloom_notes": "Da intravisto (S3) a presenza concreta silenziosa (S4) a compagno attivo con agency narrativa (S5): Bru indica la radura col mento, sceglie le pertiche giuste in silenzio, passa per quarto sul ponte come ospite che onora il lavoro di Elias, si siede al centro della radura per primo. Vincoli Bible rispettati (mai centro attenzione in gruppo, mai eroe). Secondo bloom atteso in S11 (riconosciuto da Elias come quello-solo, porta a Rovo) sara' seed fratello, da piantare in S10 o S11."
+    },
+    "seed_pallone_stoffa_cucita": {
+      "seed_id": "seed_pallone_stoffa_cucita",
+      "type": "fisico",
+      "origin_story": "s03",
+      "description": "Pallone di stoffa cucita. Oggetto di gioco dei fratelli. In S3 rotola oltre il margine della Foresta, recuperato da Rovo.",
+      "bloom_target_stories": [
+        "s11"
+      ],
+      "bloom_type": "ricomparsa_in_giochi_cuccioli_festa_raccolto",
+      "status": "active",
+      "note": "Tentativo: in S11 festa è 'eventuale'. Se non ritorna, chiudere come closed in D."
+    },
+    "seed_foresta_tempi_modi_propri": {
+      "seed_id": "seed_foresta_tempi_modi_propri",
+      "type": "relazionale",
+      "origin_story": "s03",
+      "description": "La Foresta come luogo che ha tempi propri. Istituito dalla frase di Rovo 'Le cose della Foresta hanno il loro orario'. Prepara la rete delle radici di S4.",
+      "bloom_target_stories": [
+        "s04",
+        "s05"
+      ],
+      "bloom_type": "foresta_come_tessuto_vivo_percettivo_che_porta_vibrazioni_attraverso_radici",
+      "status": "bloomed",
+      "bloomed_in_story": "s04",
+      "bloom_notes": "La Foresta non porta solo voci attraverso l'aria — porta vibrazioni attraverso il tessuto delle radici. Chi ha il palmo (o le unghie) sulla terra la sente. Chi sta solo sopra (Salvia, lepre in superficie) no. Principio fisico del mondo istituito qui. S5 estende: la Foresta nasconde radure che si raggiungono solo se costruisci — stesso principio (la Foresta ha suoi modi) declinato in chiave spaziale/costruttiva."
+    },
+    "seed_tum_tum_tum_codice_fratelli": {
+      "seed_id": "seed_tum_tum_tum_codice_fratelli",
+      "type": "gesto",
+      "origin_story": "s04",
+      "description": "TUM-tum-TUM-tum-TUM. Il ritmo che solo i tre fratelli sanno — 'la loro canzone', non spiegata, non insegnata nel testo. Nell'universo della storia preesiste S4 (i fratelli lo sanno già); nella grammatica della saga è qui che viene istituito come seed. Elias lo batte su una radice, Noah lo riconosce e risponde col palmo sulla terra. Ritmo identitario dei tre.",
+      "voice_constraint": "mai_spiegato_come_lo_hanno_imparato_mai_chiamato_la_loro_canzone_nel_testo_salvo_come_narratore_memoria_lunga_discreta",
+      "bloom_target_stories": [
+        "s12"
+      ],
+      "bloom_type": "eco_silenziosa_mani_sulla_terra_forno_cena_finale_saga",
+      "status": "active",
+      "strato": "strato_3_ritmo_identitario",
+      "note": "Primo patrimonio fisico-identitario dei tre, mai raccontato. S12 lo richiama senza ribattuto: il gesto delle mani sulla terra a fine saga è sua eco silenziosa."
+    },
+    "seed_rovo_abitante_foresta": {
+      "seed_id": "seed_rovo_abitante_foresta",
+      "type": "relazionale",
+      "origin_story": "s04",
+      "description": "Secondo registro di Rovo, fratello del primo (seed_rovo_resistenza_che_protegge, S3). Rovo come abitante della Foresta che sente rumore di casa propria — non guardiano del confine, ma chi vive dentro e si accorge di chi disturba. I due registri coesistono, non si sostituiscono.",
+      "bloom_target_stories": [],
+      "bloom_type": "coesistenza_con_seed_s3_rovo_due_registri_che_convivono",
+      "status": "active",
+      "related_seed": "seed_rovo_resistenza_che_protegge",
+      "note": "Rovo è personaggio a doppio registro — S3 (guardiano confine) + S4 (abitante dentro). In saga si alternano. S11 lo segna via Bru — in quel bloom finale i due registri si uniranno o si chiuderanno insieme."
+    },
+    "seed_farfalla_blu_seguire_fuori_soglia": {
+      "seed_id": "seed_farfalla_blu_seguire_fuori_soglia",
+      "type": "gesto",
+      "origin_story": "s04",
+      "description": "Noah segue una farfalla blu — singolo punto cromatico isolato che poi sparisce. Gesto del piccolo che si lascia attirare oltre una soglia senza accorgersi. Variante maturing della paura del buio (ora buio geografico del perdersi in Foresta, non del bianco come in S1, non del margine come in S3). Quarta variante è S10 (buio puro, bloom).",
+      "bloom_target_stories": [],
+      "bloom_type": "gesto_caratteriale_di_noah_non_obbligatorio_bloom",
+      "status": "active",
+      "note": "Seed di tipo gesto per tracciare modalità ricorrente del piccolo. Si lega al seed_noah_raccoglie_oggetti (S1) — Noah che raccoglie e Noah che segue sono due facce dello stesso gesto distrattivo-scoperta. Senza bloom obbligatorio."
+    },
+    "seed_gesto_della_terra_palmo": {
+      "seed_id": "seed_gesto_della_terra_palmo",
+      "type": "gesto",
+      "origin_story": "s04",
+      "description": "Gesto del palmo aperto sulla terra per sentire e per parlare. Noah lo fa per primo quando e' perso (irriflesso — si siede tra le radici, il palmo scende sulla terra da solo, e lui sente vibrare). E' il canale attraverso cui il TUM-tum-TUM dei fratelli passa dentro il tessuto della Foresta. Non e' un gesto simbolico — e' come si sente una vibrazione nel mondo di questa Foresta. Sara' ripreso in S12, gesto delle mani sulla terra al Forno a fine saga — eco silenziosa, li' senza vibrazione, solo postura ereditata.",
+      "bloom_target_stories": [
+        "s12"
+      ],
+      "bloom_type": "gesto_finale_saga_mani_sulla_terra_al_forno",
+      "status": "active",
+      "strato": "strato_3_come_seed_tum_tum_tum"
+    },
+    "seed_nodo_marinaro_capacita_elias": {
+      "seed_id": "seed_nodo_marinaro_capacita_elias",
+      "type": "capacita",
+      "origin_story": "s05",
+      "description": "Il Nodo Marinaro — uno dei quattro nodi di Nodo (Bible §4.10) — viene mostrato una volta da Nodo a Elias durante la costruzione del ponte. Elias sbaglia due volte, riesce alla terza. Da qui in poi Elias sa fare il nodo marinaro: diventa 'quello dei nodi' tra i fratelli. Capacita' tecnica tramandata da un maggiore a un fratello, eredita' pratica che lo porta attraverso il blocco C.",
+      "materiale_associato": "un_pezzo_della_corda_di_nodo_tagliato_dalla_sua_matassa_al_braccio_entra_nel_ponte_dei_fratelli_la_maestria_fisica_si_incorpora_nella_costruzione",
+      "voice_constraint": "nel_testo_mai_spiegato_come_si_fa_il_nodo_solo_mostrato_nodo_non_spiega_mai_elias_lo_impara_facendo",
+      "bloom_target_stories": [
+        "s07",
+        "s08",
+        "s11"
+      ],
+      "bloom_type": "capacita_che_regge_in_contesti_diversi_s7_zattera_s8_legare_albero_crisi_reale_s11_corda_intrecciata_festa",
+      "status": "active",
+      "note": "Primo patrimonio tecnico di un fratello, tramandato. Il campo materiale_associato traccia implicitamente la famiglia 'corda di Nodo entra nel fare dei fratelli' — se in S8 e S11 si conferma come pattern proprio, promuoveremo a seed autonomo in revisione grafo post-S6 (archiviato come nota operativa)."
+    },
+    "seed_radura_coi_pini_luogo_silenzioso": {
+      "seed_id": "seed_radura_coi_pini_luogo_silenzioso",
+      "type": "luogo",
+      "origin_story": "s05",
+      "description": "Radura sull'altra sponda del torrente, dentro la Foresta, 100-150 metri oltre il ponte. Cerchio d'erba con alcuni pini intorno. Luce verticale dall'alto. Bru si siede al centro per primo. Luogo silenzioso del mondo: non ha nome, non ha funzione produttiva, non e' un landmark. E' solo li'. Il numero dei pini non viene detto nel testo (l'illustrazione decide).",
+      "bloom_target_stories": [
+        "s12"
+      ],
+      "bloom_type": "passaggio_autunnale_verso_roccia_alta_i_fratelli_passano_di_nuovo_aghi_gialli_di_pino_sul_cerchio_d_erba",
+      "status": "active",
+      "location_ref": "foresta_intrecciata_zona_interna_oltre_torrente",
+      "strato": "strato_3_luogo_che_non_si_usa_solo_si_attraversa"
+    },
+    "seed_bru_sa_indicare_luoghi_che_altri_non_vedono": {
+      "seed_id": "seed_bru_sa_indicare_luoghi_che_altri_non_vedono",
+      "type": "capacita",
+      "origin_story": "s05",
+      "description": "Bru sa indicare luoghi che gli altri non vedono. In S5 ha indicato la radura coi pini senza parole, solo col mento. Gesto silenzioso che apre scoperte. Seme leggero — non obbligatorio bloom.",
+      "bloom_target_stories": [],
+      "bloom_type": "capacita_caratteriale_bru_non_obbligatorio_bloom",
+      "status": "active",
+      "note": "Semina che rimane sullo sfondo. Se non torna, si chiude come closed in D. Possibile eco lieve in S11 (Bru come ponte verso Rovo assente)."
+    },
+    "seed_elias_collauda_per_primo_responsabilita_di_chi_ha_fatto": {
+      "seed_id": "seed_elias_collauda_per_primo_responsabilita_di_chi_ha_fatto",
+      "type": "gesto",
+      "origin_story": "s05",
+      "description": "Chi ha fatto una cosa, la collauda per primo. Non e' dichiarato nel testo — e' il gesto di Elias che passa per primo sul ponte appena finito, dopo aver legato i nodi. Istituzione del modo di Elias: responsabilita' tecnica che si completa nel provare cio' che si e' fatto. Non e' eroismo, e' chiusura del ciclo del fare.",
+      "bloom_target_stories": [
+        "s08"
+      ],
+      "bloom_type": "quando_elias_lega_ramo_grosso_albero_caduto_crisi_s8_tiene_per_primo_quello_che_ha_legato",
+      "status": "active",
+      "note": "Modo di Elias che il blocco C deve onorare. In S8 Elias lega un ramo grosso dell'albero caduto sotto istruzione di Nodo — e terra' per primo la corda, prima di passarla agli altri Mantenitori."
+    },
+    "seed_pattern_a_rami_caduti_diventano_materia": {
+      "seed_id": "seed_pattern_a_rami_caduti_diventano_materia",
+      "type": "frame",
+      "origin_story": "s05",
+      "description": "PRIMA SEMINA FORMALE DEL PATTERN A. Le pertiche cadute dalla Foresta — cose cadute, rotte, lasciate, che la Foresta ha abbandonato dopo l'inverno — diventano la materia con cui i fratelli costruiscono il ponte. Il ponte e' fatto interamente di cose che la Foresta ha lasciato andare. Il principio del Pattern A ('le cose rotte arrivano lo stesso') qui si manifesta come 'le cose cadute diventano materia'. Mai nominato nel testo. Il narratore puo' toccarlo nella memoria lunga (1 inciso sui rami che cadono in inverno e diventano materia in primavera).",
+      "voice_constraint": "mai_dichiarato_mai_regola_vive_solo_nell_immagine_fisica_del_ponte_fatto_di_pertiche_cadute_e_in_al_massimo_1_inciso_narratore",
+      "bloom_target_stories": [
+        "s06",
+        "s07",
+        "s08",
+        "s10",
+        "s11",
+        "s12"
+      ],
+      "bloom_type": "pattern_a_trasversale_saga_chiusura_silente_s12_anno_chiuso_fratelli_diversi_insieme",
+      "status": "seminato",
+      "pattern_a_first_active_scene": "s05",
+      "related_to_saga_architecture": "pattern_a_riconosciuto_in_b2_come_famiglia_di_immagini_ricorrente_da_onorare_nelle_chiusure_di_blocco"
+    }
+  },
+  "callbacks": {
+    "cb_s02_001": {
+      "callback_id": "cb_s02_001",
+      "from_story": "s01",
+      "element": "bastoncino_noah",
+      "type": "oggetto",
+      "note": "Il bastoncino raccolto da Noah in cammino sui Pascoli (S1) cade nella pozza qui.",
+      "registered_in_story": "s02"
+    },
+    "cb_s02_002": {
+      "callback_id": "cb_s02_002",
+      "from_story": "s01",
+      "element": "gesto_firma_noah_raccoglie",
+      "type": "gesto",
+      "note": "Il gesto-firma di Noah (raccoglie in cammino) si conferma: stavolta l'oggetto raccolto ha un ruolo narrativo.",
+      "registered_in_story": "s02"
+    },
+    "cb_s03_001": {
+      "callback_id": "cb_s03_001",
+      "from_story": "s01",
+      "element": "fermarsi_come_gesto_attivo",
+      "type": "strutturale_tematico",
+      "note": "Eco strutturale: il fermarsi prima del buio Foresta è eco del fermarsi nella nebbia (S1). Chiusura del ciclo Δ per accumulo silenzioso. Non dichiarato nel testo, tracciato solo a livello di grafo e di note voce.",
+      "registered_in_story": "s03"
+    },
+    "cb_s04_001": {
+      "callback_id": "cb_s04_001",
+      "from_story": "s01",
+      "element": "fermarsi_come_gesto_attivo",
+      "type": "gesto_trasferito_tra_fratelli",
+      "note": "Il gesto del fermarsi istituito da Gabriel nella nebbia (S1) ora in Noah: si siede tra le radici, non piange, si ferma da solo. Pattern che circola tra fratelli.",
+      "registered_in_story": "s04"
+    },
+    "cb_s04_002": {
+      "callback_id": "cb_s04_002",
+      "from_story": "s01",
+      "element": "aspettiamo_di_gabriel_diventa_pensiamo",
+      "type": "frase_eco_diretta",
+      "note": "'Gridiamo no. Pensiamo.' di Gabriel in S4 e' eco diretta dell''Aspettiamo' di S1. Stesso fratello, stessa struttura di decisione contraria all'istinto, problema diverso.",
+      "registered_in_story": "s04"
+    },
+    "cb_s04_003": {
+      "callback_id": "cb_s04_003",
+      "from_story": "s03",
+      "element": "cantilena_coltivatori",
+      "type": "bloom_sonoro",
+      "note": "La cantilena sommessa dei Coltivatori in S3 diventa cantilena piena della semina in S4. Passaggio stagionale sonoro (inverno->primavera piena).",
+      "registered_in_story": "s04"
+    },
+    "cb_s04_004": {
+      "callback_id": "cb_s04_004",
+      "from_story": "s03",
+      "element": "rovo_registro_diverso",
+      "type": "personaggio_secondo_registro",
+      "note": "Rovo in S4 e' abitante della Foresta (gia' dentro quando tutto comincia), non guardiano del confine come in S3. I due registri coesistono.",
+      "registered_in_story": "s04"
+    },
+    "cb_s04_005": {
+      "callback_id": "cb_s04_005",
+      "from_story": "s03",
+      "element": "bru_da_intravisto_a_presenza_concreta",
+      "type": "personaggio_sviluppo_presenza",
+      "note": "Bru in S3 intravisto dietro Rovo con occhi che brillano; in S4 presenza concreta appoggiata a un tronco, che ha sentito la vibrazione dalle unghie nella terra.",
+      "registered_in_story": "s04"
+    },
+    "cb_s05_001": {
+      "callback_id": "cb_s05_001",
+      "from_story": "s04",
+      "element": "bru_indica_col_mento_direzione_radura",
+      "type": "gesto_richiamo",
+      "note": "Bru in S4 (fine, mentre tornavano con Salvia) aveva indicato col mento una direzione. In S5 quel gesto diventa motivo del viaggio: i fratelli chiamano Bru e lo seguono verso la radura che lui aveva indicato.",
+      "registered_in_story": "s05"
+    },
+    "cb_s05_002": {
+      "callback_id": "cb_s05_002",
+      "from_story": "s04",
+      "element": "foresta_che_ha_suoi_modi",
+      "type": "principio_fisico_esteso",
+      "note": "In S4 la Foresta come tessuto vivo che porta vibrazioni. In S5 la Foresta estende: ha suoi modi anche di nascondere radure che si raggiungono solo se costruisci. Stesso principio, declinato in chiave costruttiva/spaziale.",
+      "registered_in_story": "s05"
+    },
+    "cb_s05_003": {
+      "callback_id": "cb_s05_003",
+      "from_story": "s04",
+      "element": "bru_presenza_che_custodisce",
+      "type": "personaggio_sviluppo_agency",
+      "note": "Bru da presenza concreta silenziosa (S4) a compagno attivo con agency narrativa (S5). Bloom del seed.",
+      "registered_in_story": "s05"
+    }
+  },
+  "stories": {
+    "s01": {
+      "id": "s01",
+      "title_provvisorio": "La Nebbia delle Montagne Gemelle",
+      "cycle": "A",
+      "attribute_dominant": "delta",
+      "season": "inverno",
+      "season_passage": null,
+      "block_position": "apertura_saga",
+      "wind_active": "vento_taglio",
+      "wind_notes": "Taglio all'alba atteso. Notte ferma prima (i tre venti dormono). Quando arriva, apre la nebbia — visibilmente marcato perché la scena lo richiede narrativamente.",
+      "location_primary": {
+        "id": "montagne_gemelle",
+        "quadrant": "aria_nord",
+        "coordinates_mandala": "nord_esterno",
+        "specific_points": [
+          "pascoli_alti",
+          "sentiero_montagne_gemelle",
+          "burrone",
+          "grotta_grunto"
+        ],
+        "_note": "Percorso: Forno (apertura) → salita dai Pascoli Alti → nebbia sul sentiero → cengia presso Burrone (non dentro) → ritorno al Forno (chiusura cornice)."
+      },
+      "locations_secondary": [
+        {
+          "id": "forno",
+          "quadrant": "fuoco_est",
+          "scene_role": "cornice_apertura_e_chiusura"
+        }
+      ],
+      "characters_in_scene": [
+        {
+          "id": "gabriel",
+          "role": "protagonista_azione_dominante",
+          "narrative_weight": "portante_del_ciclo_delta",
+          "key_actions": [
+            "chiede_aiuto_a_fiamma_implicitamente_passando_al_forno",
+            "dice_no_non_muoverci_nella_nebbia_decisione_contraria_istinto",
+            "posa_la_pagnotta_su_pietra_piatta_per_grunto"
+          ],
+          "quote_count_estimate": 3
+        },
+        {
+          "id": "elias",
+          "role": "protagonista_azione",
+          "narrative_weight": "ponte_tra_fratelli",
+          "key_actions": [
+            "propone_di_tenersi_per_mano_nella_nebbia",
+            "tiene_la_mano_di_noah"
+          ],
+          "quote_count_estimate": 2
+        },
+        {
+          "id": "noah",
+          "role": "protagonista_azione",
+          "narrative_weight": "piccolo_che_sente_il_freddo_bianco",
+          "key_actions": [
+            "vuole_correre_nella_nebbia_istinto_di_fuga",
+            "si_stringe_ai_fratelli_senza_dirlo",
+            "raccoglie_bastoncino_in_cammino_gesto_firma_en_passant"
+          ],
+          "quote_count_estimate": 2
+        },
+        {
+          "id": "fiamma",
+          "role": "cammeo_cornice_apertura",
+          "mode": "chiacchiera",
+          "detti_count": 1,
+          "detti_notes": "detto popolare en passant, generico sul carattere di Grunto (es. 'Più di una se la mangia per dispetto e poi non torna'). Da raffinare in D. NON anticipazione nebbia.",
+          "familial_role_episodic": "presenza_calda_di_partenza_non_madre_piena",
+          "quote_count_estimate": 3
+        },
+        {
+          "id": "grunto",
+          "role": "incontro_vero_seconda_parte_storia",
+          "narrative_weight": "altro_da_famiglia",
+          "fragment_used": false,
+          "key_actions": [
+            "grunt_iniziale_zampa_manda_via",
+            "smette_di_guardare_quando_restano_permesso",
+            "annusa_la_pagnotta_posata",
+            "una_parola_sola_buono"
+          ],
+          "constraints_active": [
+            "no_nomi_propri_ariete_ondina_tempesta",
+            "mai_nostalgia",
+            "mai_racconto_pieno",
+            "zero_frammenti_pre_vento_in_questa_storia"
+          ],
+          "quote_count_estimate": 1
+        }
+      ],
+      "premise": "I fratelli decidono di salire alle Montagne Gemelle per vedere l'isola dall'alto. Passano dal Forno per scaldarsi. Fiamma li guarda, capisce dove vanno, gli mette in mano una pagnotta: se passate dal Burrone, una per Grunto, una sola.",
+      "problem": "Sopra i Pascoli Alti, nebbia di inversione termica li avvolge. Bianco totale. Non vedono più sentiero né montagne. Noah vuole correre. Elias propone di tenersi per mano. Gabriel sente che muoversi è sbagliato — ma non sa spiegare perché.",
+      "threshold_moment": "Gabriel dice 'No. Non muoverci' e i fratelli si siedono. Decisione contraria all'istinto. Vento Taglio arriva poco dopo, la nebbia si apre, e davanti a loro — due passi — c'è il bordo del Burrone.",
+      "resolution_mode": "Riprendono il sentiero a sinistra. Salgono. Trovano la cengia di Grunto. Incontro vero: Grunto grunt, batte uno zoccolo, manda via. Loro restano. Lui smette di guardarli (permesso). Gabriel posa la pagnotta su una pietra piatta. Grunto la annusa. Una parola: 'Buono.' I fratelli scendono prima che faccia buio. Tornano al Forno. Fiamma non chiede com'è andata.",
+      "key_phrase_indicative": null,
+      "key_phrase_notes": "Direzione: immagine che sigilla, non regola. Sigillo del narratore in chiusura (non di Fiamma). Nessuna frase-chiave dichiarativa di personaggio. Da scrivere in D.",
+      "fear_touched": {
+        "brother": "noah",
+        "fear_id": "buio",
+        "status": "implicita",
+        "mode_of_touch": "disagio_bianco_totale_come_proto_paura_del_buio",
+        "_note": "Prima apparizione (seminata): prepara S10."
+      },
+      "seeds_planted": [
+        "seed_s01_bastoncino_noah",
+        "seed_noah_raccoglie_oggetti",
+        "seed_pagnotta_grunto_rito",
+        "seed_grunto_prima_apparizione",
+        "seed_due_passi_dal_burrone",
+        "seed_gabriel_sa_la_strada_senza_vedere",
+        "seed_paura_noah_buio",
+        "seed_fermarsi_come_gesto_attivo"
+      ],
+      "seeds_picked_up": [],
+      "callbacks_made": [],
+      "active_constraints_touched": [
+        "grunto_testimone_unico",
+        "grunto_zero_frammenti_qui",
+        "detti_fiamma_esclusivi",
+        "night_not_personified",
+        "no_narrator_reveal_preannouncement",
+        "frame_s1_s12_at_forno_opening"
+      ],
+      "pattern_a_active": "none",
+      "pattern_a_notes": "Pattern A non ancora seminato in saga. S1 non lo tocca.",
+      "when_water_trembles": false,
+      "night_scene": true,
+      "night_scene_notes": "Scena notturna parziale: notte ferma sui Pascoli prima dell'alba (breve, in passaggio verso il Taglio che arriva). Prima delle 3-4 scene notturne saga.",
+      "visual_anchors": {
+        "scene_hooks": [
+          {
+            "hook_id": "s01_h1",
+            "location_precise": "forno_interno",
+            "quadrant": "fuoco_est",
+            "time_of_day": "mattino_presto",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "fiamma"
+            ],
+            "focal_action": "Fiamma mette in mano una pagnotta. Dice di portarla a Grunto passando dal Burrone, una sola.",
+            "focal_object": "pagnotta_forno",
+            "atmosphere": "caldo_interno_freddo_fuori_vapore_dal_pane",
+            "wind_visible": null,
+            "palette_local": "terracotta_arancio_forno_fiato_bianco_vetri_appannati"
+          },
+          {
+            "hook_id": "s01_h2",
+            "location_precise": "pascoli_alti_salita_verso_sentiero_montagne",
+            "quadrant": "aria_nord",
+            "time_of_day": "mattino",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah"
+            ],
+            "focal_action": "i tre entrano nella nebbia bianca, sagome che si sfocano, tenuti per mano su proposta di Elias; Noah ha un bastoncino raccolto che stringe distrattamente",
+            "focal_object": "nebbia",
+            "atmosphere": "bianco_totale_silenzio_ovattato_perdita_di_riferimenti",
+            "wind_visible": null,
+            "wind_notes": "Taglio non ancora sceso dall'est; i venti stanno per svegliarsi",
+            "palette_local": "bianco_grigio_azzurro_freddo_della_nebbia_sagome_sbiadite"
+          },
+          {
+            "hook_id": "s01_h3",
+            "location_precise": "sentiero_montagne_gemelle_mezzacosta_cengia_sul_burrone",
+            "quadrant": "aria_nord",
+            "time_of_day": "mattino_inoltrato",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah"
+            ],
+            "focal_action": "i tre seduti sul sentiero dopo il 'no' di Gabriel; il Vento Taglio scende dall'est, apre la nebbia — davanti a loro, a due passi, il bordo del Burrone",
+            "focal_object": "bordo_del_burrone_rivelato",
+            "atmosphere": "rivelazione_silenziosa_luce_che_taglia_nebbia_vertigine_che_non_accade",
+            "wind_visible": "vento_taglio_visibilmente_marcato",
+            "wind_visual_details": "linee_di_luce_gialla_tra_nebbia_che_si_apre_ombre_lunghe_definite_capelli_scolpiti_in_una_direzione",
+            "palette_local": "bianco_che_si_apre_oro_pallido_invernale_primo_sole_grigio_pietra_burrone_profondo_nero_sotto"
+          },
+          {
+            "hook_id": "s01_h4_signature",
+            "location_precise": "cengia_grotta_grunto_burrone",
+            "quadrant": "aria_nord",
+            "time_of_day": "mezzogiorno_montagna",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "grunto"
+            ],
+            "focal_action": "Gabriel posa la pagnotta su una pietra piatta. Grunto, dopo aver mandato via, annusa. I tre fratelli restano a rispettosa distanza.",
+            "focal_object": "pagnotta_su_pietra_piatta",
+            "atmosphere": "incontro_misurato_silenzio_altitudine_rispetto_reciproco",
+            "wind_visible": "taglio_residuo_in_alta_quota",
+            "palette_local": "verde_scuro_del_muschio_nelle_pietre_pelo_verde_di_grunto_che_si_confonde_con_lichene_oro_pallido_luce_invernale_cicatrice_chiara_sul_fianco_di_grunto"
+          },
+          {
+            "hook_id": "s01_h5",
+            "location_precise": "forno_interno_ritorno",
+            "quadrant": "fuoco_est",
+            "time_of_day": "tardo_pomeriggio_quasi_sera",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "fiamma"
+            ],
+            "focal_action": "i tre tornano al Forno prima che faccia buio. Fiamma non chiede com'è andata. Probabilmente qualcosa di caldo in mano.",
+            "focal_object": "forno_acceso_cornice_di_chiusura",
+            "atmosphere": "ritorno_calore_quiete_non_trionfo",
+            "wind_visible": "mulinello_sera_leggero_fuori",
+            "palette_local": "arancio_forno_blu_crepuscolo_dalle_finestre_fiato_bianco_dei_fratelli_che_entrano"
+          }
+        ],
+        "signature_image": "s01_h4_signature",
+        "signature_image_reason": "L'incontro con Grunto sulla cengia è la scena-cardine della storia — la prima volta che la saga mostra la figura di confronto, architrave strato 3. La palette con pelo-verde-che-si-confonde-con-lichene è la firma visiva che resterà di Grunto in saga.",
+        "palette_tag": "bianco_freddo_nebbia_poi_oro_pallido_invernale_verde_muschio_burrone",
+        "light_key_sequence": "mattino_presto_forno_arancio → mattino_nebbia_bianco → mattino_inoltrato_taglio_che_apre → mezzogiorno_montagna → tardo_pomeriggio_ritorno_forno",
+        "recurring_visual_objects": [
+          "pagnotta_forno",
+          "grembiule_fiamma",
+          "cicatrice_grunto"
+        ],
+        "visual_signatures_touched": []
+      },
+      "voice_notes_essential": [
+        "apertura_saga_frase_firma_narratore_esplicita_1_di_max_2_in_saga",
+        "address_al_lettore_in_chiusura_1_di_max_6_in_saga",
+        "memoria_lunga_narratore_1_o_2_incisi_su_nebbia_alta_quota_o_burrone",
+        "fiamma_modalita_chiacchiera_con_1_detto_popolare_en_passant_generico_non_anticipazione_trama",
+        "grunto_una_parola_sola_buono_zero_frammenti_pre_vento",
+        "niente_frasi_chiave_dichiarative_di_personaggio_sigillo_narratore_con_immagine"
+      ],
+      "debts_opened": [
+        "s02_bastoncino_noah_cade_nella_pozza_oggetto_fantasma",
+        "s04_gabriel_sa_la_strada_trasferito_al_buio_via_pensiamo_non_gridiamo",
+        "s10_paura_noah_buio_emerge_pienamente",
+        "s12_pagnotta_grunto_cornice_chiusura_saga_al_forno",
+        "s12_cengia_burrone_spatial_echo_cresciuti_lo_sapranno_senza_vederlo",
+        "s12_grunto_frammento_pre_vento_unico_saga"
+      ],
+      "debts_closed": [],
+      "palette_emotiva": "Bianco-grigio-azzurro freddo della nebbia → al diradarsi, oro pallido invernale del primo sole sui Pascoli + verde scuro del muschio nelle pietre + pelo verde di Grunto che si confonde col lichene. Caldo del Forno all'andata e al ritorno (cornice).",
+      "callback_summary": "Nessun callback (è la prima storia).",
+      "structural_notes": [
+        "APERTURA_SAGA — patto di lettura col narratore installato qui",
+        "CORNICE_S1_S12 — pagnotta a Grunto istituita come frame di apertura; si chiuderà in S12",
+        "GRUNTO_PRIMA_APPARIZIONE — modo del personaggio istituito (grunt→zampa→permesso→una_parola)",
+        "PATTERN_A non ancora seminato (prima scena attiva: S7, preparata da S6)",
+        "DELTA_ESTERNO_E_INTERNO — i confini della nebbia e il confine del Burrone sono entrambi di Gabriel"
+      ]
+    },
+    "s02": {
+      "id": "s02",
+      "title_provvisorio": "Il Riflesso nella Pozza",
+      "cycle": "A",
+      "attribute_dominant": "delta",
+      "season": "inverno",
+      "season_passage": null,
+      "block_position": "centro_blocco_a",
+      "wind_active": "vento_taglio",
+      "wind_notes": "Taglio (alba) atteso; nella storia soffia una folata tardiva che increspa il velo d'acqua al momento-soglia — primo soffio visibile del Taglio in saga.",
+      "location_primary": {
+        "id": "pascoli_alti",
+        "quadrant": "aria_nord",
+        "coordinates_mandala": "nord_interno_dei_pascoli",
+        "specific_points": [
+          "pozza_abbeveratoio_pastori"
+        ],
+        "_note": "La pozza è piccola, d'estate abbeveratoio delle capre dei Pastori, ora ghiacciata con il velo di superficie appena sgelato da una giornata di sole. Da aggiungere come sub_location di pascoli_alti in ATLANTE quando si raffina (Fase E)."
+      },
+      "locations_secondary": [
+        {
+          "id": "pascoli_alti",
+          "quadrant": "aria_nord",
+          "scene_role": "cornice_consegna_pastori_off_screen"
+        }
+      ],
+      "characters_in_scene": [
+        {
+          "id": "gabriel",
+          "role": "protagonista_azione",
+          "narrative_weight": "delta_che_distingue_riflesso_da_verita",
+          "key_actions": [
+            "chiede_a_stria_dove_sta_andando_lei_vola_via",
+            "capisce_per_primo_che_riflesso_non_e_loro",
+            "dice_piano_quello_che_vedi_nello_specchio_e_solo_come_ti_guardi_adesso"
+          ],
+          "quote_count_estimate": 3
+        },
+        {
+          "id": "elias",
+          "role": "protagonista_soglia_emotiva",
+          "narrative_weight": "primo_tocco_della_sua_paura",
+          "key_actions": [
+            "si_vede_piccolo_nel_riflesso",
+            "tocca_l_acqua_col_dito_ritrae_la_mano",
+            "mormora_voi_siete_grandi_davvero",
+            "non_risponde_a_gabriel_poi_dice_andiamo"
+          ],
+          "quote_count_estimate": 3
+        },
+        {
+          "id": "noah",
+          "role": "protagonista_azione_irriflessa",
+          "narrative_weight": "agente_del_momento_soglia_via_gesto",
+          "key_actions": [
+            "tira_fuori_il_bastoncino_raccolto_in_s1",
+            "lo_getta_nell_acqua_per_rabbia_gesto_irriflesso",
+            "lo_vede_galleggiare_inclinarsi_sparire"
+          ],
+          "quote_count_estimate": 2
+        },
+        {
+          "id": "stria",
+          "role": "cammeo_apertura",
+          "narrative_weight": "archetipo_vede_prima_istituito",
+          "key_actions": [
+            "affida_messaggio_per_pastori",
+            "rilancia_invece_di_rispondere_tu_cosa_pensi",
+            "vola_via_senza_spiegare"
+          ],
+          "familial_role_episodic": "maestra_zia",
+          "quote_count_estimate": 2
+        }
+      ],
+      "characters_offscreen_or_background": [
+        {
+          "id": "pastori",
+          "entity_type": "gruppo_istituzione_implicita",
+          "role": "destinatari_messaggio_off_screen",
+          "_note": "I Pastori ricevono il messaggio dopo la pozza (consegna off-screen breve). Decisione B3: consegna avviene, non c'è debito di non-consegna. Pastori come entità: sfondo costante delle storie, mai individuati."
+        }
+      ],
+      "premise": "Stria affida ai fratelli un messaggio per i Pastori sui Pascoli Alti — quel mattino lei vola altrove. 'Tu cosa pensi?' — chiede a Gabriel quando lui le domanda dove stia andando. Vola via senza spiegare. Loro salgono.",
+      "problem": "A metà cammino trovano la pozza scoperta. Si chinano a bere. Vedono i loro riflessi — diversi da come si vedono loro. Gabriel si vede con la bocca tirata. Elias si vede piccolo — molto piccolo, tra i fratelli che nello specchio risultano più grandi di quanto siano. Noah si vede fermo (e lui non è mai fermo). Litigano. Elias resta zitto. Tocca l'acqua col dito, ritrae la mano.",
+      "threshold_moment": "Il bastoncino di Noah (callback S1) nell'acqua. Gesto irriflesso che diventa rottura della falsa fissità. Il riflesso non era la verità — era una versione, fissata da un'acqua troppo ferma. Vento Taglio arriva, folata che increspa il velo.",
+      "resolution_mode": "Il bastoncino galleggia un attimo, si inclina, sparisce sotto. Resta congelato dentro il velo che si richiude al calare del sole — oggetto-fantasma per il rilettore, MAI dichiarato nel testo. I fratelli si rialzano, riprendono il cammino verso i Pastori. Consegna del messaggio off-screen breve.",
+      "key_phrase_indicative": null,
+      "key_phrase_notes": "Direzione: rifiuto della falsa fissità senza dichiararla. Da affidare al narratore in chiusura, non a un personaggio. Nessuna frase-regola. Da scrivere in D.",
+      "fear_touched": {
+        "brother": "elias",
+        "fear_id": "non_essere_abbastanza",
+        "status": "seminata",
+        "mode_of_touch": "riflesso_mostra_elias_piccolo_tra_fratelli_piu_grandi_mormora_voi_siete_grandi_davvero",
+        "_note": "Semina FORTE della paura di Elias. Maturing successivo in S4-S5-S6-S9, bloom S11."
+      },
+      "seeds_planted": [
+        "seed_paura_elias_piccolo",
+        "seed_stria_vede_prima",
+        "seed_oggetto_fantasma_congelato"
+      ],
+      "seeds_picked_up": [
+        "seed_s01_bastoncino_noah",
+        "seed_noah_raccoglie_oggetti"
+      ],
+      "seeds_bloomed_here": [
+        "seed_s01_bastoncino_noah"
+      ],
+      "callbacks_made": [
+        {
+          "callback_id": "cb_s02_001",
+          "from_story": "s01",
+          "element": "bastoncino_noah",
+          "type": "oggetto",
+          "note": "Il bastoncino raccolto da Noah in cammino sui Pascoli (S1) cade nella pozza qui."
+        },
+        {
+          "callback_id": "cb_s02_002",
+          "from_story": "s01",
+          "element": "gesto_firma_noah_raccoglie",
+          "type": "gesto",
+          "note": "Il gesto-firma di Noah (raccoglie in cammino) si conferma: stavolta l'oggetto raccolto ha un ruolo narrativo."
+        }
+      ],
+      "active_constraints_touched": [
+        "detti_fiamma_esclusivi_qui_non_presente",
+        "stria_mai_due_risposte_stessa_scena",
+        "stria_mai_lezione_morale",
+        "no_narrator_reveal_preannouncement"
+      ],
+      "pattern_a_active": "pre_eco",
+      "pattern_a_notes": "Non è semina (semina: S6). È PRE-ECO VISIVA del Pattern A: l'acqua + Vento Taglio + cerchi argentei dell'increspatura che non rompe il flusso. Primissima immagine fisica della famiglia Pattern A, ma non conta nel tracciato formale (semina vera in S6, prima scena attiva S7). Da onorare visivamente.",
+      "when_water_trembles": false,
+      "night_scene": false,
+      "visual_anchors": {
+        "scene_hooks": [
+          {
+            "hook_id": "s02_h1",
+            "location_precise": "scuola_stria_cortile_o_margine_pascoli",
+            "quadrant": "centro_villaggio_o_via_che_sale",
+            "time_of_day": "mattino_presto",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "stria"
+            ],
+            "focal_action": "Stria, alta e ferma su una zampa, affida un messaggio per i Pastori. Quando Gabriel chiede dove va lei, solleva il becco — 'Tu cosa pensi?' — apre le ali e vola via.",
+            "focal_object": "stria_che_si_alza_in_volo",
+            "atmosphere": "autorita_calma_alba_invernale_rilancio_mai_risposta",
+            "palette_local": "grigio_cenere_di_stria_contro_azzurro_pallido_mattino_invernale_fiati_bianchi"
+          },
+          {
+            "hook_id": "s02_h2",
+            "location_precise": "sentiero_in_salita_verso_pascoli_alti",
+            "quadrant": "aria_nord",
+            "time_of_day": "mattino",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah"
+            ],
+            "focal_action": "i tre salgono sui Pascoli Alti. Noah distratto ha ancora il bastoncino di S1 in mano. Aria tersa, fiati visibili.",
+            "focal_object": "bastoncino_in_mano_a_noah",
+            "atmosphere": "cammino_in_salita_freddo_secco_chiaro",
+            "palette_local": "grigio_pietra_dei_pascoli_azzurro_invernale_bruno_chiaro_erba_secca"
+          },
+          {
+            "hook_id": "s02_h3_signature",
+            "location_precise": "pozza_ghiacciata_con_velo_d_acqua_sgelato_in_superficie",
+            "quadrant": "aria_nord_pascoli",
+            "time_of_day": "mattino_inoltrato",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah"
+            ],
+            "focal_action": "i tre chinati sulla pozza, vedono i riflessi — i riflessi sono un filo più scuri, più rigidi. Elias si vede piccolo tra i fratelli grandi. Tocca l'acqua col dito, ritrae la mano.",
+            "focal_object": "riflessi_falsati_sull_acqua",
+            "atmosphere": "momento_di_falsa_fissita_turbamento_silenzioso_litigio_freddo",
+            "palette_local": "blu_profondo_dell_acqua_sotto_il_ghiaccio_bianco_del_velo_grigio_pietra_dei_pascoli_riflessi_leggermente_piu_scuri_e_piu_rigidi_dei_volti_veri"
+          },
+          {
+            "hook_id": "s02_h4",
+            "location_precise": "pozza_dopo_il_gesto_di_noah",
+            "quadrant": "aria_nord_pascoli",
+            "time_of_day": "mattino_inoltrato",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah"
+            ],
+            "focal_action": "Noah getta il bastoncino nell'acqua per rabbia. L'acqua si increspa. Il Vento Taglio manda una folata — cerchi argentei sull'acqua. Il bastoncino galleggia, si inclina, sparisce sotto.",
+            "focal_object": "bastoncino_che_sparisce_sotto_il_velo",
+            "atmosphere": "rottura_della_falsa_fissita_via_gesto_irriflesso_vento_che_increspa",
+            "wind_visible": "vento_taglio_folata_cerchi_argentei",
+            "palette_local": "argento_dei_cerchi_sull_acqua_azzurro_che_torna_dopo_increspatura_punto_scuro_del_bastoncino_che_affonda"
+          },
+          {
+            "hook_id": "s02_h5",
+            "location_precise": "sentiero_del_ritorno_dai_pastori",
+            "quadrant": "aria_nord",
+            "time_of_day": "primo_pomeriggio",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah"
+            ],
+            "focal_action": "i tre scendono dai Pascoli. Hanno consegnato il messaggio. Camminano in silenzio un po' più lungo del solito.",
+            "focal_object": "i_tre_in_fila",
+            "atmosphere": "ritorno_piu_silenzioso_del_previsto",
+            "palette_local": "pomeriggio_invernale_luce_bassa_ombre_lunghe"
+          }
+        ],
+        "signature_image": "s02_h3_signature",
+        "signature_image_reason": "Il momento in cui i tre si vedono nel riflesso falsato è la scena-cardine. Prima volta in saga che un personaggio vede una versione di sé diversa da come si sente. Per Elias in particolare — semina della paura maggiore della saga su di lui.",
+        "palette_tag": "blu_profondo_sotto_ghiaccio_bianco_velo_grigio_pascoli_argento_cerchi_taglio",
+        "light_key_sequence": "mattino_presto_alba_taglio → mattino_nebbia_terso → mattino_inoltrato_pozza → primo_pomeriggio_ritorno",
+        "recurring_visual_objects": [
+          "scialle_stria",
+          "bastoncino_noah_s1"
+        ],
+        "visual_signatures_touched": []
+      },
+      "voice_notes_essential": [
+        "una_scena_di_silenzio_lungo_dei_tre_fratelli_carta_usata_con_misura",
+        "memoria_lunga_narratore_1_inciso_sulla_pozza_dei_pastori",
+        "nessun_address_al_lettore_arriva_in_s4",
+        "nessun_detto_popolare_fiamma_non_presente",
+        "stria_una_frase_rilancio_mai_due_risposte",
+        "riflessi_descritti_come_leggermente_piu_scuri_piu_rigidi_dei_volti_veri_eredita_schema_v1_1_app_c",
+        "pattern_a_mai_nominato_vive_nell_immagine_dei_cerchi_argentei_che_non_rompono_il_flusso"
+      ],
+      "debts_opened": [
+        "s11_paura_elias_bloom_accettazione_via_vecchie",
+        "s04_s05_s06_s09_paura_elias_maturing_micro_sguardi",
+        "s06_s09_stria_vede_prima_maturing",
+        "s11_stria_vede_prima_bloom_quattro_coni_a_elias"
+      ],
+      "debts_closed": [
+        "s01_bastoncino_noah_cade_e_diventa_oggetto_fantasma"
+      ],
+      "palette_emotiva": "Blu profondo dell'acqua sotto il ghiaccio + bianco del velo + grigio pietra dei Pascoli. Quando il vento increspa: cerchi argentei. I riflessi un filo più scuri, più rigidi dei volti veri (eredita schema v1.1 App. C).",
+      "callback_summary": "Bastoncino di Noah da S1 (oggetto → oggetto-fantasma). Gesto-firma di Noah che raccoglie (S1 → conferma qui).",
+      "structural_notes": [
+        "SEMINA_PAURA_ELIAS — seme maggiore, bloom S11",
+        "STRIA_VEDE_PRIMA — archetipo istituito, bloom S11",
+        "CALLBACK_S1 — bastoncino chiude il suo arco diventando oggetto-fantasma congelato",
+        "PRE_ECO_PATTERN_A — immagine dei cerchi argentei, non semina ma anticipazione visiva",
+        "STRUCTURA_FRATELLI — ognuno vede un riflesso falsato in modo coerente col proprio attributo EAR: Gabriel (Δ) vede 'bocca tirata' come deformazione del distinguere; Elias (⇄) vede 'piccolo' come deformazione del sentirsi in mezzo; Noah (⟳) vede 'fermo' come deformazione di non cambiare. Mai dichiarato, mai spiegato."
+      ]
+    },
+    "s03": {
+      "id": "s03",
+      "title_provvisorio": "Il Pallone oltre la Foresta",
+      "cycle": "A",
+      "attribute_dominant": "delta",
+      "season": "inverno",
+      "season_passage": "inverno_a_primavera",
+      "block_position": "chiusura_blocco_a_passaggio_stagionale",
+      "wind_active": null,
+      "wind_notes": "Taglio tramontato (è sera), la sua assenza si sente. Mulinello in arrivo, ancora silenzioso. Nessun vento AGISCE sulla scena — è la pausa tra due venti, tempo sospeso. Da onorare visivamente come aria ferma, foglie immobili, nessuna manifestazione visiva dei venti.",
+      "wind_transition": "taglio_tramontato_mulinello_in_attesa_silenziosa",
+      "location_primary": {
+        "id": "foresta_intrecciata",
+        "quadrant": "terra_ovest",
+        "coordinates_mandala": "ovest_esterno_margine",
+        "specific_points": [
+          "margine_foresta_intrecciata",
+          "orti_del_cerchio_confine"
+        ],
+        "_note": "Margine: confine tra Orti del Cerchio e Foresta Intrecciata, dove gli alberi cominciano a infittirsi. Non dentro la Foresta — i fratelli si fermano prima del margine. Solo Rovo esce dalla Foresta."
+      },
+      "locations_secondary": [
+        {
+          "id": "orti_del_cerchio",
+          "quadrant": "terra_ovest",
+          "scene_role": "sfondo_coltivatori_cantilena_sommessa"
+        }
+      ],
+      "characters_in_scene": [
+        {
+          "id": "gabriel",
+          "role": "protagonista_azione",
+          "narrative_weight": "delta_che_sente_limite_senza_saperlo_spiegare",
+          "key_actions": [
+            "blocca_noah_che_vuole_entrare",
+            "non_sa_spiegare_perche_non_si_entra_sente_solo_che_non_si_fa",
+            "chiede_a_rovo_perche_non_si_entra_di_sera"
+          ],
+          "quote_count_estimate": 3
+        },
+        {
+          "id": "elias",
+          "role": "protagonista_azione",
+          "narrative_weight": "ponte_che_trova_modo_terzo",
+          "key_actions": [
+            "indeciso_tra_gabriel_e_noah",
+            "ha_l_idea_di_chiamare_nel_buio_foresta",
+            "c_e_nessuno"
+          ],
+          "quote_count_estimate": 2
+        },
+        {
+          "id": "noah",
+          "role": "protagonista_azione_irriflessa",
+          "narrative_weight": "piccolo_che_sente_il_buio_foresta_e_torna_indietro",
+          "key_actions": [
+            "calcio_mal_misurato_pallone_entra_in_foresta",
+            "fa_due_passi_dentro_la_foresta_si_ferma",
+            "torna_indietro_senza_dirlo_resta_arrabbiato"
+          ],
+          "quote_count_estimate": 2
+        },
+        {
+          "id": "rovo",
+          "role": "maggiore_prima_apparizione",
+          "narrative_weight": "guardiano_confine_che_protegge_senza_ammetterlo",
+          "key_actions": [
+            "risponde_brusco_dal_buio_foresta_chi_e",
+            "esce_dalla_foresta_col_pallone_in_mano",
+            "lo_posa_per_terra_a_un_passo_dal_margine_non_lancia",
+            "brontola_cosa_fate_qua_a_quest_ora_e_buio_andate",
+            "frase_chiave_sigillo_le_cose_della_foresta_hanno_il_loro_orario"
+          ],
+          "familial_role_episodic": "zio_severo",
+          "quote_count_estimate": 4
+        },
+        {
+          "id": "bru",
+          "role": "cammeo_intravisto",
+          "narrative_weight": "prima_apparizione_presenza_silenziosa",
+          "key_actions": [
+            "appare_un_attimo_dietro_rovo",
+            "occhi_che_brillano",
+            "si_ritira"
+          ],
+          "quote_count_estimate": 0
+        }
+      ],
+      "characters_offscreen_or_background": [
+        {
+          "id": "coltivatori_del_cerchio",
+          "role": "sfondo_lontano",
+          "_note": "Prima cantilena saga (1 di ≤4-5). Modalità: sommessa, lavori di preparazione pre-semina, lontana. Distinta dalla semina piena di S4."
+        }
+      ],
+      "premise": "I fratelli giocano col pallone di stoffa cucita ai margini degli Orti, nel tratto dove gli alberi della Foresta cominciano a infittirsi. I Coltivatori chiudono il lavoro lontano con una cantilena sommessa. Si fa tardi.",
+      "problem": "Un calcio mal misurato di Noah: il pallone rotola dentro la Foresta, scompare tra i tronchi. È quasi sera. Tutti sanno (per tradizione orale, nessuno spiega) che nella Foresta di sera non si entra. Noah vuole andare. Gabriel dice no. Elias indeciso.",
+      "threshold_moment": "Elias che chiama nel buio: 'C'è nessuno?'. Una voce risponde da dentro, brusca: 'Chi è?'. È Rovo. Modo diverso di affrontare il limite — non oltrepassarlo, non stare fermi davanti: chiamare chi vi sta dall'altra parte.",
+      "resolution_mode": "Rovo esce dalla Foresta col pallone in mano. Lo posa per terra a un passo dal margine, dalla parte degli Orti — non lo lancia. Brontola: 'Cosa fate qua a quest'ora? È buio. Andate.' Bru appare un attimo dietro Rovo, occhi che brillano, poi si ritira. Gabriel chiede perché non si entra di sera. Rovo non risponde subito. Poi, mentre già si volta: 'Le cose della Foresta hanno il loro orario.' Rientra. Bru lo segue.",
+      "key_phrase_indicative": "Le cose della Foresta hanno il loro orario.",
+      "key_phrase_attributed_to": "rovo",
+      "key_phrase_notes": "ECCEZIONE esplicita: frase-chiave attribuita a un personaggio (non al narratore). Giustificata perché è pratica, non filosofia — Rovo dice un fatto della Foresta, non una massima morale. Embedded en passant, mentre Rovo già si volta per rientrare. Nessun sigillo aggiuntivo del narratore che la commenti.",
+      "fear_touched": {
+        "brother": "noah",
+        "fear_id": "buio",
+        "status": "maturing",
+        "mode_of_touch": "sentore_foresta_di_sera_noah_fa_due_passi_dentro_si_ferma_torna_indietro_senza_dirlo",
+        "_note": "Seconda variante della paura del buio di Noah (la prima in S1 bianco totale). Qui variante geografica: buio della Foresta di sera. Seme: seed_paura_noah_buio (maturing)."
+      },
+      "seeds_planted": [
+        "seed_rovo_resistenza_che_protegge",
+        "seed_bru_presenza_che_custodisce",
+        "seed_pallone_stoffa_cucita",
+        "seed_foresta_tempi_modi_propri"
+      ],
+      "seeds_picked_up": [
+        "seed_fermarsi_come_gesto_attivo",
+        "seed_paura_noah_buio"
+      ],
+      "seeds_bloomed_here": [],
+      "seeds_maturing_here": [
+        "seed_fermarsi_come_gesto_attivo",
+        "seed_paura_noah_buio"
+      ],
+      "callbacks_made": [
+        {
+          "callback_id": "cb_s03_001",
+          "from_story": "s01",
+          "element": "fermarsi_come_gesto_attivo",
+          "type": "strutturale_tematico",
+          "note": "Eco strutturale: il fermarsi prima del buio Foresta è eco del fermarsi nella nebbia (S1). Chiusura del ciclo Δ per accumulo silenzioso. Non dichiarato nel testo, tracciato solo a livello di grafo e di note voce."
+        }
+      ],
+      "active_constraints_touched": [
+        "rovo_tenerezza_sempre_mediata",
+        "rovo_non_compagno_viaggio_prolungato",
+        "rovo_mai_confidenza_calorosa",
+        "bru_mai_racconta_sua_storia",
+        "bru_mai_centro_attenzione",
+        "frase_chiave_a_personaggio_eccezione_pratica_non_filosofia"
+      ],
+      "pattern_a_active": "none",
+      "pattern_a_notes": "Pattern A non seminato né eco. S3 non lo tocca.",
+      "when_water_trembles": false,
+      "night_scene": false,
+      "night_scene_notes": "Non è scena notturna piena. È crepuscolo, sera che cala. Il buio è implicito come *minaccia nel luogo* (Foresta di sera non si entra), non come tempo attivo della scena.",
+      "visual_anchors": {
+        "scene_hooks": [
+          {
+            "hook_id": "s03_h1",
+            "location_precise": "margine_foresta_orti_campo_gioco",
+            "quadrant": "terra_ovest",
+            "time_of_day": "tardo_pomeriggio",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah"
+            ],
+            "focal_action": "i tre giocano col pallone di stoffa cucita al margine degli Orti. In lontananza, Coltivatori che chiudono il lavoro cantano sommessi.",
+            "focal_object": "pallone_di_stoffa_cucita",
+            "atmosphere": "gioco_gia_lungo_luce_che_cala_fatica_dolce",
+            "palette_local": "dorato_tramonto_ocra_orti_verde_scuro_della_foresta_alle_spalle"
+          },
+          {
+            "hook_id": "s03_h2_signature",
+            "location_precise": "margine_foresta_momento_del_calcio_mal_misurato",
+            "quadrant": "terra_ovest",
+            "time_of_day": "quasi_sera",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah"
+            ],
+            "focal_action": "Noah dà un calcio al pallone. Il pallone rotola oltre il margine, entra tra i primi tronchi della Foresta, scompare.",
+            "focal_object": "pallone_che_sparisce_tra_i_tronchi",
+            "atmosphere": "errore_piccolo_che_fa_rumore_grande_luce_che_cambia_da_arancione_a_blu",
+            "palette_local": "pallone_color_brace_come_unico_punto_caldo_che_si_perde_nell_oscurita_della_foresta_arancio_tramonto_sugli_orti_blu_sera_nella_foresta"
+          },
+          {
+            "hook_id": "s03_h3",
+            "location_precise": "margine_foresta_momento_del_chiamare_elias",
+            "quadrant": "terra_ovest",
+            "time_of_day": "crepuscolo",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah"
+            ],
+            "focal_action": "Noah ha fatto due passi dentro la Foresta e è tornato indietro. Elias si fa avanti al margine. Chiama verso dentro: 'C'è nessuno?' La Foresta è buia, silenziosa, densa.",
+            "focal_object": "elias_che_chiama_nel_buio",
+            "atmosphere": "tensione_del_margine_buio_che_non_risponde",
+            "palette_local": "blu_scuro_della_foresta_interna_grigio_dei_tronchi_riflessi_azzurrati_della_sera"
+          },
+          {
+            "hook_id": "s03_h4",
+            "location_precise": "margine_foresta_rovo_esce",
+            "quadrant": "terra_ovest",
+            "time_of_day": "crepuscolo",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "rovo",
+              "bru"
+            ],
+            "focal_action": "Rovo esce dalla Foresta col pallone in mano, la bandana marrone-grigia stretta sulla fronte. Posa il pallone per terra a un passo dal margine dalla parte degli Orti. Bru sbuca un attimo dietro Rovo, occhi che brillano.",
+            "focal_object": "rovo_col_pallone_in_mano_posato_a_terra",
+            "atmosphere": "incontro_brusco_tenerezza_mediata_pallone_restituito_con_gesto_preciso",
+            "palette_local": "grigio_marrone_di_rovo_con_bandana_scura_pallone_color_brace_ai_suoi_piedi_buio_foresta_alle_spalle_con_occhi_di_bru_che_brillano_un_attimo"
+          },
+          {
+            "hook_id": "s03_h5",
+            "location_precise": "margine_foresta_rovo_si_volta_per_rientrare",
+            "quadrant": "terra_ovest",
+            "time_of_day": "sera_piena",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "rovo"
+            ],
+            "focal_action": "Rovo si sta già voltando per rientrare nella Foresta quando, senza guardare i fratelli, dice: 'Le cose della Foresta hanno il loro orario.' Bru lo segue dentro. I fratelli restano col pallone in mano.",
+            "focal_object": "rovo_di_spalle_che_rientra_nella_foresta",
+            "atmosphere": "sigillo_laconico_dignita_del_margine",
+            "palette_local": "blu_sera_piena_silhouette_di_rovo_e_bru_che_rientrano_nel_verde_scuro"
+          }
+        ],
+        "signature_image": "s03_h2_signature",
+        "signature_image_reason": "Il pallone color brace che sparisce tra i tronchi è l'immagine che apre la storia al suo punto di rottura. Unico punto caldo che si perde nell'oscurità — icona del limite del ciclo Δ.",
+        "palette_tag": "tramonto_arancione_che_cede_al_blu_sera_verde_scuro_foresta_pallone_color_brace_punto_caldo",
+        "light_key_sequence": "tardo_pomeriggio_dorato → quasi_sera_calo_luce → crepuscolo_blu → sera_piena",
+        "recurring_visual_objects": [
+          "pallone_di_stoffa_cucita",
+          "bandana_rovo"
+        ],
+        "visual_signatures_touched": []
+      },
+      "voice_notes_essential": [
+        "nessun_address_al_lettore_arriva_in_s4",
+        "memoria_lunga_narratore_1_o_2_incisi_sul_margine_foresta_come_luogo_di_soglia",
+        "cantilena_coltivatori_sommessa_in_lontananza_prima_di_saga_1_di_max_5",
+        "nessun_detto_popolare_fiamma_non_presente",
+        "rovo_frasi_secche_non_commentare_il_sigillo_lasciare_la_frase_asciutta",
+        "frase_chiave_attribuita_a_rovo_eccezione_giustificata_no_sigillo_narratore_che_commenta",
+        "chiusura_ciclo_delta_silenziosa_eco_di_s1_per_accumulo_non_dichiarata"
+      ],
+      "debts_opened": [
+        "s04_rovo_bloom_registro_diverso_abitante_foresta",
+        "s04_bru_maturing_presenza_concreta",
+        "s04_foresta_tempi_modi_bloom_radici",
+        "s05_bru_maturing_compagno_scoperta",
+        "s05_foresta_tempi_modi_bloom_ponte",
+        "s11_bru_bloom_riconosciuto_da_elias",
+        "s11_pallone_ricomparsa_giochi_cuccioli_tentativo"
+      ],
+      "debts_closed": [],
+      "palette_emotiva": "Verde scuro/marrone della Foresta. Tardo pomeriggio: dorato → arancione → blu sera. Pallone color brace = unico punto caldo. Aria un filo più tiepida del solito di gennaio — primo segnale di passaggio stagionale.",
+      "callback_summary": "Eco strutturale S1 (fermarsi come gesto attivo maturing). Paura Noah S1 buio → S3 buio Foresta sera (maturing, variante geografica).",
+      "structural_notes": [
+        "CHIUSURA_BLOCCO_A — il fermarsi come gesto attivo si completa per accumulo silenzioso",
+        "PASSAGGIO_STAGIONALE_1 — primo cambio (inverno → primavera), aria un filo più tiepida",
+        "VENTO_ASSENTE_TEMPO_SOSPESO — S3 è l'unica storia con wind_active=null, la pausa tra Taglio e Mulinello",
+        "FRASE_CHIAVE_A_PERSONAGGIO — eccezione esplicita, giustificata da pragma non filosofia",
+        "ROVO_PRIMA_APPARIZIONE — registro 'guardiano del confine', da ricambiare in S4 ('abitante della Foresta')",
+        "BRU_PRIMA_APPARIZIONE — intravisto, prepara S4-S5",
+        "PATTERN_A non toccato (prima scena attiva S7)"
+      ]
+    },
+    "s04": {
+      "id": "s04",
+      "title_provvisorio": "Le Radici che Parlano",
+      "cycle": "B",
+      "attribute_dominant": "connettere",
+      "season": "primavera",
+      "season_passage": null,
+      "block_position": "apertura_blocco_b",
+      "wind_active": "vento_intreccio",
+      "wind_notes": "Intreccio (giorno) in regime pieno — prima storia saga dove Intreccio e' vento attivo protagonista. Porta le voci basse e continue da lontano (la cantilena dei Coltivatori resta riconoscibile dal margine). Disperde invece le voci corte ad alto volume dentro le chiome in movimento — gridare dentro la Foresta non funziona, il suono si confonde nel fruscio. Eco silenziosa nome=cosa: Vento Intreccio + radici intrecciate + fratelli che si ritrovano via canale che intreccia. Mai detto.",
+      "location_primary": {
+        "id": "foresta_intrecciata",
+        "quadrant": "terra_ovest",
+        "coordinates_mandala": "ovest_margine_e_interno_primo_tratto",
+        "specific_points": [
+          "margine_foresta_intrecciata_lato_orti",
+          "interno_foresta_primo_tratto_ortica_giovane",
+          "interno_foresta_oltre_zona_salvia_grande_albero_radici"
+        ],
+        "_note": "Tre fasce di profondita' crescente: margine (dove i fratelli restano, vicino Orti) -> primo tratto interno (dove Salvia raccoglie ortica giovane, qualche metro dentro) -> oltre zona Salvia (dove Noah si perde seguendo la farfalla, alberi tutti uguali, grande albero con radici esposte). La geografia in profondita' crescente e' essenziale per la coerenza della scena — l'ortica giovane cresce ai margini (Bible §4.9), Noah supera quella soglia."
+      },
+      "locations_secondary": [
+        {
+          "id": "orti_del_cerchio",
+          "quadrant": "terra_ovest",
+          "scene_role": "sfondo_lavoro_coltivatori_cantilena_piena_semina"
+        },
+        {
+          "id": "casa_salvia",
+          "quadrant": "terra_ovest",
+          "scene_role": "implicita_punto_partenza_e_ritorno_salvia_off_screen"
+        }
+      ],
+      "characters_in_scene": [
+        {
+          "id": "gabriel",
+          "role": "protagonista_azione",
+          "narrative_weight": "delta_che_si_trasferisce_al_connettere_tramite_movimento",
+          "key_actions": [
+            "grida_noah_prima_volta_istinto",
+            "si_accorge_che_gridare_non_funziona_voce_inghiottita",
+            "dice_gridiamo_no_pensiamo_eco_aspettiamo_s1",
+            "cammina_nella_direzione_del_battito_di_noah_movimento_attivo"
+          ],
+          "quote_count_estimate": 3
+        },
+        {
+          "id": "elias",
+          "role": "protagonista_azione",
+          "narrative_weight": "connettere_in_azione_fisica_di_tenuta_ancora_del_ritmo",
+          "key_actions": [
+            "si_inginocchia_trova_radice_grossa_esposta",
+            "comincia_a_battere_TUM_tum_TUM_tum_TUM_ritmo_loro_non_spiegato",
+            "resta_fermo_a_battere_come_ancora_faticoso",
+            "al_ritrovamento_sguardo_storto_mai_nominato_mentre_gli_altri_si_abbracciano"
+          ],
+          "quote_count_estimate": 2
+        },
+        {
+          "id": "noah",
+          "role": "protagonista_azione",
+          "narrative_weight": "piccolo_che_si_ferma_da_solo_pokemon_attivo_da_s3",
+          "key_actions": [
+            "vede_farfalla_blu_la_segue_oltre_soglia_zona_salvia",
+            "si_accorge_di_essere_solo_alberi_tutti_uguali",
+            "si_siede_tra_le_radici_non_piange_si_ferma_da_solo",
+            "tocca_radici_col_palmo_gesto_irriflesso",
+            "sente_vibrare_riconosce_TUM_tum_TUM",
+            "risponde_col_palmo_attivamente",
+            "quando_sente_gabriel_arrivare_batte_piu_piano_per_non_confonderlo"
+          ],
+          "quote_count_estimate": 2
+        },
+        {
+          "id": "salvia",
+          "role": "cornice_apertura_e_chiusura",
+          "mode": "lavoro",
+          "narrative_weight": "consegna_e_riconsegna_breve_non_si_accorge_di_nulla",
+          "key_actions": [
+            "chiede_ai_fratelli_di_accompagnarla_per_ortica_giovane",
+            "entra_solo_qualche_metro_al_margine_per_raccolta",
+            "dice_voi_qua_torno_presto",
+            "esce_dalla_foresta_col_cesto_pieno_di_ortica_pronti_andiamo"
+          ],
+          "plant_named": "ortica_giovane",
+          "familial_role_episodic": "madre_pratica_cornice_non_piena",
+          "constraints_active": [
+            "max_1_pianta_nominata_per_apparizione",
+            "mai_spiega_perche_pianta_funziona",
+            "mai_risolve_emotivamente",
+            "salvia_non_si_accorge_che_i_fratelli_si_sono_persi_per_economia_narrativa_e_per_non_farla_risolutrice_e_per_coerenza_fisica_zampe_lepre_su_humus_al_margine_canale_vibrazione_tattile_non_attivo_per_lei"
+          ],
+          "quote_count_estimate": 2
+        },
+        {
+          "id": "rovo",
+          "role": "apparizione_secondo_registro",
+          "narrative_weight": "abitante_foresta_non_guardiano_confine_gia_dentro_quando_s4_comincia",
+          "key_actions": [
+            "gia_nella_foresta_quando_s4_comincia_tana_al_margine_o_cammino_per_fatti_suoi",
+            "sente_la_vibrazione_del_battito_nel_tessuto_delle_radici_non_suono",
+            "arriva_poco_dopo_che_i_fratelli_si_sono_ritrovati",
+            "brontola_battete_come_capre_tutta_la_foresta_lo_ha_sentito",
+            "non_aiuta_non_ha_aiutato_e_venuto_a_vedere_chi_disturbava_la_sua_foresta",
+            "rientra_nella_foresta_dopo_verifica"
+          ],
+          "constraints_active": [
+            "tenerezza_sempre_mediata",
+            "mai_confidenza_calorosa",
+            "registro_diverso_da_s3_abitante_non_guardiano",
+            "non_compagno_di_viaggio_prolungato",
+            "arriva_guidato_da_vibrazione_non_da_suono_acustico"
+          ],
+          "familial_role_episodic": "zio_severo_secondo_tocco_consecutivo_con_s3_sostenibile_perche_registro_diverso",
+          "quote_count_estimate": 1
+        },
+        {
+          "id": "bru",
+          "role": "presenza_concreta_silenziosa",
+          "narrative_weight": "sa_gia_cosa_e_successo_appoggiato_a_tronco_non_sorpreso",
+          "key_actions": [
+            "appare_appoggiato_a_un_tronco_quando_i_fratelli_si_ritrovano",
+            "occhi_neri_non_sembra_sorpreso",
+            "probabilmente_ha_seguito_il_movimento_attraverso_unghie_nella_terra_ha_sentito_anche_lui",
+            "segue_rovo_quando_rovo_se_ne_va"
+          ],
+          "constraints_active": [
+            "mai_racconta_sua_storia",
+            "mai_centro_attenzione_in_gruppo",
+            "mai_piange_visibile",
+            "mai_eroe",
+            "nessuna_parola"
+          ],
+          "quote_count_estimate": 0
+        }
+      ],
+      "characters_offscreen_or_background": [
+        {
+          "id": "coltivatori_del_cerchio",
+          "role": "sfondo_lavoro_cantilena_piena",
+          "_note": "Seconda cantilena saga (2 di <=4-5). Modalita': piena della semina primaverile, TUM-tum delle zappe ritmico sullo sfondo. Bloom rispetto alla cantilena sommessa di S3 (passaggio->piena). La cantilena piena e' anche il TAPPETO SONORO del TUM-tum-TUM dei fratelli: i Coltivatori battono nella stessa terra che i fratelli batteranno, ma con ritmo diverso — sovrapposizione mai dichiarata, vive solo nell'orecchio del rilettore."
+        }
+      ],
+      "premise": "Primavera piena — primo tepore vero dopo l'inverno. Salvia passa dalla casa dei fratelli e chiede se l'accompagnano fino al margine della Foresta — deve raccogliere foglie di ortica giovane, crescono qualche metro dentro. I fratelli vanno volentieri. Al margine, Salvia dice loro di restare fuori, vicino agli Orti: 'Voi qua. Torno presto.' Entra con il cesto. In lontananza, cantilena piena della semina dei Coltivatori — TUM-tum delle zappe sullo sfondo, portato chiaro dall'Intreccio perche' e' suono basso e continuo.",
+      "problem": "Noah vede una farfalla blu. La segue di qualche passo. Poi qualche altro. Attraversa senza accorgersi la soglia oltre la zona di lavoro di Salvia. La farfalla sparisce. Noah e' solo. Alberi tutti uguali. Gabriel ed Elias si accorgono dopo qualche minuto che Noah non c'e' piu'. Gridano una volta. La Foresta non risponde — l'Intreccio passa tra le chiome e confonde le loro voci corte nel fruscio. Gridare non funziona.",
+      "threshold_moment": "Gabriel dice 'Gridiamo no. Pensiamo.' — eco diretta dell''Aspettiamo' di S1, applicata a problema diverso. Elias si inginocchia, trova una radice grossa esposta che esce dalla terra, comincia a batterla col palmo: TUM-tum-TUM-tum-TUM — il ritmo che solo loro tre sanno. Resta fermo a battere come ancora. Il battito non e' suono che si propaga nell'aria — e' vibrazione che viaggia nel tessuto sotterraneo della Foresta, da radice a radice intrecciata. Noah, seduto tra le radici di un grande albero piu' dentro, ha istintivamente appoggiato il palmo sulla terra. Sente vibrare. Riconosce il ritmo. Risponde col palmo. Gabriel cammina nella direzione del battito di Noah (segue il suono che trafila dal terreno, non l'aria). I tre hanno ruoli simultanei e fisici: Elias e' ancora, Noah e' risposta, Gabriel e' movimento. La Foresta e' il tessuto che porta il ritmo attraverso il corpo vivo delle radici — principio fisico del mondo istituito qui.",
+      "resolution_mode": "Quando Gabriel arriva nel punto dove e' Noah, Noah ha gia' smesso di battere forte — ha battuto piu' piano man mano che sentiva Gabriel avvicinarsi, per non confonderlo (gesto che il bambino di 4 non coglie, il rilettore si'). Si ritrovano. Elias li raggiunge. Si abbracciano. In quel momento, appoggiato a un tronco poco lontano, c'e' Bru — occhi neri, non sorpreso. Le unghie di tassino affondate nell'humus: ha sentito anche lui, dalla sua parte di Foresta. Arriva Rovo poco dopo, passo pesante tra le radici, brontolando: 'Battete come capre. Tutta la Foresta l'ha sentito.' Non aiuta, non ha aiutato — era gia' nella Foresta quando tutto e' cominciato (tana al margine, o cammino per fatti suoi, da decidere in D), e' venuto a vedere chi disturbava la sua casa. Bru lo segue quando Rovo rientra. I fratelli tornano al margine. Salvia sta uscendo col cesto pieno di ortica giovane — non si e' accorta di nulla: zampe di lepre sull'humus al margine, concentrata sulla raccolta, poco legata al tessuto profondo delle radici. 'Pronti? Andiamo.'",
+      "key_phrase_indicative": null,
+      "key_phrase_notes": "Nessuna frase-chiave dichiarativa di personaggio. Sigillo del narratore in chiusura (ADDRESS AL LETTORE, 1 di <=6, primo della saga). Direzione: quello che hanno trovato non era il sentiero — era un modo. Mai dichiarato come regola, il narratore puo' aprirsi al lettore con una domanda o un'immagine (es. direzione: se tocchi una radice qui, chissa' dove arriva il tocco; il tipo di frase va fissata in D).",
+      "fear_touched": {
+        "brother": "elias",
+        "fear_id": "non_essere_abbastanza",
+        "status": "maturing",
+        "mode_of_touch": "micro_sguardo_storto_all_abbraccio_post_ritrovamento_mai_nominato",
+        "_note": "Prima variante maturing dopo la semina forte in S2. Traiettoria intenzionale: in S2 affiora quasi in parola ('Voi siete grandi davvero' mormorato); in S4 scende sotto le parole — solo un micro-sguardo storto al momento dell'abbraccio dei fratelli, dopo che lui ha tenuto fisicamente l'ancora del ritmo. La paura matura VERSO IL BASSO (piu' sommersa) prima di risalire in S11. Mai nominata, mai mostrata visibilmente ai fratelli — solo il rilettore la coglie."
+      },
+      "seeds_planted": [
+        "seed_tum_tum_tum_codice_fratelli",
+        "seed_rovo_abitante_foresta",
+        "seed_farfalla_blu_seguire_fuori_soglia",
+        "seed_gesto_della_terra_palmo"
+      ],
+      "seeds_picked_up": [
+        "seed_fermarsi_come_gesto_attivo",
+        "seed_paura_noah_buio",
+        "seed_rovo_resistenza_che_protegge",
+        "seed_bru_presenza_che_custodisce",
+        "seed_foresta_tempi_modi_propri",
+        "seed_paura_elias_piccolo",
+        "seed_gabriel_sa_la_strada_senza_vedere"
+      ],
+      "seeds_bloomed_here": [
+        "seed_fermarsi_come_gesto_attivo",
+        "seed_gabriel_sa_la_strada_senza_vedere",
+        "seed_foresta_tempi_modi_propri"
+      ],
+      "seeds_maturing_here": [
+        "seed_paura_elias_piccolo",
+        "seed_bru_presenza_che_custodisce",
+        "seed_rovo_resistenza_che_protegge"
+      ],
+      "callbacks_made": [
+        {
+          "callback_id": "cb_s04_001",
+          "from_story": "s01",
+          "element": "fermarsi_come_gesto_attivo",
+          "type": "gesto_trasferito_tra_fratelli",
+          "note": "Il gesto del fermarsi istituito da Gabriel nella nebbia (S1) ora in Noah: si siede tra le radici, non piange, si ferma da solo. Pattern che circola tra fratelli."
+        },
+        {
+          "callback_id": "cb_s04_002",
+          "from_story": "s01",
+          "element": "aspettiamo_di_gabriel_diventa_pensiamo",
+          "type": "frase_eco_diretta",
+          "note": "'Gridiamo no. Pensiamo.' di Gabriel in S4 e' eco diretta dell''Aspettiamo' di S1. Stesso fratello, stessa struttura di decisione contraria all'istinto, problema diverso."
+        },
+        {
+          "callback_id": "cb_s04_003",
+          "from_story": "s03",
+          "element": "cantilena_coltivatori",
+          "type": "bloom_sonoro",
+          "note": "La cantilena sommessa dei Coltivatori in S3 diventa cantilena piena della semina in S4. Passaggio stagionale sonoro (inverno->primavera piena)."
+        },
+        {
+          "callback_id": "cb_s04_004",
+          "from_story": "s03",
+          "element": "rovo_registro_diverso",
+          "type": "personaggio_secondo_registro",
+          "note": "Rovo in S4 e' abitante della Foresta (gia' dentro quando tutto comincia), non guardiano del confine come in S3. I due registri coesistono."
+        },
+        {
+          "callback_id": "cb_s04_005",
+          "from_story": "s03",
+          "element": "bru_da_intravisto_a_presenza_concreta",
+          "type": "personaggio_sviluppo_presenza",
+          "note": "Bru in S3 intravisto dietro Rovo con occhi che brillano; in S4 presenza concreta appoggiata a un tronco, che ha sentito la vibrazione dalle unghie nella terra."
+        }
+      ],
+      "active_constraints_touched": [
+        "salvia_max_1_pianta_nominata_per_apparizione_ortica_giovane",
+        "salvia_mai_spiega_perche_pianta_funziona",
+        "salvia_mai_risolve_emotivamente",
+        "rovo_tenerezza_sempre_mediata",
+        "rovo_non_compagno_viaggio_prolungato",
+        "rovo_mai_confidenza_calorosa",
+        "bru_mai_racconta_sua_storia",
+        "bru_mai_centro_attenzione",
+        "bru_nessuna_parola_in_questa_storia",
+        "detti_fiamma_esclusivi_qui_non_presente",
+        "night_not_personified_non_applicabile_scena_diurna",
+        "no_narrator_reveal_preannouncement",
+        "ear_framework_invisible_connettere_in_azione_fisica_non_concetto",
+        "elias_non_e_quello_delle_idee_tiene_fisico_ritmo_ancora_faticoso"
+      ],
+      "pattern_a_active": "none",
+      "pattern_a_notes": "Pattern A non ancora seminato (prima semina formale: S5 con i rami caduti che diventano materia). S4 non lo tocca direttamente, ma apre il canale-tessuto su cui il Pattern A camminera': se le radici portano vibrazioni attraverso i fratelli, la Foresta e' il tessuto che tiene le cose anche quando sembrano perse. Non e' pre-eco Pattern A — e' pre-fondamento fisico.",
+      "when_water_trembles": false,
+      "night_scene": false,
+      "visual_anchors": {
+        "scene_hooks": [
+          {
+            "hook_id": "s04_h1",
+            "location_precise": "margine_foresta_intrecciata_lato_orti",
+            "quadrant": "terra_ovest",
+            "time_of_day": "mattino_inoltrato",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "salvia"
+            ],
+            "focal_action": "Salvia col cesto a tracolla al margine della Foresta, dice ai fratelli di restare vicino agli Orti. I Coltivatori in lontananza cantano e battono le zappe — TUM-tum sullo sfondo.",
+            "focal_object": "salvia_col_cesto_che_entra_soglia_foresta",
+            "atmosphere": "primo_tepore_primavera_piena_lavoro_di_fondo_serenita_breve",
+            "wind_visible": "intreccio_diffuso_velature_azzurre_tra_rami",
+            "palette_local": "sabbia_chiara_di_salvia_verde_tenero_foglie_nuove_ocra_orti_alle_spalle_azzurro_pallido_sopra"
+          },
+          {
+            "hook_id": "s04_h2",
+            "location_precise": "interno_foresta_primo_tratto_oltre_soglia_salvia",
+            "quadrant": "terra_ovest",
+            "time_of_day": "mattino_inoltrato",
+            "characters_present": [
+              "noah"
+            ],
+            "focal_action": "Noah segue la farfalla blu tra i tronchi. Qualche passo. Poi qualche altro. La farfalla sparisce tra due alberi e non c'e' piu'. Noah guarda in giro: alberi tutti uguali.",
+            "focal_object": "farfalla_blu_che_sparisce_tra_due_tronchi",
+            "atmosphere": "attrazione_innocente_che_diventa_smarrimento_silenzioso_alberi_che_si_ripetono",
+            "wind_visible": "intreccio_chiome_in_movimento",
+            "palette_local": "farfalla_blu_unico_punto_cromatico_isolato_verdi_tenerissimi_primavera_marrone_tronchi_ombre_screziate_luce_di_chiome"
+          },
+          {
+            "hook_id": "s04_h3_signature",
+            "location_precise": "interno_foresta_elias_sulla_radice_esposta_grande_albero",
+            "quadrant": "terra_ovest",
+            "time_of_day": "mattino_inoltrato_inizio_mezzogiorno",
+            "characters_present": [
+              "gabriel",
+              "elias"
+            ],
+            "focal_action": "Elias inginocchiato, palmo sulla radice grossa esposta, batte TUM-tum-TUM-tum-TUM. Gabriel dietro di lui in piedi, teso verso l'ascolto, una mano sul tronco dello stesso albero — sente anche lui nel legno.",
+            "focal_object": "palmo_di_elias_sulla_radice_che_batte",
+            "atmosphere": "tenuta_fisica_silenziosa_concentrazione_ritmo_che_parte_nel_tessuto",
+            "wind_visible": "intreccio_chiome_in_movimento_sopra_ma_sotto_aria_piu_ferma",
+            "palette_local": "marrone_scuro_umido_della_radice_verdi_tenerissimi_sopra_luce_che_trafila_dall_alto_a_macchie_palmo_chiaro_di_elias_unico_punto_caldo_sulla_radice"
+          },
+          {
+            "hook_id": "s04_h4",
+            "location_precise": "interno_foresta_noah_tra_radici_grande_albero",
+            "quadrant": "terra_ovest",
+            "time_of_day": "mattino_inoltrato_inizio_mezzogiorno",
+            "characters_present": [
+              "noah"
+            ],
+            "focal_action": "Noah seduto tra le radici aggrovigliate di un grande albero, schiena al tronco, il palmo destro appoggiato sulla terra tra due radici. Occhi chiusi — non dorme, ascolta. La mano sente vibrare. Risponde col palmo.",
+            "focal_object": "palmo_di_noah_sulla_terra_tra_due_radici",
+            "atmosphere": "solitudine_che_trova_risposta_dal_sottosuolo_ascolto_tattile_che_diventa_canale",
+            "wind_visible": "intreccio_chiome_che_muovono_foglie_sopra",
+            "palette_local": "marrone_scuro_umido_delle_radici_verdi_scuri_della_foresta_interna_palmo_chiaro_di_noah_unico_punto_caldo_in_contatto_con_la_terra_specchio_visivo_di_elias_stesso_gesto_due_corpi_lontani"
+          },
+          {
+            "hook_id": "s04_h5",
+            "location_precise": "interno_foresta_punto_di_ritrovamento",
+            "quadrant": "terra_ovest",
+            "time_of_day": "mezzogiorno_nella_foresta",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "bru"
+            ],
+            "focal_action": "I tre fratelli abbracciati al punto di ritrovamento. Elias nell'abbraccio ma con lo sguardo un filo storto — non triste, solo storto, cosa che nessuno vede. Bru appoggiato a un tronco poco lontano, unghie nell'humus, occhi neri, non sorpreso.",
+            "focal_object": "abbraccio_dei_tre_con_elias_storto_dentro_e_bru_che_guarda",
+            "atmosphere": "ritrovamento_felice_con_crepa_invisibile_sotto_presenza_silenziosa_che_custodisce",
+            "wind_visible": "intreccio_attutito_nella_radura_interna",
+            "palette_local": "abbraccio_al_centro_come_nucleo_caldo_verdi_foresta_intorno_bru_grigio_marrone_sullo_sfondo_tronco_scuro"
+          },
+          {
+            "hook_id": "s04_h6",
+            "location_precise": "interno_foresta_arrivo_di_rovo",
+            "quadrant": "terra_ovest",
+            "time_of_day": "mezzogiorno",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "bru",
+              "rovo"
+            ],
+            "focal_action": "Rovo arriva passo pesante tra le radici, bandana marrone-grigia sulla fronte. Brontola. I fratelli si staccano dall'abbraccio. Bru si raddrizza, fa un passo verso lo zio.",
+            "focal_object": "rovo_in_piedi_tra_tronchi_bandana_sulla_fronte_bru_un_passo_verso_di_lui",
+            "atmosphere": "ingresso_brusco_non_minaccioso_zio_che_verifica_e_ripartira",
+            "wind_visible": "intreccio_diffuso",
+            "palette_local": "grigio_marrone_di_rovo_con_bandana_scura_verdi_foresta_interna_bru_piccolo_al_suo_fianco"
+          },
+          {
+            "hook_id": "s04_h7",
+            "location_precise": "margine_foresta_ritorno_da_salvia",
+            "quadrant": "terra_ovest",
+            "time_of_day": "primo_pomeriggio",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "salvia"
+            ],
+            "focal_action": "Salvia esce dalla Foresta col cesto pieno di ortica giovane. Non si e' accorta di nulla. I fratelli arrivano al margine dall'interno. 'Pronti? Andiamo.' I Coltivatori in lontananza ancora cantano, cantilena piena della semina.",
+            "focal_object": "salvia_col_cesto_pieno_che_esce_al_margine",
+            "atmosphere": "ritorno_al_visibile_nulla_e_cambiato_per_chi_guarda_da_fuori",
+            "wind_visible": "intreccio_diffuso",
+            "palette_local": "cesto_verde_scuro_di_ortica_sabbia_chiara_di_salvia_ocra_orti_alle_spalle_primo_pomeriggio_luce_alta"
+          }
+        ],
+        "signature_image": "s04_h3_signature",
+        "signature_image_reason": "Il palmo di Elias sulla radice grossa esposta che batte TUM-tum-TUM e' la scena-cardine — primo momento saga in cui un canale fisico del mondo (la vibrazione che viaggia nel tessuto delle radici intrecciate) viene attivato consapevolmente da un fratello. E' anche il primo bloom visivo del nome=cosa: Vento Intreccio + radici intrecciate + battito che intreccia i fratelli. Gabriel con la mano sul tronco completa la composizione — chi fa il ritmo, chi lo segue attraverso il legno.",
+        "palette_tag": "verdi_tenerissimi_primavera_marroni_umidi_radici_azzurro_intreccio_sopra_punti_caldi_palmi_sulla_terra_farfalla_blu_isolata",
+        "light_key_sequence": "mattino_inoltrato_margine_dorato_tenero -> mezzogiorno_interno_foresta_luce_verticale_a_macchie -> mezzogiorno_radura_luce_piena -> primo_pomeriggio_margine_ritorno",
+        "recurring_visual_objects": [
+          "cesto_salvia",
+          "bandana_rovo"
+        ],
+        "visual_signatures_touched": []
+      },
+      "voice_notes_essential": [
+        "address_al_lettore_in_chiusura_1_di_<=6_in_saga_primo_del_blocco_b",
+        "memoria_lunga_narratore_1_o_2_incisi_sulla_foresta_come_tessuto_vivo_mai_detta_come_tessuto_meta_non_testo",
+        "TUM_tum_TUM_tum_TUM_onomatopea_isolata_graficamente_in_riga_propria",
+        "TUM_tum_delle_zappe_coltivatori_onomatopea_di_sfondo_diversa_da_quella_dei_fratelli_per_ritmo_e_volume",
+        "nessun_detto_popolare_fiamma_non_presente",
+        "salvia_voce_lavoro_brevi_asciutte_voi_qua_torno_presto_e_pronti_andiamo",
+        "rovo_frase_secca_battete_come_capre_tutta_la_foresta_lo_ha_sentito_in_carattere_scontroso_pratico",
+        "elias_tiene_fisico_zero_parole_mentre_batte_ritmo_che_parla_al_posto_delle_parole",
+        "noah_irriflesso_nessuna_dichiarazione_di_paura_solo_gesto",
+        "gabriel_gridiamo_no_pensiamo_eco_diretta_aspettiamo_s1_da_scrivere_in_d_come_frase_che_emerge_non_come_sentenza",
+        "canale_vibrazione_mai_spiegato_a_parole_vive_solo_nelle_azioni_gesti_e_in_1_inciso_narratore_max_su_foresta_che_sente",
+        "cantilena_coltivatori_piena_in_lontananza_bloom_della_sommessa_di_s3_2_di_<=4_5_saga",
+        "micro_sguardo_storto_di_elias_all_abbraccio_mai_nominato_nel_testo_segnato_solo_in_visual_anchor_h5"
+      ],
+      "debts_opened": [
+        "s05_nodo_marinaro_insegnato_a_elias_eredita_tecnica",
+        "s05_bru_compagno_attivo_scoperta_indica_radura",
+        "s05_foresta_ha_suoi_modi_bloom_radure_che_si_raggiungono_solo_se_costruisci",
+        "s07_s08_nodo_marinaro_regge_capacita_di_elias",
+        "s10_paura_noah_buio_bloom_pieno_risolta_dire",
+        "s11_paura_elias_bloom_accettazione_vecchie_micro_sguardi_continuano_s5_s6_s9",
+        "s12_tum_tum_tum_eco_silenziosa_mani_sulla_terra_forno",
+        "s12_gesto_palmo_sulla_terra_bloom_finale_saga"
+      ],
+      "debts_closed": [
+        "s03_seed_foresta_tempi_modi_propri_bloomed_come_canale_vibrazione_tessuto_radici",
+        "s01_seed_fermarsi_come_gesto_attivo_bloomed_trasferito_a_noah_si_ferma_da_solo",
+        "s01_seed_gabriel_sa_la_strada_senza_vedere_bloomed_cammina_seguendo_il_battito_da_sotto_non_la_vista"
+      ],
+      "palette_emotiva": "Verdi tenerissimi delle foglie nuove di primavera + marrone scuro umido delle radici esposte (umidita' di rugiada appena asciugata) + grigio-marrone di Rovo con bandana scura + sabbia chiara di Salvia + cesto di ortica verde scuro. Farfalla di Noah: blu, singolo punto cromatico isolato che poi sparisce. Palmi dei fratelli: punti caldi sulla terra, specchio visivo a distanza (h3-h4). Intreccio: velature azzurre diffuse tra rami, chiome in movimento.",
+      "callback_summary": "Callback a S1: fermarsi come gesto attivo bloomato (trasferito da Gabriel a Noah); 'Gridiamo no. Pensiamo.' eco diretta di 'Aspettiamo'; Gabriel sa la strada senza vedere bloomato (cammina nella direzione del battito). Callback a S3: Rovo (secondo registro, abitante-Foresta), Bru (da intravisto a presenza concreta), cantilena Coltivatori (sommessa -> piena), 'la Foresta ha i suoi modi' bloom del 'loro orario'.",
+      "structural_notes": [
+        "APERTURA_BLOCCO_B — ciclo Connettere entra. Connettere in azione fisica (non idea).",
+        "PASSAGGIO_STAGIONALE_2 — inverno -> primavera piena (passaggio gia' segnato in S3, qui e' pienezza).",
+        "CANALE_VIBRAZIONE — la Foresta come tessuto percettivo, non acustico. Principio fisico del mondo istituito qui. Rilevante per S5 (ponte che trasmette tenuta) e S12 (mani sulla terra come eco silenziosa). Il vento disperde le voci nell'aria, le radici portano le vibrazioni. Sistema a due canali che il bambino di 4 sente come 'magia della foresta', il rilettore di 9 come 'principio fisico', l'adulto come 'concetto di tessuto connesso'.",
+        "ROVO_SECONDO_REGISTRO — abitante della Foresta (gia' dentro quando tutto comincia), non guardiano del confine come in S3. I due registri coesistono. S11 segnera' via Bru la sintesi.",
+        "BRU_PRESENZA_PIENA — da intravisto (S3) a presenza concreta silenziosa. Ha sentito la vibrazione dalle unghie nella terra — stesso canale di Noah.",
+        "SALVIA_NON_RISOLUTRICE — presente solo in cornice, non si accorge di nulla per economia narrativa e per coerenza fisica (zampe di lepre sull'humus, canale tattile-vibratorio non attivo per la sua postura).",
+        "FERMARSI_TRASFERITO — il gesto di S1 (Gabriel) ora in Noah (bloomed): si ferma da solo, non piange. Pattern che circola tra fratelli.",
+        "SEMI_NUOVI — TUM-tum-TUM identitario, gesto del palmo come canale, farfalla blu come gesto caratteriale di Noah, Rovo secondo registro.",
+        "PAURA_ELIAS_MATURING_SOTTO — dopo semina S2 (quasi in parola) scende sotto le parole in un micro-sguardo storto all'abbraccio dei fratelli. Traiettoria: S2 alta -> S4 bassa -> S11 bloom.",
+        "SPECCHIO_VISIVO_H3_H4 — due corpi lontani nello stesso gesto (Elias palmo su radice esposta, Noah palmo sulla terra tra radici), composizione ad ancora e risposta. Firma visiva del blocco B.",
+        "PATTERN_A non toccato direttamente — pre-fondamento fisico (il tessuto che tiene) ma prima semina formale e' S5."
+      ]
+    },
+    "s05": {
+      "id": "s05",
+      "title_provvisorio": "Il Ponte di Rami",
+      "cycle": "B",
+      "attribute_dominant": "connettere",
+      "season": "primavera",
+      "season_passage": null,
+      "block_position": "centro_blocco_b",
+      "wind_active": "vento_intreccio",
+      "wind_notes": "Intreccio (giorno) in regime pieno — seconda storia consecutiva con Intreccio attivo. Sopra le chiome soffia, muove i rami in alto, passa tra le fronde — ma sul torrente passa sopra l'acqua senza increspare forte (aria calda parallela alla corrente, non contro). Porta voci basse e continue da lontano, disperde voci corte ad alto volume — coerente col principio fisico istituito in S4. Il TOK-TOK-TOK di Nodo viaggia bene in questo vento perche' e' suono ritmico secco su legno: viaggia via-aria (colpi distinti, non parole sfumate) E vibra nel legno dei tronchi circostanti — doppio canale, nuovamente coerente con S4. Eco silenziosa nome=cosa: Vento Intreccio + rami intrecciati + fratelli che intrecciano azioni. Mai detto.",
+      "location_primary": {
+        "id": "torrente_affluente_foresta",
+        "quadrant": "terra_ovest",
+        "coordinates_mandala": "ovest_interno_foresta_affluente",
+        "specific_points": [
+          "torrente_che_attraversa_foresta_intrecciata",
+          "punto_del_vecchio_tronco_ponte_portato_via_dalla_piena",
+          "posizione_nodo_al_lavoro_50_metri_a_valle_verso_margine_orti",
+          "radura_coi_pini_oltre_il_torrente_a_100_150_metri"
+        ],
+        "_note": "Il torrente e' affluente del Fiume che Gira — nasce da una sorgente nella Foresta, scende attraverso l'ovest, sfocia nel Fiume prima della Bocca. Larghezza al punto di guado: 4-5 metri. Profondita' primaverile con piena: circa mezzo metro — guadabile d'estate, non ora. Il vecchio passaggio era un tronco caduto anni fa adagiato da sponda a sponda — portato via dalla piena delle ultime settimane. Nodo sta lavorando a ~50 metri dal punto di guado, sulla stessa sponda dei fratelli, verso il margine degli Orti: ripara una scaletta dei Coltivatori caduta male. Distanza funzionale: Nodo e' fuori campo visivo dei fratelli (alberi di mezzo) ma presente acusticamente — il TOK-TOK-TOK emerge dal fruscio del vento come richiamo ritmico. I fratelli devono camminare un po' per raggiungerlo. La radura coi pini e' sull'altra sponda, 100-150 metri di cammino dentro la Foresta. Da aggiungere torrente come sub_location di foresta_intrecciata nell'ATLANTE in Fase D/E."
+      },
+      "locations_secondary": [
+        {
+          "id": "foresta_intrecciata",
+          "quadrant": "terra_ovest",
+          "scene_role": "ambiente_attraversato_dall_inizio_fino_al_torrente_e_oltre"
+        },
+        {
+          "id": "orti_del_cerchio",
+          "quadrant": "terra_ovest",
+          "scene_role": "confine_con_foresta_motivo_della_presenza_di_nodo_mai_in_inquadratura_diretta"
+        }
+      ],
+      "characters_in_scene": [
+        {
+          "id": "gabriel",
+          "role": "protagonista_azione",
+          "narrative_weight": "delta_che_chiede_decide_e_fa_il_collaudo_finale_peso_maggiore",
+          "key_actions": [
+            "chiede_a_nodo_se_puo_aiutarli_mentre_nodo_lavora_senza_interrompere",
+            "aspetta_che_nodo_finisca_il_giro_di_nodo_in_corso",
+            "tiene_fermi_i_rami_durante_la_costruzione_ruolo_di_ancora_fisica",
+            "passa_per_terzo_sul_ponte_test_massimo_peso_maggiore_conferma_finale"
+          ],
+          "quote_count_estimate": 2
+        },
+        {
+          "id": "elias",
+          "role": "protagonista_azione_dominante",
+          "narrative_weight": "connettere_in_eredita_tecnica_apprende_il_marinaro_riceve_la_corda_collauda",
+          "key_actions": [
+            "ha_l_idea_di_usare_pertiche_di_rami_caduti_grossi_e_lunghi",
+            "propone_a_nodo_che_annuisce",
+            "riceve_un_pezzo_di_corda_da_nodo_tagliato_dalla_sua_matassa_al_braccio",
+            "riceve_il_nodo_marinaro_mostrato_una_sola_volta_da_nodo",
+            "sbaglia_due_volte_rifa_la_terza_volta_riesce",
+            "lega_i_rami_con_marinaro_durante_tutta_la_costruzione",
+            "passa_per_primo_sul_ponte_finito_peso_intermedio_chi_ha_fatto_collauda",
+            "micro_sguardo_storto_quando_bru_si_siede_al_centro_della_radura_per_primo_mai_nominato"
+          ],
+          "quote_count_estimate": 2
+        },
+        {
+          "id": "noah",
+          "role": "protagonista_azione_irriflessa",
+          "narrative_weight": "piccolo_entusiasta_che_passa_la_corda_e_passa_per_secondo_piu_leggero",
+          "key_actions": [
+            "corre_a_cercare_pertiche_si_entusiasma",
+            "coinvolge_bru_nella_ricerca_bru_lo_accompagna",
+            "raccoglie_piu_rami_di_quanti_ne_serva_alcuni_troppo_piccoli_alcuni_troppo_grossi",
+            "passa_la_corda_a_elias_durante_i_nodi_gesto_di_supporto",
+            "passa_per_secondo_sul_ponte_sicurezza_post_collaudo_di_elias"
+          ],
+          "quote_count_estimate": 2
+        },
+        {
+          "id": "bru",
+          "role": "compagno_attivo_scoperta",
+          "narrative_weight": "presenza_silenziosa_con_agency_indica_radura_sceglie_pertiche_giuste_passa_per_quarto_chiusura",
+          "key_actions": [
+            "indica_col_mento_la_direzione_della_radura_richiamo_gesto_s4",
+            "accompagna_i_fratelli_al_torrente",
+            "sceglie_in_silenzio_le_pertiche_giuste_tra_quelle_che_noah_raccoglie_alla_rinfusa",
+            "segna_in_silenzio_dove_va_ogni_ramo_durante_la_costruzione",
+            "passa_per_quarto_sul_ponte_ospite_del_lavoro_dei_fratelli_chiusura",
+            "si_siede_al_centro_della_radura_coi_pini_per_primo_riprende_la_proprieta_del_momento"
+          ],
+          "constraints_active": [
+            "mai_racconta_sua_storia",
+            "mai_centro_attenzione_in_gruppo",
+            "mai_piange_visibile",
+            "mai_eroe",
+            "agency_narrativa_tramite_gesti_silenziosi_non_tramite_parole",
+            "passa_per_quarto_non_per_paura_ma_per_cortesia_selvatica_onora_il_lavoro_di_elias"
+          ],
+          "quote_count_estimate": 0
+        },
+        {
+          "id": "nodo",
+          "role": "maggiore_prima_apparizione_piena",
+          "narrative_weight": "mano_che_fa_padre_pratico_artigiano_per_coltivatori",
+          "mode": "lavoro",
+          "client_current": "coltivatori_del_cerchio",
+          "distinct_from_s08": "in_s5_nodo_e_artigiano_commissionato_dai_coltivatori_per_riparare_scaletta_in_s8_nodo_sara_mantenitore_nel_collettivo_di_emergenza_dopo_caduta_noce_due_modalita_distinte_stesso_personaggio",
+          "key_actions": [
+            "TOK_TOK_TOK_sullo_sfondo_dall_inizio_della_scena_al_torrente_richiamo_acustico_50_metri",
+            "non_risponde_subito_a_gabriel_finisce_il_giro_di_nodo_in_corso_sulla_scaletta",
+            "alza_la_testa_cosa_vi_serve_constatazione_non_domanda",
+            "ascolta_spiegazione_di_gabriel_annuisce_all_idea_di_elias_delle_pertiche",
+            "si_toglie_un_pezzo_di_corda_dalla_matassa_al_braccio_taglia_con_un_colpo_secco_la_porge_a_elias_con_adesso_fai_tu",
+            "mostra_il_nodo_marinaro_una_sola_volta",
+            "non_costruisce_per_loro_torna_al_TOK_TOK_TOK_della_scaletta_tra_un_passaggio_e_l_altro",
+            "non_collauda_il_ponte_finito_e_vostro_provatelo_voi",
+            "riprende_la_propria_strada_TOK_TOK_TOK_si_allontana_nella_foresta_prima_del_collaudo_finale"
+          ],
+          "constraints_active": [
+            "mai_spiega_perche_nodo_funziona",
+            "mai_fa_il_nodo_al_posto_di_chi_impara",
+            "mai_parla_di_sentimenti",
+            "tok_tok_tok_1_di_<=4_5_storie_saga",
+            "voce_tipica_tieni_qui_un_altro_giro_tira_piu_forte_adesso_fai_tu"
+          ],
+          "familial_role_episodic": "padre_pratico_intervallato_bene_dopo_salvia_madre_pratica_cornice_s4_e_rovo_zio_severo_s3_s4",
+          "quote_count_estimate": 4
+        }
+      ],
+      "characters_offscreen_or_background": [
+        {
+          "id": "coltivatori_del_cerchio",
+          "role": "committenti_scaletta_di_nodo_mai_in_scena",
+          "_note": "I Coltivatori non compaiono in scena. Sono il motivo per cui Nodo e' li' (commissione della scaletta). Distinzione importante per l'economia della storia: S5 non ha cantilena Coltivatori (quota <=4-5 saga preservata), solo TOK-TOK-TOK di Nodo. I Coltivatori respirano sullo sfondo del blocco B come istituzione che commissiona lavori — S4 cantilena piena della semina, S5 scaletta commissionata, S6 off-screen."
+        }
+      ],
+      "premise": "Primavera piena, qualche settimana dopo S4 — fiori aperti, Fiume piu' alto, sole che scalda. I fratelli vogliono vedere una radura nuova che Bru ha indicato loro mentre tornavano con Salvia dalla raccolta di ortica (callback S4: Bru ha fatto col mento un gesto silenzioso verso una direzione dentro la Foresta). Chiamano Bru. Vanno insieme. Seguono la sua indicazione per 20-30 minuti di cammino dentro la Foresta, arrivano al torrente: il vecchio tronco che faceva da ponte non c'e' piu' — la piena lo ha portato via. L'acqua corre alta, non si guada.",
+      "problem": "L'altra sponda e' a quattro-cinque metri. Tornare = rinunciare. Cercare un altro punto = ore nella Foresta. Stanno pensando di tornare quando sentono TOK-TOK-TOK poco distante, verso il margine degli Orti — suono ritmico secco che viaggia bene nel vento, riconoscibile. E' Nodo, sta riparando una scaletta dei Coltivatori. Camminano 50 metri per raggiungerlo.",
+      "threshold_moment": "Elias ha l'idea: usare pertiche di rami grossi e lunghi — di quelli che la Foresta ha lasciato cadere dopo l'inverno, lunghi abbastanza da coprire la luce del torrente con margine sulle sponde. Propone a Nodo. Nodo annuisce, continua il giro di nodo in corso, poi alza la testa: 'Cosa vi serve.' Ascolta, si toglie un pezzo di corda dalla matassa al braccio, taglia con un colpo secco. Porge la corda a Elias insieme al nodo marinaro mostrato una volta sola. 'Adesso fai tu.' Torna alla scaletta. Elias prova: sbaglia. Riprova: sbaglia. Alla terza riesce. Il ponte prende forma in 20-30 minuti di lavoro coordinato — Gabriel tiene le pertiche, Noah passa la corda, Elias lega marinari, Bru sceglie in silenzio i pezzi giusti. L'Intreccio fa oscillare le chiome sopra, ma il torrente resta liscio — aria parallela alla corrente.",
+      "resolution_mode": "Quando il ponte e' finito, Nodo e' ancora sulla scaletta. Alza la testa, lo guarda un secondo, non lo collauda. 'E' vostro. Provatelo voi.' Si rimette al TOK-TOK-TOK. Elias passa per primo — chi ha legato collauda, responsabilita' tecnica che si chiude nel provare cio' che si e' fatto. Peso intermedio. Il ponte regge. Noah passa per secondo, sicurezza post-collaudo, piu' leggero. Regge. Gabriel passa per terzo — test massimo, peso maggiore, conferma finale. Regge. Bru passa per quarto, ospite sul ponte che i fratelli hanno fatto — cortesia selvatica, onora il lavoro di Elias. Attraversano. Camminano 100-150 metri dentro la Foresta dall'altra parte. Trovano la radura: un cerchio d'erba con alcuni pini intorno, luce verticale dall'alto (il numero dei pini non detto nel testo — l'illustrazione decide). Bru si siede al centro per primo — riprende la proprieta' del momento, dopo aver passato per quarto sul ponte. I fratelli fanno lo stesso, in cerchio intorno. Restano un po', senza parole. Tornano. Al ritorno il ponte e' ancora li'. Nodo se n'e' gia' andato col suo TOK-TOK-TOK lontano nella Foresta — non ha visto il collaudo finale. Non gli serviva vederlo.",
+      "key_phrase_indicative": null,
+      "key_phrase_notes": "Nessuna frase-chiave dichiarativa di personaggio. Sigillo del narratore in chiusura — direzione: non hanno trovato qualcosa, hanno fatto qualcosa che resta. Mai dichiarato come regola. Il narratore puo' chiudere con un'immagine sul ponte che e' ancora li' (cose fatte dai fratelli che continuano a tenere anche quando nessuno guarda), o su Nodo che non ha visto il collaudo ma sapeva — qualcosa di pratico, non filosofico. Da scrivere in D.",
+      "fear_touched": {
+        "brother": "elias",
+        "fear_id": "non_essere_abbastanza",
+        "status": "maturing",
+        "mode_of_touch": "fare_la_fatica_tecnica_senza_avere_il_centro_del_silenzio_micro_sguardo_storto_quando_bru_si_siede_al_centro_della_radura_per_primo_mai_nominato",
+        "_note": "Seconda variante maturing dopo S4 (sguardo storto all'abbraccio). In S5 la paura assume forma piu' precisa, archiviata dal critico esterno: Elias ha ricevuto la corda di Nodo, ha imparato il marinaro, ha legato tutti i nodi del ponte, ha passato per primo — ha fatto tutta la fatica tecnica. Eppure e' Bru a sedersi al centro della radura per primo. Elias si prende il ponte, Bru si prende il silenzio. Il conflitto sottile e': fare le cose non e' la stessa cosa di averle. Modulazione della paura nel blocco B: fare-senza-avere (S5) -> in S6 evolvera' in capire-senza-avere (Pun riconosce il dente, Elias capisce e si tira indietro). Traiettoria complessiva: S2 alta (quasi in parola) -> S4 bassa (sguardo abbraccio) -> S5 bassa (sguardo radura) -> S6 variante capire-e-tirarsi-indietro -> S9 variante -> S11 bloom accettare."
+      },
+      "seeds_planted": [
+        "seed_nodo_marinaro_capacita_elias",
+        "seed_radura_coi_pini_luogo_silenzioso",
+        "seed_bru_sa_indicare_luoghi_che_altri_non_vedono",
+        "seed_elias_collauda_per_primo_responsabilita_di_chi_ha_fatto",
+        "seed_pattern_a_rami_caduti_diventano_materia"
+      ],
+      "seeds_picked_up": [
+        "seed_foresta_tempi_modi_propri",
+        "seed_bru_presenza_che_custodisce",
+        "seed_paura_elias_piccolo"
+      ],
+      "seeds_bloomed_here": [
+        "seed_bru_presenza_che_custodisce"
+      ],
+      "seeds_maturing_here": [
+        "seed_foresta_tempi_modi_propri",
+        "seed_paura_elias_piccolo"
+      ],
+      "callbacks_made": [
+        {
+          "callback_id": "cb_s05_001",
+          "from_story": "s04",
+          "element": "bru_indica_col_mento_direzione_radura",
+          "type": "gesto_richiamo",
+          "note": "Bru in S4 (fine, mentre tornavano con Salvia) aveva indicato col mento una direzione. In S5 quel gesto diventa motivo del viaggio: i fratelli chiamano Bru e lo seguono verso la radura che lui aveva indicato."
+        },
+        {
+          "callback_id": "cb_s05_002",
+          "from_story": "s04",
+          "element": "foresta_che_ha_suoi_modi",
+          "type": "principio_fisico_esteso",
+          "note": "In S4 la Foresta come tessuto vivo che porta vibrazioni. In S5 la Foresta estende: ha suoi modi anche di nascondere radure che si raggiungono solo se costruisci. Stesso principio, declinato in chiave costruttiva/spaziale."
+        },
+        {
+          "callback_id": "cb_s05_003",
+          "from_story": "s04",
+          "element": "bru_presenza_che_custodisce",
+          "type": "personaggio_sviluppo_agency",
+          "note": "Bru da presenza concreta silenziosa (S4) a compagno attivo con agency narrativa (S5). Bloom del seed."
+        }
+      ],
+      "active_constraints_touched": [
+        "nodo_mai_spiega_perche_nodo_funziona",
+        "nodo_mai_fa_il_nodo_al_posto_di_chi_impara",
+        "nodo_mai_parla_di_sentimenti",
+        "nodo_tok_tok_tok_1_di_<=4_5_storie_saga",
+        "bru_mai_racconta_sua_storia",
+        "bru_mai_centro_attenzione_in_gruppo",
+        "bru_mai_piange_visibile",
+        "bru_mai_eroe",
+        "bru_nessuna_parola_in_questa_storia_agency_gesti_silenziosi",
+        "detti_fiamma_esclusivi_qui_non_presente",
+        "no_narrator_reveal_preannouncement",
+        "ear_framework_invisible_connettere_in_azione_fisica_non_concetto",
+        "elias_non_e_quello_delle_idee_tiene_fisico_tecnica_apprendista",
+        "pattern_a_never_named_in_text_prima_semina_formale_in_immagine_del_ponte_materia_caduta"
+      ],
+      "pattern_a_active": "seminato",
+      "pattern_a_notes": "PRIMA SEMINA FORMALE DEL PATTERN A in saga. Le pertiche cadute dalla Foresta diventano la materia del ponte dei fratelli. Il Pattern A qui si manifesta come 'le cose cadute diventano materia' — famiglia di immagini che in S6 si estendera' a 'le cose perse non si perdono, si nascondono', in S7-S8 sara' scena attiva piena (zattera rotta che arriva, noce caduto che diventa cataste di legna), in S10 variante notturna (nido vuoto che e' pieno), S11 variante collettiva (festa che non si vince), S12 chiusura silente (anno chiuso, fratelli diversi insieme). Mai nominato nel testo. Puo' essere toccato da massimo 1 inciso del narratore nella memoria lunga (es. direzione: sui rami che cadono in inverno e diventano materia in primavera). Vive nell'immagine del ponte.",
+      "when_water_trembles": false,
+      "night_scene": false,
+      "visual_anchors": {
+        "scene_hooks": [
+          {
+            "hook_id": "s05_h1",
+            "location_precise": "foresta_intrecciata_cammino_interno_verso_torrente",
+            "quadrant": "terra_ovest",
+            "time_of_day": "mattino_inoltrato",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "bru"
+            ],
+            "focal_action": "I quattro camminano in fila dentro la Foresta seguendo la direzione che Bru ha indicato. Bru davanti, silenzioso, occhi neri attenti. I fratelli dietro. Primavera piena — foglie nuove, luce screziata dalle chiome.",
+            "focal_object": "bru_davanti_che_guida_col_passo_i_fratelli_in_fila",
+            "atmosphere": "cammino_di_scoperta_fiducia_reciproca_silenziosa_primavera_piena",
+            "wind_visible": "intreccio_tra_chiome_velature_azzurre_diffuse",
+            "palette_local": "verdi_tenerissimi_primavera_marroni_tronchi_grigio_marrone_bru_luce_screziata_dall_alto"
+          },
+          {
+            "hook_id": "s05_h2",
+            "location_precise": "torrente_punto_del_vecchio_tronco_portato_via",
+            "quadrant": "terra_ovest",
+            "time_of_day": "mattino_inoltrato",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "bru"
+            ],
+            "focal_action": "I quattro fermi sulla sponda. Acqua che corre alta tra loro e l'altra sponda. Il vecchio tronco non c'e' — si vede un taglio fresco dove si era adagiato da anni, ora terra e erba schiacciata dove era appoggiato. L'altra sponda a 4-5 metri.",
+            "focal_object": "torrente_in_piena_tra_le_due_sponde_assenza_del_tronco",
+            "atmosphere": "arresto_davanti_al_vuoto_scoperta_del_passaggio_mancante",
+            "wind_visible": "intreccio_sopra_le_chiome_aria_parallela_al_torrente_acqua_liscia_non_increspata",
+            "palette_local": "marrone_scuro_della_terra_dove_era_il_tronco_verde_acqua_chiara_che_corre_verde_foresta_su_entrambe_le_sponde"
+          },
+          {
+            "hook_id": "s05_h3",
+            "location_precise": "posizione_nodo_a_50_metri_al_lavoro_sulla_scaletta",
+            "quadrant": "terra_ovest",
+            "time_of_day": "mattino_inoltrato",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "bru",
+              "nodo"
+            ],
+            "focal_action": "Nodo sulla scaletta a terra rovesciata, gradino rotto in mano, corda arrotolata sul braccio sinistro, cresta rossa visibile tra il verde. TOK-TOK-TOK del becco sul legno. Alza la testa verso i fratelli che sono arrivati, aspetta di finire il giro di nodo corrente, poi: 'Cosa vi serve.'",
+            "focal_object": "nodo_al_lavoro_con_corda_sul_braccio_e_scaletta_sotto",
+            "atmosphere": "incontro_con_maestria_calma_pratica_che_non_si_interrompe",
+            "wind_visible": "intreccio_diffuso",
+            "palette_local": "nero_bianco_rosso_di_nodo_con_cresta_accesa_corda_chiara_sul_braccio_marroni_scaletta_verdi_foresta_alle_spalle"
+          },
+          {
+            "hook_id": "s05_h4",
+            "location_precise": "posizione_nodo_momento_della_corda_tagliata",
+            "quadrant": "terra_ovest",
+            "time_of_day": "mattino_inoltrato",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "bru",
+              "nodo"
+            ],
+            "focal_action": "Nodo si toglie un pezzo di corda dalla matassa al braccio. Taglia con un colpo secco del becco. La porge a Elias insieme a un gesto-nodo mostrato una volta sola. 'Adesso fai tu.' Elias prende la corda. Gli altri guardano.",
+            "focal_object": "corda_che_passa_dalla_matassa_di_nodo_alla_mano_di_elias",
+            "atmosphere": "trasmissione_silenziosa_eredita_tecnica_e_materiale_in_un_gesto",
+            "wind_visible": "intreccio_diffuso",
+            "palette_local": "corda_chiara_come_filo_caldo_unico_gesto_tra_le_due_mani_nero_bianco_rosso_di_nodo_marrone_e_verde_di_elias"
+          },
+          {
+            "hook_id": "s05_h5_signature",
+            "location_precise": "torrente_durante_costruzione_ponte",
+            "quadrant": "terra_ovest",
+            "time_of_day": "tarda_mattina_inizio_mezzogiorno",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "bru"
+            ],
+            "focal_action": "I quattro al lavoro sul ponte. Gabriel tiene ferme le pertiche stese sull'acqua da sponda a sponda. Noah passa la corda a Elias. Elias inginocchiato lega un nodo marinaro sulle giunture. Bru sceglie in silenzio la prossima pertica da quelle raccolte alla rinfusa da Noah. TOK-TOK-TOK di Nodo in lontananza sulla scaletta.",
+            "focal_object": "ponte_in_costruzione_con_quattro_ruoli_simultanei",
+            "atmosphere": "lavoro_coordinato_silenzioso_ognuno_al_proprio_ruolo_intreccio_di_azioni",
+            "wind_visible": "intreccio_chiome_mosse_sopra_acqua_liscia_sotto_sistema_a_due_piani",
+            "palette_local": "pertiche_marroni_chiare_di_rami_caduti_corda_chiara_di_nodo_ponte_che_prende_forma_verdi_foresta_luce_che_trafila_dall_alto"
+          },
+          {
+            "hook_id": "s05_h6",
+            "location_precise": "ponte_finito_momento_passaggio_elias",
+            "quadrant": "terra_ovest",
+            "time_of_day": "mezzogiorno",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "bru"
+            ],
+            "focal_action": "Elias primo passo sul ponte appena finito. Le braccia un po' aperte per equilibrio. Gli altri lo guardano dalla sponda. Sotto di lui l'acqua corre. Nodo in lontananza a testa bassa sulla scaletta — non sta guardando.",
+            "focal_object": "elias_sul_ponte_primo_passaggio_gabriel_e_noah_che_guardano",
+            "atmosphere": "collaudo_responsabile_tensione_sottile_chi_ha_fatto_prova",
+            "wind_visible": "intreccio_che_fa_oscillare_leggermente_le_chiome_sopra",
+            "palette_local": "elias_sulle_pertiche_al_centro_della_scena_verdi_foresta_specchiati_nell_acqua_sotto_ponte_chiaro_tra_verdi_scuri"
+          },
+          {
+            "hook_id": "s05_h7_radura",
+            "location_precise": "radura_coi_pini_oltre_torrente_100_150_metri",
+            "quadrant": "terra_ovest",
+            "time_of_day": "mezzogiorno",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "bru"
+            ],
+            "focal_action": "La radura: cerchio d'erba, pini intorno, luce verticale dall'alto. Bru seduto al centro per primo. I tre fratelli in cerchio intorno, seduti anche loro. Nessuno parla. Elias con lo sguardo un filo storto che nessuno vede.",
+            "focal_object": "bru_al_centro_del_cerchio_d_erba_i_tre_fratelli_intorno",
+            "atmosphere": "silenzio_verticale_centro_che_si_prende_dopo_che_il_ponte_e_stato_fatto_conflitto_sottile_invisibile",
+            "wind_visible": "intreccio_attutito_nella_radura_luce_piu_che_aria",
+            "palette_local": "verde_quasi_giallo_dell_erba_sotto_luce_verticale_tronchi_scuri_di_pino_intorno_bru_grigio_marrone_al_centro_tre_fratelli_piu_chiari_in_cerchio"
+          },
+          {
+            "hook_id": "s05_h8",
+            "location_precise": "torrente_ritorno_ponte_ancora_li",
+            "quadrant": "terra_ovest",
+            "time_of_day": "primo_pomeriggio",
+            "characters_present": [
+              "gabriel",
+              "elias",
+              "noah",
+              "bru"
+            ],
+            "focal_action": "I quattro tornano dall'altra parte, attraversano il ponte al contrario. Il ponte e' ancora li', tiene. Niente Nodo in lontananza — TOK-TOK-TOK gia' sparito nella Foresta. I quattro non si voltano a controllare di aver fatto bene.",
+            "focal_object": "ponte_al_ritorno_ancora_in_piedi_senza_nodo",
+            "atmosphere": "cose_fatte_che_continuano_a_tenere_anche_quando_nessuno_guarda_quiete",
+            "wind_visible": "intreccio_che_gira_verso_mulinello_pomeridiano_velature_piu_mosse",
+            "palette_local": "ponte_chiaro_tra_verdi_scuri_ancora_li_luce_piu_gialla_pomeridiana"
+          }
+        ],
+        "signature_image": "s05_h5_signature",
+        "signature_image_reason": "Il ponte in costruzione con i quattro ruoli simultanei e' la scena-cardine — prima volta saga in cui quattro corpi lavorano a un oggetto fisico comune, ognuno al proprio compito (Gabriel tiene, Noah passa, Elias lega, Bru sceglie). Pattern A in prima manifestazione visibile: le pertiche cadute dalla Foresta diventano materia. Ed eco silenziosa nome=cosa: Vento Intreccio sopra + rami intrecciati + azioni intrecciate dei fratelli. L'immagine che riassume il blocco B meglio di ogni altra.",
+        "palette_tag": "verdi_tenerissimi_primavera_marroni_pertiche_e_radici_corda_chiara_come_filo_conduttore_unico_nero_bianco_rosso_di_nodo_acqua_del_torrente_verde_liscio",
+        "light_key_sequence": "mattino_inoltrato_cammino_screziato -> mezzogiorno_costruzione_luce_alta -> mezzogiorno_radura_verticale -> primo_pomeriggio_ritorno_luce_piu_gialla",
+        "recurring_visual_objects": [
+          "corda_nodo"
+        ],
+        "visual_signatures_touched": []
+      },
+      "voice_notes_essential": [
+        "TOK_TOK_TOK_di_nodo_onomatopea_isolata_graficamente_1_di_<=4_5_storie_saga_prima_apparizione",
+        "nessun_address_al_lettore_arriva_in_s7_come_da_arco_questo_era_in_s4",
+        "memoria_lunga_narratore_1_inciso_sui_rami_che_cadono_in_inverno_e_diventano_materia_in_primavera_pattern_a_silenzioso_mai_dichiarato",
+        "nodo_voce_tipica_tieni_qui_un_altro_giro_adesso_fai_tu_cosa_vi_serve_e_vostro_provatelo_voi",
+        "elias_zero_dichiarazioni_fa_con_le_mani_micro_sguardo_storto_mai_in_parola",
+        "bru_zero_parole_agency_tramite_gesti",
+        "gabriel_breve_delega_chi_ha_fatto_collauda_ma_io_tengo",
+        "noah_entusiasmo_fisico_non_in_parole",
+        "fase_d_specificare_pertiche_lunghe_non_ramoscelli_rami_grossi_che_la_foresta_ha_lasciato_cadere_pattern_a",
+        "fase_d_corda_arriva_da_nodo_tagliata_dal_braccio_gesto_di_trasmissione_eredita_tecnica_e_materiale",
+        "fase_d_intreccio_muove_chiome_sopra_non_crea_onde_nel_torrente_tensione_regge_non_regge_solo_visiva",
+        "nessuna_cantilena_coltivatori_saga_quota_preservata_s4_era_piena",
+        "sigillo_narratore_in_chiusura_immagine_del_ponte_ancora_li_non_regola"
+      ],
+      "debts_opened": [
+        "s07_nodo_marinaro_bloom_funzionale_zattera",
+        "s08_nodo_marinaro_bloom_crisi_reale_albero_caduto",
+        "s08_elias_collauda_per_primo_bloom_tiene_per_primo_corda_ramo_legato",
+        "s11_nodo_marinaro_bloom_festa_corda_intrecciata",
+        "s12_radura_coi_pini_bloom_passaggio_autunnale_verso_roccia_alta",
+        "s11_paura_elias_bloom_accettazione_vecchie_continua_maturing_s6",
+        "s06_paura_elias_maturing_capire_senza_avere_dente_da_latte_pun",
+        "s06_s07_s08_s10_s11_s12_pattern_a_bloom_trasversale_saga"
+      ],
+      "debts_closed": [
+        "s03_s04_seed_bru_presenza_che_custodisce_bloomed_agency_attiva_compagno_scoperta"
+      ],
+      "palette_emotiva": "Verdi tenerissimi della primavera piena + marroni chiari delle pertiche cadute e delle radici scoperte + corda chiara di Nodo come filo caldo unico + cresta rossa di Nodo unico punto vivo della scena + grigio-marrone di Bru silenzioso. Radura: verde quasi giallo nella luce verticale, tronchi scuri di pino intorno. Acqua del torrente: verde liscio che corre sotto il ponte. Il ponte in costruzione e' la cosa piu' chiara della tavola, l'unico punto di legno chiaro tra verdi e marroni scuri.",
+      "callback_summary": "Callback a S4: Bru che indica col mento la direzione della radura (richiamo gesto di fine S4). Foresta come tessuto che ha suoi modi (da canale vibrazione di S4 a accessibilita' costruttiva di S5 — principio fisico che si estende). Fermarsi come gesto attivo non rilevante qui ma ereditato. Callback a S3: Rovo/Bru contesto Foresta ma in modalita' diversa (S5 costruttiva non margine).",
+      "structural_notes": [
+        "CENTRO_BLOCCO_B — ciclo Connettere in fase costruttiva piena. Connettere in azione fisica a quattro corpi.",
+        "PATTERN_A_PRIMA_SEMINA_FORMALE — le pertiche cadute dalla Foresta diventano la materia del ponte dei fratelli. Prima volta saga in cui il principio 'le cose cadute diventano materia' appare in immagine chiara. Da qui in poi Pattern A cammina. Mai nominato.",
+        "EREDITA_TECNICA_E_MATERIALE — Nodo tramanda a Elias sia la capacita' (nodo marinaro) sia il materiale (pezzo di corda dalla matassa al braccio). Prima volta saga in cui un maggiore passa contemporaneamente know-how e materia a un fratello. Il campo materiale_associato dentro seed_nodo_marinaro lo traccia implicitamente; se il pattern si conferma in S8/S11 lo promuoviamo a seed autonomo nella revisione post-S6.",
+        "CANALE_VIBRAZIONE_ESTESO — coerenza con S4: TOK-TOK-TOK e' suono ritmico su legno, viaggia via-aria (secco) E vibra nei tronchi circostanti. Sistema a due canali si conferma. Il vento Intreccio muove chiome sopra il torrente ma non crea onde sull'acqua (aria parallela, non contro). Ambiente fisicamente coerente.",
+        "NODO_PRIMA_APPARIZIONE — modalita' lavoro commissione Coltivatori (scaletta). Registro 'artigiano che non interrompe il giro in corso per rispondere'. S8 sara' modalita' Mantenitore (collettivo emergenza). Due modalita' distinte.",
+        "BRU_BLOOM_AGENCY — da presenza concreta (S4) a compagno attivo con agency narrativa (indica radura, sceglie pertiche, passa per quarto, si siede al centro). Vincoli Bible rispettati. Secondo bloom atteso in S11 (riconosciuto da Elias) sara' seed fratello, da piantare in S10 o S11.",
+        "BRU_OSPITE_SCOPRITORE — Bru passa per quarto sul ponte (cortesia selvatica: onora il lavoro di Elias) ma si siede al centro della radura per primo (riprende proprieta' del momento). Due gesti che sembrano opposti e si completano. Conflitto sottile che apre il micro-sguardo di Elias.",
+        "SEQUENZA_PASSAGGI_PONTE — Elias responsabilita' (chi ha fatto collauda, peso intermedio), Noah sicurezza (piu' leggero, post-collaudo), Gabriel test massimo (peso maggiore, conferma finale), Bru chiusura (ospite). Quattro funzioni distinte che chiudono il ciclo della verifica. Coerenza fisica e narrativa piena.",
+        "PAURA_ELIAS_MODULAZIONE_BLOCCO_B — fare-senza-avere (S5) in evoluzione verso capire-senza-avere (S6). Traiettoria S2_alta -> S4_bassa -> S5_bassa -> S6_variante -> S9_variante -> S11_bloom. Mai in parola, sempre in micro-sguardi.",
+        "ELIAS_COLLAUDA_PER_PRIMO — modo del personaggio istituito: responsabilita' tecnica si chiude nel provare cio' che si e' fatto. Bloom S8 (tiene per primo la corda del ramo che ha legato).",
+        "SEED_MATERIALE_ASSOCIATO — campo dentro seed_nodo_marinaro per tracciare famiglia implicita 'corda di Nodo entra nel fare dei fratelli'. Decisione pragmatica (no proliferazione seeds). Se conferma in S8/S11, promuoviamo.",
+        "NESSUNA_CANTILENA_COLTIVATORI — quota saga preservata. Cantilena piena in S4, TOK-TOK-TOK di Nodo in S5, niente duplicazioni sonore."
+      ]
+    }
+  },
+  "quote_tracker": {
+    "fiamma_detti_per_storia": {
+      "s01": 1
+    },
+    "grunto_fragments_used": 0,
+    "grunto_fragments_planned_stories": [
+      "s12"
+    ],
+    "tok_tok_tok_stories": [
+      "s05"
+    ],
+    "night_scenes": [
+      "s01"
+    ],
+    "pattern_a_stories": [],
+    "when_water_trembles_stories": [],
+    "addresses_to_reader": [
+      "s04"
+    ],
+    "narrator_signature_phrases": [],
+    "tum_tum_tum_fratelli_stories": [
+      "s04"
+    ],
+    "tum_tum_coltivatori_stories": [
+      "s03",
+      "s04"
+    ],
+    "cantilene_coltivatori_stories": [
+      "s03_sommessa",
+      "s04_piena"
+    ],
+    "pattern_a_seminato_stories": [
+      "s05"
+    ],
+    "pattern_a_pre_eco_stories": [
+      "s02"
+    ]
+  },
+  "active_constraints_global": [
+    "ear_framework_invisible",
+    "no_explicit_morals",
+    "grunto_max_2_fragments_saga",
+    "fiamma_detti_max_2_per_story",
+    "night_not_personified",
+    "no_narrator_reveal_preannouncement",
+    "pattern_a_never_named_in_text",
+    "fears_resolved_by_brothers_only",
+    "s1_s12_frame_at_forno"
+  ],
+  "migration_log": [
+    {
+      "from_version": "0.2.0",
+      "to_version": "0.3.0",
+      "date": "2026-04-22",
+      "phase": "B3.0.5",
+      "scope": "pulizia tecnica grafo — nessuna modifica narrativa",
+      "changes": [
+        "Creata entità characters.pastori (gruppo-istituzione, quadrante aria_nord)",
+        "Creata entità locations.torrente_affluente_foresta (corso d'acqua minore, quadrante terra_ovest)",
+        "s01.pattern_a_active: False → 'none'",
+        "s02.pattern_a_active: False → 'pre_eco'",
+        "s03.pattern_a_active: False → 'none'",
+        "s04.pattern_a_active: 'inattivo' → 'none'",
+        "Ricalcolato quote_tracker.pattern_a_stories (solo attivo+bloomed); aggiunti tracker pre_eco/seminato",
+        "Migrati 1 seme(i) da type='frame_pattern_a' → 'frame' (related_to_saga_architecture=true): ['seed_pattern_a_rami_caduti_diventano_materia']",
+        "seed_s01_bastoncino_noah: related_gesture_seed → related_seed ('seed_noah_raccoglie_oggetti')",
+        "seed_s01_bastoncino_noah: rimosso bloom_form=\"Noah lo getta nell'acqua della pozza per rabbia. L'acqua si increspa. Il bastoncino galleggia un attimo, si inclina, sparisce sotto. Resta congelato dentro il velo che si richiude al calare del sole — oggetto-fantasma per il rilettore, MAI dichiarato nel testo.\" (assorbito)",
+        "seed_gabriel_sa_la_strada_senza_vedere: rimosso bloom_form=\"Gabriel dice 'Gridiamo no. Pensiamo.' ed esegue: cammina nella direzione del battito di Noah, segue il suono che trafila dal terreno, non l'aria. Sa la strada anche senza vederla. Il bloom si estende ancora in S10 (buio puro).\" (assorbito)",
+        "seed_fermarsi_come_gesto_attivo: rimosso bloom_form='Noah si siede tra le radici del grande albero quando si perde — non piange, si ferma da solo. Il pattern del fermarsi istituito da Gabriel in S1 si trasferisce a Noah in S4. Il gesto circola tra fratelli.' (assorbito)",
+        "seed_paura_elias_piccolo: rimosso maturing_type='micro_sguardi_distribuiti_mai_nominati' (assorbito)",
+        "seed_paura_noah_buio: spostato rename_history in migration_log",
+        "seed_bru_presenza_che_custodisce: rimosso bloom_form=\"Da intravisto (S3) a presenza concreta silenziosa (S4) a compagno attivo con agency narrativa (S5): Bru indica la radura col mento, sceglie le pertiche giuste in silenzio, passa per quarto sul ponte come ospite che onora il lavoro di Elias, si siede al centro della radura per primo. Vincoli Bible rispettati (mai centro attenzione in gruppo, mai eroe). Secondo bloom atteso in S11 (riconosciuto da Elias come quello-solo, porta a Rovo) sara' seed fratello, da piantare in S10 o S11.\" (assorbito)",
+        "seed_foresta_tempi_modi_propri: rimosso bloom_form=\"La Foresta non porta solo voci attraverso l'aria — porta vibrazioni attraverso il tessuto delle radici. Chi ha il palmo (o le unghie) sulla terra la sente. Chi sta solo sopra (Salvia, lepre in superficie) no. Principio fisico del mondo istituito qui. S5 estende: la Foresta nasconde radure che si raggiungono solo se costruisci — stesso principio (la Foresta ha suoi modi) declinato in chiave spaziale/costruttiva.\" (assorbito)",
+        "Popolato registry g.callbacks con 11 voci da callback inline (mantenuti anche inline nei nodi-storia)",
+        "Rinominato _absorbed_bloom_form → bloom_notes in 5 semi (campo narrativo descrittivo del bloom)",
+        "Rinominato _absorbed_maturing_type → maturing_type_legacy in 1 semi (conservato come etichetta storica per riferimento)",
+        "seed_paura_noah_buio: aggiunto resolution_mode='dire' (deducibile univocamente da bloom_type 'paura_noah_buio_risolta_dire')"
+      ],
+      "whitelist_updates": {
+        "ALLOWED_SEED_STATUS": [
+          "active",
+          "seminato",
+          "maturing",
+          "bloomed",
+          "closed"
+        ],
+        "ALLOWED_SEED_TYPES": [
+          "fisico",
+          "gesto",
+          "capacita",
+          "relazionale",
+          "ritmo",
+          "spatial_echo",
+          "pattern",
+          "fenomeno",
+          "paura",
+          "frame",
+          "luogo"
+        ],
+        "PATTERN_A_ACTIVE_VALUES": [
+          "attivo",
+          "bloomed",
+          "none",
+          "pre_eco",
+          "seminato"
+        ],
+        "removed_seed_type": "frame_pattern_a (generalizzato → frame)"
+      },
+      "deferred_decisions": [
+        "Classificazione 'prima scena pattern_a attivo' (S5 vs S7): rimandata a chat narrativa successiva. Migrazione attuale non assegna alcun 'attivo' a S1-S5; S5 resta 'seminato'."
+      ],
+      "archived_rename_history": [
+        {
+          "seed_id": "seed_paura_noah_buio",
+          "rename_history": [
+            {
+              "from": "seed_paura_noah_bianco_totale",
+              "to": "seed_paura_noah_buio",
+              "reason": "generalizzazione: buio include bianco_totale come variante"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

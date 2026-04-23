@@ -1,0 +1,172 @@
+# EAR-PERSONAGGI: Lezioni Apprese
+
+## Schema delle Evoluzioni
+
+### 1. DAL SIMBOLO ALLA MISCELA
+
+**Prima (errore):**
+```
+Personaggio = Σ₂₃₂₊ (etichetta fissa)
+```
+
+**Dopo (evoluzione):**
+```
+Personaggio = {
+  Σ₂₃₂₊: 60% (dominante quando rilassato)
+  Σ₂₁₃₋: 25% (emerge sotto stress)
+  Σ₄₂₁₊: 15% (emerge in intimità)
+}
+```
+
+**Principio:** I personaggi reali non sono archetipi puri. Sono miscele che cambiano dosaggio in base al contesto. Lo stesso personaggio può essere Spiralista con gli amici e Membranista con gli estranei.
+
+---
+
+### 2. DAL MOSTRARE AL NASCONDERE
+
+**Prima (errore):**
+```
+[Σ₂₃₂₊ — Lo Spiralista: speech pattern ciclico]
+"È come quando giri e giri e—"
+```
+
+**Dopo (evoluzione):**
+```
+Le sue mani non stavano mai ferme. Piegava il tovagliolo,
+lo spiegava, lo ripiegava in forme diverse.
+"Sai cosa? Sorprendimi."
+```
+
+**Principio:** Il framework è il motore, non la carrozzeria. Il lettore vede comportamenti, voci, gesti — mai calcoli o etichette. Se devi spiegare il Σ, hai fallito a mostrarlo.
+
+---
+
+### 3. DAL CALCOLO ALL'EMERGENZA
+
+**Prima (errore):**
+```
+d(A,B) = 4 → "tensione produttiva" → scrivo tensione
+```
+
+**Dopo (evoluzione):**
+```
+A parla → B reagisce in modo naturale per il suo mix Σ →
+la tensione emerge dalla differenza di voci, non dalla formula
+```
+
+**Principio:** Calcola le distanze per te stesso, per sapere chi capisce chi, chi irrita chi. Ma poi lascia che il dialogo emerga organicamente. La distanza Σ è una mappa, non uno script.
+
+---
+
+### 4. DAL PERSONAGGIO AL CONTESTO
+
+**Prima (errore):**
+```
+Marco = Σ₃₁₁₊ sempre, in ogni scena
+```
+
+**Dopo (evoluzione):**
+```
+Marco con colleghi = Σ₃₁₁₊ dominante (minimale, tagliente)
+Marco con figlia = Σ₃₂₃₊ emerge (organico, protettivo)
+Marco sotto pressione = Σ₃₁₃₋ emerge (muro, chiusura)
+```
+
+**Principio:** Il contesto attiva diverse componenti del mix. Un personaggio ben costruito ha almeno 2-3 Σ che si alternano, con trigger specifici che li attivano.
+
+---
+
+### 5. DAL META-ESPOSTO AL META-INTEGRATO
+
+**Prima (errore):**
+```
+[NOTA META: qui il personaggio diventa consapevole
+di essere in una storia, applicando il principio A5]
+```
+
+**Dopo (evoluzione):**
+```
+"Sentite quella sensazione? Come se qualcuno ci stesse guardando.
+Come se le nostre parole andassero da qualche parte."
+```
+
+**Principio:** Il metalivello funziona quando i personaggi lo sentono senza nominarlo. L'inquietudine di essere osservati, il déjà-vu, la sensazione che le parole abbiano peso — tutto questo evoca il meta senza spezzare l'immersione.
+
+---
+
+### 6. DALL'ARCO LINEARE ALL'ARCO FLUIDO
+
+**Prima (errore):**
+```
+Capitolo 1: Σₐ
+Evento catalizzatore
+Capitolo finale: Σᵦ
+(transizione netta, dichiarata)
+```
+
+**Dopo (evoluzione):**
+```
+Il personaggio oscilla tra più Σ per tutta la storia.
+In certi momenti domina uno, in altri un altro.
+Alla fine, il MIX è cambiato — non il Σ singolo.
+Le proporzioni si sono spostate gradualmente.
+```
+
+**Principio:** L'arco non è da A a B. È un riequilibrio del mix. Sandro non smette di essere strutturale — impara ad accettare anche l'organico. Il suo 80/20 diventa 50/50.
+
+---
+
+## Checklist Pre-Scrittura
+
+Prima di scrivere una storia con EAR-PERSONAGGI:
+
+| Domanda | Se la risposta è sì → problema |
+|---------|-------------------------------|
+| I lettori vedranno codici Σ? | Nascondili completamente |
+| Ogni personaggio ha un solo Σ? | Aggiungi 2-3 Σ secondari |
+| Le distanze sono calcolate e poi citate? | Calcola per te, poi dimentica |
+| L'arco è una transizione netta? | Rendilo un riequilibrio graduale |
+| Il metalivello è spiegato? | Fallo sentire, non dire |
+| Le voci sono distinguibili senza etichette? | Se no, rafforza i pattern vocali |
+
+---
+
+## Template Personaggio Evoluto
+
+```
+NOME: _______________
+
+MIX Σ:
+- Dominante (60%): Σ_____ → emerge quando: _____
+- Secondario (25%): Σ_____ → emerge quando: _____  
+- Latente (15%): Σ_____ → emerge quando: _____
+
+VOCE:
+- Ritmo: _____
+- Parole ricorrenti: _____
+- Cosa NON direbbe mai: _____
+
+TRIGGER DI CAMBIO:
+- Stress → attiva: _____
+- Intimità → attiva: _____
+- Pericolo → attiva: _____
+
+ARCO (se presente):
+- Mix iniziale: ___/___/___
+- Mix finale: ___/___/___
+- Cosa causa lo spostamento: _____
+```
+
+---
+
+## La Regola d'Oro
+
+> **Il framework perfetto è quello che il lettore non vede ma sente.**
+
+Se qualcuno legge la storia e dice "che personaggi ben costruiti" → successo.
+
+Se qualcuno legge la storia e dice "interessante questo sistema Σ" → fallimento.
+
+L'architettura deve essere invisibile. Solo la casa deve essere abitabile.
+
+---
