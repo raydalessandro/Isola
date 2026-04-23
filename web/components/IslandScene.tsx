@@ -8,11 +8,11 @@ import Island from "./Island";
 import Ocean from "./Ocean";
 import Hotspot from "./Hotspot";
 import HotspotPanel from "./HotspotPanel";
-import type { IslandGeography, Quartiere } from "@/lib/geography";
+import type { IslandGeographyData, Quartiere } from "@/lib/geography";
 import { PALETTE } from "@/lib/geography";
 
 type Props = {
-  geography: IslandGeography;
+  geography: IslandGeographyData;
 };
 
 export default function IslandScene({ geography }: Props) {

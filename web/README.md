@@ -58,7 +58,8 @@ web/
 │   ├── HotspotPanel.tsx    — overlay UI slide-up
 │   └── ServiceWorkerRegister.tsx
 ├── lib/
-│   ├── geography.ts        — tipi + palette + metersToUnits()
+│   ├── geography.ts        — tipi + palette + metersToUnits() + classe IslandGeography (client-safe)
+│   ├── geography-load.ts   — loader server-only per world/geography/*.json (usa fs)
 │   └── world.ts            — fs-readers per ../world/_index.json e ../world/geography/island.json
 ├── public/
 │   ├── manifest.json
@@ -71,9 +72,17 @@ web/
 ## Fonti dati canoniche (fuori da `web/`)
 
 - `world/_index.json` — elenco personaggi/avatar generato dalla pipeline `tools/`
-- `world/geography/island.json` — geometria canonica dell'isola (bounds, quartieri, coordinate in metri)
+- `world/geography/island.json` — geometria canonica dell'isola (bounds, quartieri)
+- `world/geography/locations.json` — ~27 luoghi canonici con coordinate
+- `world/geography/paths.json` — rete sentieri per pathfinding
 
 Questi file vengono letti a **build time** da `lib/world.ts` (SSG).
+
+`lib/geography.ts` è il **mirror TypeScript** di `tools/geography.py`:
+stessa API, stessa semantica, stesso algoritmo Dijkstra. La geografia è
+la stessa sorgente di verità interrogabile da autori AI in chat narrativa,
+da autori umani via CLI (`python -m tools.geo_query`) e dalla web app
+per navigazione zoom.
 
 ## Palette & tipografia
 

@@ -1,0 +1,379 @@
+{
+  "version": "1",
+  "notes": "Luoghi canonici dell'Isola dei Tre Venti con coordinate in metri. Origine (0,0) = Albero Vecchio al centro del Villaggio. Convenzione Three.js: x=est positivo, z=sud positivo, y=elevazione. Coordinate indicative derivate dalle descrizioni narrative (content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md §8, content/worldbuilding/GLOSSARIO_ISOLA.md §1-§2, content/grafo/story_graph_v0_3_0.json entities.locations). Non sono misurate al metro, ma coerenti come gerarchia di distanze. Da affinare quando un parser dedicato leggerà direttamente la Bibbia. I quartieri usano id tecnici (centro/forno/pontile/orti/montagne); le label user-facing vanno dal campo label in island.json, mai 'Fuoco/Acqua/Terra/Aria' qui.",
+  "locations": [
+    {
+      "id": "albero_vecchio",
+      "nome_canonico": "L'Albero Vecchio",
+      "categoria": "landmark",
+      "quartiere": "centro",
+      "coords": {"x": 0, "z": 0, "y": 10},
+      "descrizione_breve": "Al centro esatto dell'isola e della Piazza. Tronco così grosso che servirebbero quattro fratelli per abbracciarlo. Origine delle coordinate.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "il_pozzo",
+      "nome_canonico": "Il Pozzo",
+      "categoria": "landmark",
+      "quartiere": "centro",
+      "coords": {"x": 12, "z": -5, "y": 10},
+      "descrizione_breve": "Accanto all'Albero Vecchio, acqua sempre fresca.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "panca_di_pietra",
+      "nome_canonico": "La Panca di Pietra",
+      "categoria": "landmark",
+      "quartiere": "centro",
+      "coords": {"x": 18, "z": -2, "y": 10},
+      "descrizione_breve": "Vicino al Pozzo, dove siedono le Vecchie del Mercato.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "bottega_di_nodo",
+      "nome_canonico": "La bottega di Nodo",
+      "categoria": "edificio",
+      "quartiere": "centro",
+      "coords": {"x": -30, "z": 35, "y": 11},
+      "descrizione_breve": "Sulla Piazza, col portico aperto e gli attrezzi appesi in fila.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "casetta_tonda_di_memolo",
+      "nome_canonico": "La casetta tonda di Mèmolo",
+      "categoria": "edificio",
+      "quartiere": "centro",
+      "coords": {"x": 25, "z": 45, "y": 10},
+      "descrizione_breve": "Nascosta dietro un cespuglio sulla Piazza centrale.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "scuola_di_stria",
+      "nome_canonico": "La Scuola di Stria",
+      "categoria": "edificio",
+      "quartiere": "centro",
+      "coords": {"x": -120, "z": 160, "y": 12},
+      "descrizione_breve": "A sud-ovest del centro, su un piccolo prato tra l'Albero Vecchio e gli Orti. Casa stretta e alta col tetto molto spiovente. La casa di Stria è accanto.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "forno_di_fiamma",
+      "nome_canonico": "Il Forno di Fiamma",
+      "categoria": "edificio",
+      "quartiere": "forno",
+      "coords": {"x": 1950, "z": -100, "y": 42},
+      "descrizione_breve": "Casa-forno col camino che fuma prima dell'alba. Cortile di legna catastata sul retro.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "casa_del_mattino",
+      "nome_canonico": "Le Case del Mattino",
+      "categoria": "edificio",
+      "quartiere": "forno",
+      "coords": {"x": 2150, "z": 80, "y": 40},
+      "descrizione_breve": "Tre o quattro case di abitanti che lavorano col fuoco o iniziano presto: un fabbro, una conceria, un piccolo essiccatoio per la frutta in autunno.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "pontile_di_bartolo",
+      "nome_canonico": "Il Pontile di Bartolo",
+      "categoria": "edificio",
+      "quartiere": "pontile",
+      "coords": {"x": 0, "z": 2700, "y": 0},
+      "descrizione_breve": "Dentro La Bocca, assi scure e pali piantati nell'acqua. Qui le barche entrano ed escono verso il mare aperto.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "capanna_di_bartolo",
+      "nome_canonico": "La capanna di Bartolo",
+      "categoria": "edificio",
+      "quartiere": "pontile",
+      "coords": {"x": -10, "z": 2720, "y": 2},
+      "descrizione_breve": "In cima al Pontile, bassa, col tetto di canne.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "la_bocca",
+      "nome_canonico": "La Bocca",
+      "categoria": "acqua",
+      "quartiere": "pontile",
+      "coords": {"x": 0, "z": 2900, "y": 0},
+      "descrizione_breve": "Canale a sud dove il Fiume che Gira sfocia nel mare. Acque dolci e salate si mescolano.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "spiaggia_delle_conchiglie",
+      "nome_canonico": "La Spiaggia delle Conchiglie",
+      "categoria": "paesaggio",
+      "quartiere": "pontile",
+      "coords": {"x": 350, "z": 3100, "y": 0},
+      "descrizione_breve": "Sulla costa-mare oltre La Bocca, raggiungibile dal piccolo ponte di legno dietro al Pontile. Mai due conchiglie uguali.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "casa_di_amo",
+      "nome_canonico": "La casa di Amo",
+      "categoria": "edificio",
+      "quartiere": "pontile",
+      "coords": {"x": 600, "z": 3050, "y": 25},
+      "descrizione_breve": "Sulla scogliera che sovrasta la Spiaggia a est. Legno scavato nella roccia, scaletta di pietra fino all'acqua.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "case_basse_dei_pescatori",
+      "nome_canonico": "Le Case Basse dei Pescatori",
+      "categoria": "edificio",
+      "quartiere": "pontile",
+      "coords": {"x": -120, "z": 2550, "y": 3},
+      "descrizione_breve": "Sulla riva interna della Bocca, dietro il Pontile. Costruzioni più larghe e basse, fatte per il vento di sud.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "orti_del_cerchio",
+      "nome_canonico": "Gli Orti del Cerchio",
+      "categoria": "paesaggio",
+      "quartiere": "orti",
+      "coords": {"x": -1500, "z": 0, "y": 22},
+      "descrizione_breve": "Disposti in tre fasce concentriche intorno al Villaggio: orti piccoli vicini, legumi e cereali in mezzo, alberi da frutto esterni.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "foresta_intrecciata",
+      "nome_canonico": "La Foresta Intrecciata",
+      "categoria": "paesaggio",
+      "quartiere": "orti",
+      "coords": {"x": -2800, "z": 0, "y": 30},
+      "descrizione_breve": "Oltre gli Orti, alberi fitti, radici connesse sotto terra. Non sentieri ma tracce. Entrata graduale.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "casa_tana_di_rovo",
+      "nome_canonico": "La tana di Rovo",
+      "categoria": "edificio",
+      "quartiere": "orti",
+      "coords": {"x": -3100, "z": 300, "y": 32},
+      "descrizione_breve": "Ai margini della Foresta Intrecciata, sotto un grosso ceppo coperto di muschio. Tre uscite.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "casa_tana_di_salvia",
+      "nome_canonico": "La casa-tana di Salvia",
+      "categoria": "edificio",
+      "quartiere": "orti",
+      "coords": {"x": -1700, "z": 150, "y": 24},
+      "descrizione_breve": "Semicoperta di terra, all'inizio degli Orti. Davanti, il giardino di erbe ordinato per file.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "casa_tana_di_zolla",
+      "nome_canonico": "La casa-tana di Zolla",
+      "categoria": "edificio",
+      "quartiere": "orti",
+      "coords": {"x": -2000, "z": 300, "y": 26},
+      "descrizione_breve": "Poco distante da Salvia, ai margini degli Orti sul confine col bosco. Tre dispense: una in casa, due nascoste fuori.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "pascoli_alti",
+      "nome_canonico": "I Pascoli Alti",
+      "categoria": "paesaggio",
+      "quartiere": "montagne",
+      "coords": {"x": 300, "z": -1800, "y": 150},
+      "descrizione_breve": "Prati estesi in pendenza dolce, dove pascolano capre e pecore. D'estate alcune capanne stagionali dei Pastori.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "roccia_alta",
+      "nome_canonico": "La Roccia Alta",
+      "categoria": "landmark",
+      "quartiere": "montagne",
+      "coords": {"x": -400, "z": -2200, "y": 250},
+      "descrizione_breve": "Sperone panoramico a due ore di cammino dal Villaggio. Da qui si vede tutta l'isola. Stria ci passa al mattino.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "montagne_gemelle",
+      "nome_canonico": "Le Montagne Gemelle",
+      "categoria": "paesaggio",
+      "quartiere": "montagne",
+      "coords": {"x": 0, "z": -2800, "y": 450},
+      "descrizione_breve": "Due cime separate dal Burrone, nel cuore della terra interna. Raggiungibili solo dall'interno. Le pendici nord sono ripide e quasi impraticabili.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "il_burrone",
+      "nome_canonico": "Il Burrone",
+      "categoria": "paesaggio",
+      "quartiere": "montagne",
+      "coords": {"x": 0, "z": -2850, "y": 350},
+      "descrizione_breve": "Gola profonda tra le due cime delle Montagne Gemelle.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "grotta_di_grunto",
+      "nome_canonico": "La grotta di Grunto",
+      "categoria": "edificio",
+      "quartiere": "montagne",
+      "coords": {"x": 50, "z": -2870, "y": 380},
+      "descrizione_breve": "Nel Burrone, su una cengia riparata da uno sperone di roccia. Dal Villaggio, mezza giornata di cammino.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "fiume_che_gira",
+      "nome_canonico": "Il Fiume che Gira",
+      "categoria": "acqua",
+      "quartiere": null,
+      "coords": {"x": 0, "z": -1500, "y": 5},
+      "descrizione_breve": "Anello d'acqua quasi chiuso che separa fascia costiera e terra interna. Nasce dalle pendici delle Montagne Gemelle, scorre antiorario, sfocia a sud nella Bocca. Coordinate = punto sull'arco nord dove i ruscelli delle montagne si raccolgono nell'anello (rappresentativo della feature lineare).",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md",
+        "content/grafo/story_graph_v0_3_0.json"
+      ],
+      "porta_socchiusa": false
+    },
+    {
+      "id": "guado_di_pietre_piatte",
+      "nome_canonico": "Il guado di pietre piatte",
+      "categoria": "soglia",
+      "quartiere": null,
+      "coords": {"x": 0, "z": -1800, "y": 6},
+      "descrizione_breve": "A nord del Fiume, attraversamento a piedi su pietre grandi messe a distanza di un passo. Porta dalla terra interna alla fascia costiera nord. Non porta alle Montagne, che si raggiungono dall'interno.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md"
+      ],
+      "porta_socchiusa": true
+    },
+    {
+      "id": "piccole_isole_allorizzonte",
+      "nome_canonico": "Le Piccole Isole all'orizzonte",
+      "categoria": "offshore",
+      "quartiere": null,
+      "coords": {"x": 5500, "z": 3500, "y": 0},
+      "descrizione_breve": "Visibili da Roccia Alta in giornate molto chiare a sud-est e ovest. Porta socchiusa per Fase F: non esplorabili, presenti come riferimento.",
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md"
+      ],
+      "porta_socchiusa": true
+    }
+  ]
+}
