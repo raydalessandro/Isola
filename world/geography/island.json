@@ -1,0 +1,59 @@
+{
+  "version": "1",
+  "island": {
+    "bounds": {
+      "width_m": 8000,
+      "depth_m": 7000,
+      "unit_scale_three": 100
+    },
+    "shape": "oval"
+  },
+  "quartieri": [
+    {
+      "id": "centro",
+      "label": "Il Villaggio",
+      "center": {"x": 0, "z": 0},
+      "radius_m": 500,
+      "elevation_m": 10,
+      "color": "#e8a547",
+      "descrizione": "Al centro dell'isola, l'Albero Vecchio veglia sulla piazza del villaggio."
+    },
+    {
+      "id": "forno",
+      "label": "Quartiere del Forno",
+      "center": {"x": 2000, "z": 0},
+      "radius_m": 600,
+      "elevation_m": 40,
+      "color": "#c8532c",
+      "descrizione": "Ad est, dove l'aria sa di pane caldo e la brace non si spegne mai."
+    },
+    {
+      "id": "pontile",
+      "label": "Quartiere del Pontile",
+      "center": {"x": 0, "z": 2500},
+      "radius_m": 700,
+      "elevation_m": 2,
+      "color": "#1e5d6e",
+      "descrizione": "A sud, le barche dondolano e il mare parla a voce bassa."
+    },
+    {
+      "id": "orti",
+      "label": "Quartiere degli Orti",
+      "center": {"x": -2000, "z": 0},
+      "radius_m": 800,
+      "elevation_m": 25,
+      "color": "#5c6b3b",
+      "descrizione": "Ad ovest, file ordinate di verdure e odore di terra bagnata."
+    },
+    {
+      "id": "montagne",
+      "label": "Quartiere dei Pascoli",
+      "center": {"x": 0, "z": -2500},
+      "radius_m": 900,
+      "elevation_m": 300,
+      "color": "#6b4423",
+      "descrizione": "A nord, i pascoli salgono fino alle montagne dove vive il vento."
+    }
+  ],
+  "notes": "Posizioni indicative derivate dal canone (content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md §3). Da affinare quando si parserà la bibbia in modo strutturato. Origine (0,0) = Albero Vecchio al centro del villaggio. Convenzione Three.js: x=est positivo, z=sud positivo, y=elevazione."
+}

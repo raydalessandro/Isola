@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+:root {
+  --cream: #f5ead5;
+  --cream-shade: #ebdebe;
+  --cream-deep: #e0ceaa;
+  --terracotta: #c8532c;
+  --terracotta-deep: #9c3d1e;
+  --olive: #5c6b3b;
+  --olive-light: #8a9a6b;
+  --sea: #1e5d6e;
+  --sea-light: #4a8595;
+  --ink: #2a2319;
+  --warm-brown: #6b4423;
+  --sun: #e8a547;
+  --sand: #d8bd8a;
+
+  --ease-soft: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-quiet: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@theme inline {
+  --color-cream: var(--cream);
+  --color-terracotta: var(--terracotta);
+  --color-olive: var(--olive);
+  --color-sea: var(--sea);
+  --color-ink: var(--ink);
+  --color-warm-brown: var(--warm-brown);
+  --color-sun: var(--sun);
+  --color-sand: var(--sand);
+  --font-serif: var(--font-cormorant);
+  --font-hand: var(--font-caveat);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; width: 100%; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+  overscroll-behavior: none;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#__next, main {
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+  touch-action: none;
+}
+
+.font-hand {
+  font-family: var(--font-caveat), "Caveat", cursive;
+}
+.font-serif {
+  font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+}
