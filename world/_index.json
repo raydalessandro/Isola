@@ -1,0 +1,115 @@
+{
+  "avatars": [
+    {
+      "categoria": "avatar",
+      "id": "avatar.elias",
+      "nome_canonico": "Elias",
+      "path": "world/avatars/elias.md"
+    },
+    {
+      "categoria": "avatar",
+      "id": "avatar.gabriel",
+      "nome_canonico": "Gabriel",
+      "path": "world/avatars/gabriel.md"
+    },
+    {
+      "categoria": "avatar",
+      "id": "avatar.noah",
+      "nome_canonico": "Noah",
+      "path": "world/avatars/noah.md"
+    }
+  ],
+  "characters": [
+    {
+      "categoria": "cuccioli",
+      "id": "char.cuccioli.bru",
+      "nome_canonico": "Bru",
+      "path": "world/characters/cuccioli/bru.md"
+    },
+    {
+      "categoria": "cuccioli",
+      "id": "char.cuccioli.cardo",
+      "nome_canonico": "Cardo",
+      "path": "world/characters/cuccioli/cardo.md"
+    },
+    {
+      "categoria": "cuccioli",
+      "id": "char.cuccioli.liu",
+      "nome_canonico": "Liù",
+      "path": "world/characters/cuccioli/liu.md"
+    },
+    {
+      "categoria": "cuccioli",
+      "id": "char.cuccioli.pun",
+      "nome_canonico": "Pun",
+      "path": "world/characters/cuccioli/pun.md"
+    },
+    {
+      "categoria": "cuccioli",
+      "id": "char.cuccioli.toba",
+      "nome_canonico": "Toba",
+      "path": "world/characters/cuccioli/toba.md"
+    },
+    {
+      "categoria": "primari",
+      "id": "char.primari.bartolo",
+      "nome_canonico": "Bartolo",
+      "path": "world/characters/primari/bartolo.md"
+    },
+    {
+      "categoria": "primari",
+      "id": "char.primari.fiamma",
+      "nome_canonico": "Fiamma",
+      "path": "world/characters/primari/fiamma.md"
+    },
+    {
+      "categoria": "primari",
+      "id": "char.primari.memolo",
+      "nome_canonico": "Mèmolo",
+      "path": "world/characters/primari/memolo.md"
+    },
+    {
+      "categoria": "primari",
+      "id": "char.primari.rovo",
+      "nome_canonico": "Rovo",
+      "path": "world/characters/primari/rovo.md"
+    },
+    {
+      "categoria": "primari",
+      "id": "char.primari.stria",
+      "nome_canonico": "Stria",
+      "path": "world/characters/primari/stria.md"
+    },
+    {
+      "categoria": "secondari",
+      "id": "char.secondari.amo",
+      "nome_canonico": "Amo",
+      "path": "world/characters/secondari/amo.md"
+    },
+    {
+      "categoria": "secondari",
+      "id": "char.secondari.nodo",
+      "nome_canonico": "Nodo",
+      "path": "world/characters/secondari/nodo.md"
+    },
+    {
+      "categoria": "secondari",
+      "id": "char.secondari.salvia",
+      "nome_canonico": "Salvia",
+      "path": "world/characters/secondari/salvia.md"
+    },
+    {
+      "categoria": "secondari",
+      "id": "char.secondari.zolla",
+      "nome_canonico": "Zolla",
+      "path": "world/characters/secondari/zolla.md"
+    },
+    {
+      "categoria": "testimoni",
+      "id": "char.testimoni.grunto",
+      "nome_canonico": "Grunto",
+      "path": "world/characters/testimoni/grunto.md"
+    }
+  ],
+  "version": "1"
+}

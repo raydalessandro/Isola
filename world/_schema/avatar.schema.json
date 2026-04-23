@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://isola-tre-venti.local/world/avatar.schema.json",
+  "title": "Avatar — scheda pubblica vessel-lettore",
+  "description": "Schema del frontmatter YAML per schede avatar pubblicate in world/avatars/. I tre fratelli sono vessel per lettori-bambini. Nessuna label framework (EAR, tratti di framework, Pattern A).",
+  "type": "object",
+  "required": [
+    "id",
+    "nome_canonico",
+    "categoria",
+    "specie",
+    "ruolo",
+    "quartiere",
+    "residenza",
+    "firma_visiva",
+    "descrizione_breve",
+    "relazioni",
+    "porte_socchiuse",
+    "fonti"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^avatar\\.[a-z][a-z0-9_]*$"
+    },
+    "nome_canonico": {"type": "string", "minLength": 1},
+    "categoria": {"type": "string", "const": "avatar"},
+    "specie": {"type": "string", "minLength": 1},
+    "ruolo": {"type": "string", "minLength": 1},
+    "quartiere": {
+      "type": ["string", "null"],
+      "enum": ["centro", "fuoco", "acqua", "terra", "aria", "montagne", null]
+    },
+    "residenza": {"type": "string"},
+    "firma_visiva": {"type": "string"},
+    "descrizione_breve": {"type": "string"},
+    "relazioni": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tipo", "target_id"],
+        "properties": {
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "parentela",
+              "appartenenza_gruppo",
+              "protegge",
+              "mentore",
+              "vicino",
+              "porta_socchiusa"
+            ]
+          },
+          "target_id": {"type": "string"},
+          "nota": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "porte_socchiuse": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "fonti": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "fatto_di_mondo": {"type": "string"}
+  },
+  "additionalProperties": false
+}
