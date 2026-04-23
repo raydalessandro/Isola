@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { IslandGeographyData } from "./geography";
+import type { IslandGeographyData, LocationsDoc } from "./geography";
 
 /**
  * Server-side loader: reads the canonical world data from the repo root at
@@ -43,4 +43,10 @@ export function loadIslandGeography(): IslandGeographyData {
   const p = path.join(repoRoot(), "world", "geography", "island.json");
   const raw = fs.readFileSync(p, "utf-8");
   return JSON.parse(raw) as IslandGeographyData;
+}
+
+export function loadLocations(): LocationsDoc {
+  const p = path.join(repoRoot(), "world", "geography", "locations.json");
+  const raw = fs.readFileSync(p, "utf-8");
+  return JSON.parse(raw) as LocationsDoc;
 }
