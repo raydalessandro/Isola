@@ -19,13 +19,19 @@ export type CameraTarget = {
 
 /**
  * Vista L0 — aerea sull'isola intera.
- * Polar angle effettivo ~20° (camera alta, leggermente inclinata).
+ * Polar angle ~42° (camera inclinata), così la verticalità delle montagne
+ * (amplificata da TerrainHeightmap::RELIEF_AMPLIFICATION) si legge molto
+ * meglio di una quasi-top-down.
  */
 export function islandCameraTarget(): CameraTarget {
-  // 120 unità sopra + leggermente spostata su Z positivo per inclinazione.
-  // Polar angle ≈ acos(y / len) — con (0, 115, 42) ≈ 20°.
+  // Con RELIEF_AMPLIFICATION=2.5 le vette arrivano a ~10.5u: serve tilt
+  // sostanziale per farne leggere il volume. Teniamo la distanza 3D vicina
+  // al valore precedente ma ridistribuiamo tra height e offset.
+  //   distance = sqrt(y^2 + z^2) ≈ 110
+  //   polar = atan2(z, y) → y = 110 * cos(42°) ≈ 81.7
+  //                        z = 110 * sin(42°) ≈ 73.6
   return {
-    position: new THREE.Vector3(0, 115, 42),
+    position: new THREE.Vector3(0, 82, 74),
     target: new THREE.Vector3(0, 0, 0),
   };
 }
@@ -33,11 +39,16 @@ export function islandCameraTarget(): CameraTarget {
 /**
  * Vista L1 — camera scesa 3/4 sul quartiere richiesto.
  * Polar angle ≈ 35°, distanza calibrata sul radius_m (40-60 unità).
+ * Elevazione targetizzata sulla superficie amplificata (RELIEF=2.5 in
+ * TerrainHeightmap), così i quartieri di montagna non finiscono dietro
+ * il picco invece che sopra.
  */
+const RELIEF_AMPLIFICATION = 2.5;
+
 export function quartiereCameraTarget(q: Quartiere): CameraTarget {
   const cx = metersToUnits(q.center.x);
   const cz = metersToUnits(q.center.z);
-  const cy = metersToUnits(q.elevation_m);
+  const cy = metersToUnits(q.elevation_m) * RELIEF_AMPLIFICATION;
 
   // Raggio in unità → distanza cam. Scala morbida: per un quartiere di
   // 500 m (centro) → ~42 u; per 900 m (montagne) → ~55 u.

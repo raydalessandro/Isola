@@ -288,6 +288,15 @@ export default function Hotspot({
   );
 }
 
+/**
+ * Calcola l'altezza Three di un hotspot sopra il terreno, tenendo conto
+ * dell'amplificazione artistica verticalità applicata in TerrainHeightmap.
+ * I dati canonici (locations.json, island.json) restano in metri, ma il
+ * terreno renderizzato è scalato di RELIEF_AMPLIFICATION → dobbiamo
+ * sollevare gli hotspot alla stessa quota "visibile" altrimenti finiscono
+ * sotto la superficie per i quartieri alti (montagne).
+ */
 export function hotspotYOffset(elevationMeters: number, lift = 2.0): number {
-  return metersToUnits(elevationMeters) + lift;
+  const RELIEF_AMPLIFICATION = 2.5;
+  return metersToUnits(elevationMeters) * RELIEF_AMPLIFICATION + lift;
 }

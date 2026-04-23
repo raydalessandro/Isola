@@ -9,6 +9,19 @@ import type {
 } from "@/lib/geography";
 import { PALETTE } from "@/lib/geography";
 
+/**
+ * Fattore di amplificazione artistica della verticalità — rendering-only.
+ * NON tocca i dati canonici (terrain.json/locations.json restano in metri
+ * veri). Applicato solo all'output y della heightmap in scena.
+ *
+ * Razionale: 420m / unit_scale 100 = 4.2 unità Three su un terreno di
+ * 80×70u → <5% della dimensione orizzontale, visivamente piatto anche
+ * con camera inclinata. 2.5× porta i picchi a ~10.5u, ~13% della width,
+ * che legge come "montagna" senza diventare caricaturale (5× sarebbe già
+ * troppo su mobile-portrait).
+ */
+export const RELIEF_AMPLIFICATION = 2.5;
+
 type Props = {
   widthUnits: number; // es. 80 = 8 km
   depthUnits: number; // es. 70 = 7 km
@@ -29,6 +42,10 @@ type Props = {
  *    organica, attenuato verso i bordi dell'isola e sulle coste piatte.
  *  - smoothstep falloff sul bordo per terminare a y=0 al margine della
  *    PlaneGeometry (evita muri verticali alla coast).
+ *  - RELIEF_AMPLIFICATION (rendering-only): dati canonici in metri restano
+ *    immutati, ma il vertex.y viene moltiplicato per un fattore artistico.
+ *    Senza, 420m / 100 = 4.2u su un terreno di 80×70u è <5% → appare piatto.
+ *    Con 2.5× i picchi arrivano a ~10.5u: leggibili a L0 con tilt 42°.
  *
  * Strategia colore (A.2):
  *  - per ogni vertice calcoliamo "appartenenza" morbida ai 5 quartieri
@@ -136,7 +153,8 @@ export default function TerrainHeightmap({
 
       // Quota finale: IDW + micro-relief, gently clampata a ≥0 tramite
       // edgeMask alla costa per evitare terreno "impiccato" fuori dal bordo.
-      const y = yIdw * edgeMask + microRelief * edgeMask;
+      // Amplificazione artistica (rendering-only): vedi RELIEF_AMPLIFICATION.
+      const y = (yIdw * edgeMask + microRelief * edgeMask) * RELIEF_AMPLIFICATION;
 
       pos.setY(i, y);
     }

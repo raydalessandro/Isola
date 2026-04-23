@@ -99,24 +99,24 @@ canvas {
               transform 200ms var(--ease-quiet);
 }
 
-/* Pinch-out hint: due angoli curvi in Caveat che si allargano ai
-   bordi alto-sx/alto-dx per 2s dopo il primo descent della sessione. */
+/* Gesture hint: testo centrato in alto che invita al swipe-down a due
+   dita per tornare a L0. Appare 2s al primo descent della sessione. */
 .pinch-hint {
   position: fixed;
   top: calc(env(safe-area-inset-top) + 56px);
+  left: 50%;
   font-family: var(--font-caveat), "Caveat", cursive;
   font-size: 22px;
   font-weight: 500;
   color: var(--cream);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   opacity: 0;
+  transform: translate(-50%, -4px);
   transition: opacity 400ms var(--ease-quiet),
               transform 900ms var(--ease-soft);
   pointer-events: none;
   user-select: none;
   letter-spacing: 0.02em;
+  white-space: nowrap;
 }
-.pinch-hint.left  { left: 18px;  transform: translateX(-6px); }
-.pinch-hint.right { right: 18px; transform: translateX(6px);  }
-.pinch-hint.show.left  { opacity: 0.78; transform: translateX(-18px); }
-.pinch-hint.show.right { opacity: 0.78; transform: translateX(18px);  }
+.pinch-hint.show { opacity: 0.82; transform: translate(-50%, 4px); }

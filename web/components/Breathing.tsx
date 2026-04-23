@@ -6,6 +6,15 @@ import * as THREE from "three";
 import type { Location, Quartiere } from "@/lib/geography";
 import { metersToUnits, PALETTE } from "@/lib/geography";
 
+// Verticalità artistica: i dati canonici restano in metri, il terreno in
+// scena è scalato di questo fattore (vedi TerrainHeightmap::RELIEF_AMPLIFICATION).
+// Applichiamo lo stesso moltiplicatore alle quote dei componenti atmosferici
+// così fumo, nuvola e spighe restano allineati alla superficie visibile.
+const RELIEF = 2.5;
+function liftY(meters: number): number {
+  return metersToUnits(meters) * RELIEF;
+}
+
 /**
  * Micro-animazioni ambient sui quartieri — "il mondo respira".
  *
@@ -42,7 +51,7 @@ export default function Breathing({ quartieri, locations }: Props) {
     if (!l) return null;
     return {
       x: metersToUnits(l.coords.x),
-      y: metersToUnits(l.coords.y),
+      y: liftY(l.coords.y),
       z: metersToUnits(l.coords.z),
     };
   }, [locations]);
@@ -79,7 +88,7 @@ function Smoke({
   const bz = anchorOverride ? anchorOverride.z - 0.42 : metersToUnits(quartiere.center.z);
   const by = anchorOverride
     ? anchorOverride.y + 1.0 + 0.8 // building base (1.0u) + chimney height (0.8u)
-    : metersToUnits(quartiere.elevation_m);
+    : liftY(quartiere.elevation_m);
 
   // 4 particelle a fase sfalsata.
   const particles = useMemo(
@@ -133,7 +142,7 @@ function WindWhispers({ quartiere }: { quartiere: Quartiere }) {
   const pointsRef = useRef<THREE.Points>(null!);
   const bx = metersToUnits(quartiere.center.x);
   const bz = metersToUnits(quartiere.center.z);
-  const by = metersToUnits(quartiere.elevation_m);
+  const by = liftY(quartiere.elevation_m);
 
   const { positions, basePositions, count } = useMemo(() => {
     const n = 16;
@@ -204,7 +213,9 @@ function SlowCloud({ quartiere }: { quartiere: Quartiere }) {
   const groupRef = useRef<THREE.Group>(null!);
   const bx = metersToUnits(quartiere.center.x);
   const bz = metersToUnits(quartiere.center.z);
-  const by = metersToUnits(quartiere.elevation_m);
+  // Quartiere "montagne" è alto: con RELIEF la nuvola deve stare sopra ai
+  // picchi amplificati, non a 3u dal suolo piatto.
+  const by = liftY(quartiere.elevation_m);
 
   useFrame(({ clock }) => {
     if (!groupRef.current) return;

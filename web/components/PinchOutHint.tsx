@@ -4,12 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { useWorldStore } from "@/lib/store";
 
 /**
- * Hint di discoverability per la gesture di ritorno (pinch-out) — C.3.
+ * Hint di discoverability per il gesto di ritorno — C.3.
+ *
+ * Il gesto è uno "swipe-down a due dita" (vedi TwoFingerSwipeDownListener
+ * in IslandScene). L'hint mostra un testo nell'header alto al primo arrivo
+ * su L1: "due dita giù per tornare".
  *
  * Comportamento:
  *  - al PRIMO arrivo su L1 nella sessione, dopo la fine della transizione,
- *    mostriamo per 2 secondi due piccoli indicatori curvi ai bordi alto-sx
- *    e alto-dx. Si allargano delicati suggerendo il gesto.
+ *    mostriamo per 2 secondi un suggerimento centrato in alto.
  *  - fade-out dopo 2s.
  *  - non rimostrato nella stessa sessione (flag in sessionStorage).
  *
@@ -68,19 +71,11 @@ export default function PinchOutHint() {
   }, [viewLevel, transitioning]);
 
   return (
-    <>
-      <div
-        className={`pinch-hint left${show ? " show" : ""}`}
-        aria-hidden
-      >
-        ← allarga
-      </div>
-      <div
-        className={`pinch-hint right${show ? " show" : ""}`}
-        aria-hidden
-      >
-        allarga →
-      </div>
-    </>
+    <div
+      className={`pinch-hint center${show ? " show" : ""}`}
+      aria-hidden
+    >
+      due dita giù per tornare ↓
+    </div>
   );
 }

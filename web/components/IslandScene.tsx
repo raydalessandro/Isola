@@ -12,6 +12,7 @@ import FingerPresence from "./FingerPresence";
 import Breathing from "./Breathing";
 import TerrainHeightmap from "./TerrainHeightmap";
 import FiumeCheGira from "./FiumeCheGira";
+import MontagneGemellePeaks from "./MontagneGemellePeaks";
 import QuartiereForno from "./QuartiereForno";
 import PinchOutHint from "./PinchOutHint";
 import type {
@@ -82,18 +83,23 @@ export default function IslandScene({
         }}
       >
         <color attach="background" args={[PALETTE.sea]} />
-        <fog attach="fog" args={[PALETTE.sea, 140, 420]} />
+        {/* Fog spinta più lontana per il tilt a 42° + amplificazione relief:
+            con camera (0,82,74) la distanza alla costa nord supera i 130u,
+            serve near 170/far 520 per non appannare le Montagne Gemelle. */}
+        <fog attach="fog" args={[PALETTE.sea, 170, 520]} />
 
         {/* Lighting — warm sun + soft sky ambient.
-            Il sole è spostato verso sud-est/basso così la luce radente
-            colpisce le facce sud delle Montagne Gemelle (quartiere nord,
-            z negativo), enfatizzandone il volume. Ambient più contenuto
-            per permettere alle ombre di disegnare i pendii. */}
-        <ambientLight intensity={0.42} color={PALETTE.cream} />
-        <hemisphereLight args={[PALETTE.cream, PALETTE.sea, 0.3]} />
+            Il sole è spostato verso sud-est con angolo RADENTE (altezza
+            più bassa del zenith) così la luce sfiora le facce sud delle
+            Montagne Gemelle (quartiere nord, z negativo) e le ombre
+            disegnano nettamente i pendii. Ambient ridotto per lasciare
+            stacco alle ombre — con RELIEF_AMPLIFICATION=2.5 la verticalità
+            legge solo se il contrasto luce/ombra è marcato. */}
+        <ambientLight intensity={0.32} color={PALETTE.cream} />
+        <hemisphereLight args={[PALETTE.cream, PALETTE.sea, 0.25]} />
         <directionalLight
-          position={[50, 70, 60]}
-          intensity={1.5}
+          position={[70, 55, 85]}
+          intensity={2.1}
           color={PALETTE.sun}
           castShadow
           shadow-mapSize-width={1024}
@@ -124,6 +130,8 @@ export default function IslandScene({
 
           <FiumeCheGira features={features} />
 
+          <MontagneGemellePeaks terrain={terrain} />
+
           <QuartiereFornoGate locations={locations} />
 
           <Breathing quartieri={geography.quartieri} locations={locations} />
@@ -138,7 +146,7 @@ export default function IslandScene({
         </Suspense>
 
         <SceneCameraController />
-        <PinchOutListener />
+        <TwoFingerSwipeDownListener />
       </Canvas>
 
       <PinchOutHint />
@@ -452,10 +460,35 @@ function inheritColor(
 }
 
 // ---------------------------------------------------------------------------
-// PinchOutListener: al pinch-out (due dita che si allontanano) risaliamo a L0.
+// TwoFingerSwipeDownListener: gesto di ritorno a L0 = swipe-down con DUE
+// dita. Scelto al posto del pinch-out perché:
+//  - il pinch-out collideva col normale pinch-zoom di MapControls (non si
+//    riusciva più a zoomare in L1);
+//  - la direzione e la velocità di uno swipe-down sono più univoche di un
+//    cambio di distanza proporzionale, che invece è *proprio* la definizione
+//    dello zoom;
+//  - leggere "scendo con due dita = torno su" è un'affordance comune nei
+//    game-UI / mappe illustrate (cfr. Gorogoa, Monument Valley).
+//
+// Regole del gesto (strette per evitare falsi positivi con pan due-dita):
+//  - esattamente 2 touch attivi per tutta la durata;
+//  - entrambi Δy > +MIN_DY_PX (verso il basso, coordinate schermo +y = giù);
+//  - durata gesto <= MAX_MS (swipe, non pan lento);
+//  - spostamento orizzontale medio <= MAX_DX_PX (niente pan laterale);
+//  - ratio della distanza inter-dita tra 0.85..1.15: se la distanza cambia
+//    molto è un pinch, non uno swipe — lasciamo gestire a MapControls.
+//
+// CRITICO: il listener è puramente osservativo. Nessun preventDefault,
+// nessun stopPropagation: MapControls continua a ricevere i PointerEvent
+// come pan/zoom normali. Triggeriamo `ascend()` solo a gesto completato.
 // ---------------------------------------------------------------------------
 
-function PinchOutListener() {
+const SWIPE_MIN_DY_PX = 100; // entrambi i touch devono scendere almeno 100px
+const SWIPE_MAX_DX_PX = 80; // tolleranza orizzontale
+const SWIPE_MAX_MS = 400; // deve essere uno swipe, non un pan
+const SWIPE_PINCH_RATIO_TOL = 0.15; // |ratio-1| <= 0.15 → non è un pinch
+
+function TwoFingerSwipeDownListener() {
   const { gl } = useThree();
   const viewLevel = useWorldStore((s) => s.viewLevel);
   const transitioning = useWorldStore((s) => s.transitioning);
@@ -465,77 +498,97 @@ function PinchOutListener() {
     if (viewLevel !== "quartiere") return;
     const canvas = gl.domElement;
 
-    // Tracciamo fino a 2 puntatori attivi e la loro distanza iniziale.
-    type P = { x: number; y: number };
+    type P = { startX: number; startY: number; x: number; y: number };
     const pts = new Map<number, P>();
-    let baseDist: number | null = null;
+    let gestureStart: number | null = null;
 
-    const distance = (): number | null => {
-      if (pts.size < 2) return null;
-      const arr = Array.from(pts.values());
-      const dx = arr[0].x - arr[1].x;
-      const dy = arr[0].y - arr[1].y;
-      return Math.sqrt(dx * dx + dy * dy);
-    };
+    const interDistance = (a: P, b: P) =>
+      Math.hypot(a.x - b.x, a.y - b.y);
 
     const onDown = (e: PointerEvent) => {
-      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (e.pointerType !== "touch") return;
+      pts.set(e.pointerId, {
+        startX: e.clientX,
+        startY: e.clientY,
+        x: e.clientX,
+        y: e.clientY,
+      });
       if (pts.size === 2) {
-        baseDist = distance();
+        gestureStart = performance.now();
+      } else if (pts.size > 2) {
+        gestureStart = null;
       }
     };
 
     const onMove = (e: PointerEvent) => {
-      if (!pts.has(e.pointerId)) return;
-      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
-      if (pts.size === 2 && baseDist != null) {
-        const cur = distance();
-        if (cur != null && baseDist > 0) {
-          const ratio = cur / baseDist;
-          // pinch-OUT = dita si allontanano = ratio cresce.
-          // In L1 riguadagniamo la vista → ascend.
-          // Soglia: +35% rispetto alla distanza iniziale.
-          if (ratio <= 0.7 && !transitioning) {
-            // Pinch-IN in L1? Per ora lo ignoriamo (zoom naturale gestito
-            // da MapControls sul loro OrbitControls inner).
-            baseDist = cur;
-          } else if (ratio >= 1.35 && !transitioning) {
-            ascend();
-            baseDist = null;
-            pts.clear();
-          }
-        }
+      const p = pts.get(e.pointerId);
+      if (!p) return;
+      p.x = e.clientX;
+      p.y = e.clientY;
+    };
+
+    const evaluate = () => {
+      if (transitioning) return;
+      if (pts.size !== 2 || gestureStart == null) return;
+      const now = performance.now();
+      const elapsed = now - gestureStart;
+      if (elapsed > SWIPE_MAX_MS) return;
+
+      const arr = Array.from(pts.values());
+      const a = arr[0];
+      const b = arr[1];
+
+      const dyA = a.y - a.startY;
+      const dyB = b.y - b.startY;
+      const dxA = Math.abs(a.x - a.startX);
+      const dxB = Math.abs(b.x - b.startX);
+
+      if (dyA < SWIPE_MIN_DY_PX) return;
+      if (dyB < SWIPE_MIN_DY_PX) return;
+      if (dxA > SWIPE_MAX_DX_PX) return;
+      if (dxB > SWIPE_MAX_DX_PX) return;
+
+      // Escludi pinch: se la distanza inter-dita è cambiata > tol → è un pinch.
+      const startDist = Math.hypot(
+        a.startX - b.startX,
+        a.startY - b.startY,
+      );
+      const curDist = interDistance(a, b);
+      if (startDist > 0) {
+        const ratio = curDist / startDist;
+        if (Math.abs(ratio - 1) > SWIPE_PINCH_RATIO_TOL) return;
       }
+
+      // Gesto valido → ascend. Resetta per non ritriggerare.
+      pts.clear();
+      gestureStart = null;
+      ascend();
+    };
+
+    const onMoveEvaluate = (e: PointerEvent) => {
+      onMove(e);
+      evaluate();
     };
 
     const onUp = (e: PointerEvent) => {
       pts.delete(e.pointerId);
-      if (pts.size < 2) baseDist = null;
+      if (pts.size < 2) gestureStart = null;
     };
 
-    canvas.addEventListener("pointerdown", onDown);
-    canvas.addEventListener("pointermove", onMove);
-    canvas.addEventListener("pointerup", onUp);
-    canvas.addEventListener("pointercancel", onUp);
-    canvas.addEventListener("pointerleave", onUp);
-
-    // Fallback: wheel con deltaY molto negativo (zoom-out) in L1 = ascend.
-    const onWheel = (e: WheelEvent) => {
-      if (transitioning) return;
-      // deltaY > 0 = scroll giù = zoom-out in OrbitControls di Three.
-      if (e.deltaY > 60) {
-        ascend();
-      }
-    };
-    canvas.addEventListener("wheel", onWheel, { passive: true });
+    // Listener PASSIVI: non catturiamo mai l'evento a MapControls.
+    const opts: AddEventListenerOptions = { passive: true };
+    canvas.addEventListener("pointerdown", onDown, opts);
+    canvas.addEventListener("pointermove", onMoveEvaluate, opts);
+    canvas.addEventListener("pointerup", onUp, opts);
+    canvas.addEventListener("pointercancel", onUp, opts);
+    canvas.addEventListener("pointerleave", onUp, opts);
 
     return () => {
       canvas.removeEventListener("pointerdown", onDown);
-      canvas.removeEventListener("pointermove", onMove);
+      canvas.removeEventListener("pointermove", onMoveEvaluate);
       canvas.removeEventListener("pointerup", onUp);
       canvas.removeEventListener("pointercancel", onUp);
       canvas.removeEventListener("pointerleave", onUp);
-      canvas.removeEventListener("wheel", onWheel);
     };
   }, [gl, viewLevel, transitioning, ascend]);
 

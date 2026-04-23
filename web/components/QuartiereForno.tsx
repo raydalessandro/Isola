@@ -7,6 +7,11 @@ import type { Location } from "@/lib/geography";
 import { PALETTE, metersToUnits } from "@/lib/geography";
 import LowPolyTree from "./LowPolyTree";
 
+// Allinea i building tile alla superficie amplificata del terreno
+// (vedi TerrainHeightmap::RELIEF_AMPLIFICATION). Dati canonici intatti.
+const RELIEF = 2.5;
+const liftY = (m: number) => metersToUnits(m) * RELIEF;
+
 type Props = {
   locations: Location[];
 };
@@ -43,7 +48,7 @@ export default function QuartiereForno({ locations }: Props) {
   if (!fornoLoc) return null;
 
   const fx = metersToUnits(fornoLoc.coords.x);
-  const fy = metersToUnits(fornoLoc.coords.y);
+  const fy = liftY(fornoLoc.coords.y);
   const fz = metersToUnits(fornoLoc.coords.z);
 
   return (
@@ -57,7 +62,7 @@ export default function QuartiereForno({ locations }: Props) {
       {casaMattinoLoc && (
         <CasaDelMattino
           x={metersToUnits(casaMattinoLoc.coords.x)}
-          y={metersToUnits(casaMattinoLoc.coords.y)}
+          y={liftY(casaMattinoLoc.coords.y)}
           z={metersToUnits(casaMattinoLoc.coords.z)}
         />
       )}
