@@ -1,0 +1,65 @@
+{
+  "version": "1",
+  "notes": "Profili terreno per quartiere + anchor points per generatore heightmap. Coordinate in metri, convenzione Three.js (x=est, z=sud, y=elevazione). I profile seguono la palette di legacy/index.html e la descrizione sensoriale della Bibbia §8 (odori, suoni, materiali). Gli anchor points coprono costa, piane, colline e cime con valori di y coerenti con locations.json e island.json.",
+  "quartieri_profiles": {
+    "centro": {
+      "profile": "grassy_plain",
+      "base_color": "#8a9a6b",
+      "roughness": 0.3,
+      "avg_elevation_m": 10,
+      "trees_density": "sparse",
+      "water_proximity": "surrounded_by_river"
+    },
+    "forno": {
+      "profile": "warm_hill",
+      "base_color": "#c8853a",
+      "roughness": 0.5,
+      "avg_elevation_m": 40,
+      "trees_density": "sparse",
+      "water_proximity": "river_west"
+    },
+    "pontile": {
+      "profile": "sandy_coast",
+      "base_color": "#d8bd8a",
+      "roughness": 0.2,
+      "avg_elevation_m": 3,
+      "trees_density": "none",
+      "water_proximity": "sea_and_river"
+    },
+    "orti": {
+      "profile": "patchwork_cultivated",
+      "base_color": "#6b7a3b",
+      "roughness": 0.4,
+      "avg_elevation_m": 25,
+      "trees_density": "forest_edge",
+      "water_proximity": "river_east"
+    },
+    "montagne": {
+      "profile": "rocky_mountain",
+      "base_color": "#6b5a48",
+      "roughness": 0.9,
+      "avg_elevation_m": 300,
+      "trees_density": "treeline_low",
+      "water_proximity": "streams_origin"
+    }
+  },
+  "heightmap_anchors": [
+    {"x": 0, "z": 0, "y": 10, "label": "centro_plateau"},
+    {"x": 2000, "z": 0, "y": 40, "label": "forno_hill"},
+    {"x": 0, "z": 2500, "y": 2, "label": "pontile_shore"},
+    {"x": -2000, "z": 0, "y": 25, "label": "orti_flat"},
+    {"x": 0, "z": -1800, "y": 150, "label": "pascoli_base"},
+    {"x": -400, "z": -2200, "y": 250, "label": "roccia_alta"},
+    {"x": -150, "z": -2820, "y": 450, "label": "peak_west"},
+    {"x": 180, "z": -2780, "y": 445, "label": "peak_east"},
+    {"x": 50, "z": -2870, "y": 380, "label": "grotta_mouth"},
+    {"x": -3500, "z": 0, "y": 0, "label": "coast_west"},
+    {"x": 3500, "z": 0, "y": 0, "label": "coast_east"},
+    {"x": 0, "z": 3300, "y": 0, "label": "coast_south"},
+    {"x": 0, "z": -3300, "y": 0, "label": "coast_north"}
+  ],
+  "fonti": [
+    "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+    "content/worldbuilding/GLOSSARIO_ISOLA.md"
+  ]
+}

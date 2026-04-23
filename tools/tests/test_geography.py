@@ -613,5 +613,332 @@ class TestApiEdgeCases(unittest.TestCase):
             self.geo.path("albero_vecchio", "non_esiste")
 
 
+# =============================================================================
+#  Features (polyline/polygon/cluster canonici)
+# =============================================================================
+
+
+ALLOWED_FEATURE_TYPES = {
+    "polyline_open",
+    "polyline_closed",
+    "polygon",
+    "concentric_rings",
+    "structure_cluster",
+    "point_cluster",
+}
+
+
+class TestFeaturesSchema(unittest.TestCase):
+    """Schema validation di world/geography/features.json."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        with (GEO_DIR / "features.json").open(encoding="utf-8") as fh:
+            cls.doc = json.load(fh)
+
+    def test_version_present(self) -> None:
+        self.assertIn("version", self.doc)
+
+    def test_features_dict_non_empty(self) -> None:
+        self.assertIn("features", self.doc)
+        self.assertGreater(len(self.doc["features"]), 0)
+
+    def test_every_feature_type_in_whitelist(self) -> None:
+        for fid, feat in self.doc["features"].items():
+            with self.subTest(feature=fid):
+                self.assertIn("type", feat)
+                self.assertIn(feat["type"], ALLOWED_FEATURE_TYPES)
+
+    def test_polyline_features_have_waypoints(self) -> None:
+        for fid, feat in self.doc["features"].items():
+            if feat["type"] in ("polyline_open", "polyline_closed"):
+                with self.subTest(feature=fid):
+                    self.assertIn("waypoints", feat)
+                    self.assertGreaterEqual(len(feat["waypoints"]), 2)
+                    for wp in feat["waypoints"]:
+                        self.assertIn("x", wp)
+                        self.assertIn("z", wp)
+
+    def test_polygon_features_have_vertices(self) -> None:
+        for fid, feat in self.doc["features"].items():
+            if feat["type"] == "polygon":
+                with self.subTest(feature=fid):
+                    self.assertIn("vertices", feat)
+                    self.assertGreaterEqual(len(feat["vertices"]), 3)
+                    for v in feat["vertices"]:
+                        self.assertIn("x", v)
+                        self.assertIn("z", v)
+
+    def test_concentric_rings_have_rings(self) -> None:
+        for fid, feat in self.doc["features"].items():
+            if feat["type"] == "concentric_rings":
+                with self.subTest(feature=fid):
+                    self.assertIn("center", feat)
+                    self.assertIn("rings", feat)
+                    self.assertGreaterEqual(len(feat["rings"]), 1)
+                    for r in feat["rings"]:
+                        self.assertGreater(r["radius_m"], 0)
+
+    def test_structure_cluster_has_structures(self) -> None:
+        for fid, feat in self.doc["features"].items():
+            if feat["type"] == "structure_cluster":
+                with self.subTest(feature=fid):
+                    self.assertIn("structures", feat)
+                    self.assertGreaterEqual(len(feat["structures"]), 1)
+                    for s in feat["structures"]:
+                        self.assertIn("id", s)
+                        self.assertIn("position", s)
+                        self.assertIn("type", s)
+
+    def test_point_cluster_has_points(self) -> None:
+        for fid, feat in self.doc["features"].items():
+            if feat["type"] == "point_cluster":
+                with self.subTest(feature=fid):
+                    self.assertIn("points", feat)
+                    self.assertGreaterEqual(len(feat["points"]), 1)
+
+    def test_cluster_centro_has_at_least_six_structures(self) -> None:
+        cluster = self.doc["features"]["cluster_centro_villaggio"]
+        self.assertGreaterEqual(len(cluster["structures"]), 6)
+
+    def test_cluster_centro_pozzo_matches_locations(self) -> None:
+        """Coerenza: il_pozzo nel cluster deve avere coords ~uguali a
+        il_pozzo in locations.json (tolleranza 2m)."""
+        with (GEO_DIR / "locations.json").open(encoding="utf-8") as fh:
+            loc_doc = json.load(fh)
+        pozzo_loc = next(
+            l for l in loc_doc["locations"] if l["id"] == "il_pozzo"
+        )
+        cluster = self.doc["features"]["cluster_centro_villaggio"]
+        pozzo_struct = next(
+            s for s in cluster["structures"] if s["id"] == "il_pozzo"
+        )
+        self.assertAlmostEqual(
+            pozzo_struct["position"]["x"], pozzo_loc["coords"]["x"], delta=2
+        )
+        self.assertAlmostEqual(
+            pozzo_struct["position"]["z"], pozzo_loc["coords"]["z"], delta=2
+        )
+
+    def test_fiume_is_polyline_closed(self) -> None:
+        fiume = self.doc["features"]["fiume_che_gira"]
+        self.assertEqual(fiume["type"], "polyline_closed")
+
+
+class TestFeaturesApi(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.geo = IslandGeography()
+
+    def test_features_returns_dict(self) -> None:
+        feats = self.geo.features()
+        self.assertIsInstance(feats, dict)
+        self.assertIn("fiume_che_gira", feats)
+        self.assertIn("cluster_centro_villaggio", feats)
+
+    def test_feature_by_id(self) -> None:
+        f = self.geo.feature("fiume_che_gira")
+        self.assertEqual(f["type"], "polyline_closed")
+
+    def test_feature_unknown_raises(self) -> None:
+        with self.assertRaises(KeyError):
+            self.geo.feature("non_esiste")
+
+    def test_features_copy_is_defensive(self) -> None:
+        feats = self.geo.features()
+        feats["nuova_feature"] = {"type": "polygon"}
+        # secondo get non deve avere la feature aggiunta
+        feats2 = self.geo.features()
+        self.assertNotIn("nuova_feature", feats2)
+
+
+class TestDistanceToRiver(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.geo = IslandGeography()
+
+    def test_albero_vecchio_inside_river_ring(self) -> None:
+        """Albero Vecchio e' al centro della terra interna; il Fiume
+        e' un anello a ~2000-3000m di distanza dal centro (cfr. §8 bibbia:
+        fascia costiera 500-800m). Deve risultare > 1500m.
+        NOTA: il task iniziale indicava 300-800m, ma quello sarebbe
+        geometricamente inconsistente con l'anello canonico che circonda
+        tutta la terra interna (orti -1500m, forno +2000m, ecc.)."""
+        d = self.geo.distance_to_river("albero_vecchio")
+        self.assertGreater(d, 1500)
+        self.assertLess(d, 3000)
+
+    def test_pontile_near_river_mouth(self) -> None:
+        """Il Pontile di Bartolo sta 'dentro La Bocca, sull'acqua mista'
+        (bibbia §3.3). La Bocca e' la foce del Fiume. Distanza al fiume
+        deve essere piccola (< 500m), non grande come ipotizzato
+        originalmente nel task (>2000m)."""
+        d = self.geo.distance_to_river("pontile_di_bartolo")
+        self.assertLess(d, 500)
+
+    def test_roccia_alta_near_river_source(self) -> None:
+        """Roccia Alta e' vicina alle montagne dove nasce il fiume."""
+        d = self.geo.distance_to_river("roccia_alta")
+        self.assertLess(d, 500)
+
+    def test_orti_inside_ring_far_from_river(self) -> None:
+        """Gli Orti del Cerchio sono internamente all'anello, quindi
+        non proprio sul fiume ma a distanza plausibile di qualche centinaio
+        di metri dal bordo ovest."""
+        d = self.geo.distance_to_river("orti_del_cerchio")
+        self.assertGreater(d, 100)
+        self.assertLess(d, 2000)
+
+    def test_distance_to_river_unknown_location_raises(self) -> None:
+        with self.assertRaises(KeyError):
+            self.geo.distance_to_river("non_esiste")
+
+    def test_distance_to_river_is_non_negative(self) -> None:
+        for loc in self.geo.all_locations():
+            with self.subTest(loc=loc.id):
+                self.assertGreaterEqual(
+                    self.geo.distance_to_river(loc.id), 0
+                )
+
+
+# =============================================================================
+#  Terrain profiles + heightmap anchors
+# =============================================================================
+
+
+ALLOWED_TERRAIN_PROFILES = {
+    "grassy_plain",
+    "warm_hill",
+    "sandy_coast",
+    "patchwork_cultivated",
+    "rocky_mountain",
+    "forest_margin",
+}
+
+
+class TestTerrainSchema(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        with (GEO_DIR / "terrain.json").open(encoding="utf-8") as fh:
+            cls.doc = json.load(fh)
+
+    def test_has_all_five_quartieri(self) -> None:
+        profiles = self.doc["quartieri_profiles"]
+        self.assertEqual(
+            set(profiles),
+            {"centro", "forno", "pontile", "orti", "montagne"},
+        )
+
+    def test_every_profile_in_whitelist(self) -> None:
+        for qid, details in self.doc["quartieri_profiles"].items():
+            with self.subTest(quartiere=qid):
+                self.assertIn(details["profile"], ALLOWED_TERRAIN_PROFILES)
+
+    def test_every_profile_has_required_keys(self) -> None:
+        required = {
+            "profile", "base_color", "roughness", "avg_elevation_m",
+            "trees_density", "water_proximity",
+        }
+        for qid, details in self.doc["quartieri_profiles"].items():
+            with self.subTest(quartiere=qid):
+                self.assertTrue(required.issubset(details.keys()))
+
+    def test_roughness_in_0_1(self) -> None:
+        for qid, details in self.doc["quartieri_profiles"].items():
+            with self.subTest(quartiere=qid):
+                self.assertGreaterEqual(details["roughness"], 0.0)
+                self.assertLessEqual(details["roughness"], 1.0)
+
+    def test_base_color_is_hex(self) -> None:
+        for qid, details in self.doc["quartieri_profiles"].items():
+            with self.subTest(quartiere=qid):
+                c = details["base_color"]
+                self.assertTrue(c.startswith("#"))
+                self.assertEqual(len(c), 7)
+
+    def test_anchor_points_non_empty(self) -> None:
+        self.assertIn("heightmap_anchors", self.doc)
+        self.assertGreaterEqual(len(self.doc["heightmap_anchors"]), 6)
+
+    def test_anchor_points_inside_island_bounds(self) -> None:
+        # Isola 8x7 km + tolleranza costa ~500m
+        max_x = 4000
+        max_z = 3500
+        for a in self.doc["heightmap_anchors"]:
+            with self.subTest(anchor=a.get("label")):
+                self.assertLessEqual(abs(a["x"]), max_x)
+                self.assertLessEqual(abs(a["z"]), max_z)
+
+    def test_anchor_points_have_required_keys(self) -> None:
+        for a in self.doc["heightmap_anchors"]:
+            with self.subTest(anchor=a.get("label")):
+                for k in ("x", "z", "y", "label"):
+                    self.assertIn(k, a)
+
+    def test_anchor_elevations_non_negative(self) -> None:
+        for a in self.doc["heightmap_anchors"]:
+            with self.subTest(anchor=a["label"]):
+                self.assertGreaterEqual(a["y"], 0)
+
+    def test_peak_anchors_match_features(self) -> None:
+        """Coerenza: anchor 'peak_west' deve avere y coerente con
+        features.json::montagne_gemelle_peaks."""
+        with (GEO_DIR / "features.json").open(encoding="utf-8") as fh:
+            feat_doc = json.load(fh)
+        peaks = {
+            p["id"]: p
+            for p in feat_doc["features"]["montagne_gemelle_peaks"]["points"]
+        }
+        anchors = {a["label"]: a for a in self.doc["heightmap_anchors"]}
+        for pid in ("peak_west", "peak_east"):
+            with self.subTest(peak=pid):
+                self.assertAlmostEqual(
+                    anchors[pid]["y"], peaks[pid]["position"]["y"], delta=5
+                )
+
+
+class TestTerrainApi(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.geo = IslandGeography()
+
+    def test_terrain_profile_pontile_is_sandy_coast(self) -> None:
+        self.assertEqual(self.geo.terrain_profile("pontile"), "sandy_coast")
+
+    def test_terrain_profile_montagne_is_rocky_mountain(self) -> None:
+        self.assertEqual(
+            self.geo.terrain_profile("montagne"), "rocky_mountain"
+        )
+
+    def test_terrain_profile_centro_is_grassy_plain(self) -> None:
+        self.assertEqual(self.geo.terrain_profile("centro"), "grassy_plain")
+
+    def test_terrain_profile_details_returns_dict(self) -> None:
+        details = self.geo.terrain_profile_details("pontile")
+        self.assertIn("base_color", details)
+        self.assertEqual(details["profile"], "sandy_coast")
+
+    def test_terrain_profile_unknown_raises(self) -> None:
+        with self.assertRaises(KeyError):
+            self.geo.terrain_profile("mare")
+
+    def test_anchor_points_returns_list(self) -> None:
+        anchors = self.geo.anchor_points()
+        self.assertIsInstance(anchors, list)
+        self.assertGreaterEqual(len(anchors), 6)
+
+    def test_anchor_points_labels_include_peaks(self) -> None:
+        labels = {a["label"] for a in self.geo.anchor_points()}
+        self.assertIn("peak_west", labels)
+        self.assertIn("peak_east", labels)
+
+    def test_anchor_points_copy_is_defensive(self) -> None:
+        anchors = self.geo.anchor_points()
+        anchors.append({"x": 0, "z": 0, "y": 0, "label": "fake"})
+        anchors2 = self.geo.anchor_points()
+        labels = {a["label"] for a in anchors2}
+        self.assertNotIn("fake", labels)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -25,6 +25,7 @@ from __future__ import annotations
 import heapq
 import json
 import math
+import warnings
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
@@ -163,6 +164,35 @@ class IslandGeography:
         self._named_routes: list[dict[str, Any]] = list(
             path_doc.get("named_routes", [])
         )
+
+        # Caricamento tollerante di features.json e terrain.json.
+        # Se mancano, API ritornano dict vuoti e distance_to_river alza
+        # RuntimeError. Emettiamo warning: retrocompat per dev locali che
+        # non hanno ancora pullato i nuovi file.
+        features_path = base / "features.json"
+        self._features: dict[str, Any] = {}
+        if features_path.exists():
+            with features_path.open("r", encoding="utf-8") as fh:
+                feat_doc = json.load(fh)
+            self._features = dict(feat_doc.get("features", {}))
+        else:
+            warnings.warn(
+                f"features.json non trovato in {base}; API features() "
+                "e distance_to_river() ritorneranno valori degradati.",
+                stacklevel=2,
+            )
+
+        terrain_path = base / "terrain.json"
+        self._terrain: dict[str, Any] = {}
+        if terrain_path.exists():
+            with terrain_path.open("r", encoding="utf-8") as fh:
+                self._terrain = json.load(fh)
+        else:
+            warnings.warn(
+                f"terrain.json non trovato in {base}; API terrain_profile() "
+                "e anchor_points() ritorneranno valori degradati.",
+                stacklevel=2,
+            )
 
     # ------------------------------------------------------------------
     # Lookup base
@@ -386,3 +416,103 @@ class IslandGeography:
 
     def named_routes(self) -> list[dict[str, Any]]:
         return list(self._named_routes)
+
+    # ------------------------------------------------------------------
+    # Features (polyline/polygon/cluster canonici)
+    # ------------------------------------------------------------------
+
+    def features(self) -> dict[str, Any]:
+        """Dizionario di tutte le feature geografiche caricate da
+        features.json. Ritorna una copia: mutare l'output non cambia
+        lo stato interno."""
+        return {k: dict(v) for k, v in self._features.items()}
+
+    def feature(self, feature_id: str) -> dict[str, Any]:
+        """Una feature per id. KeyError se sconosciuta."""
+        if feature_id not in self._features:
+            raise KeyError(f"Feature sconosciuta: {feature_id!r}")
+        return dict(self._features[feature_id])
+
+    # ------------------------------------------------------------------
+    # Terrain profile (per quartiere) + heightmap anchors
+    # ------------------------------------------------------------------
+
+    def terrain_profile(self, quartiere_id: str) -> str:
+        """Profilo terreno di un quartiere (es. 'sandy_coast', 'rocky_mountain').
+        KeyError se quartiere sconosciuto."""
+        profiles = self._terrain.get("quartieri_profiles", {})
+        if quartiere_id not in profiles:
+            raise KeyError(f"Quartiere sconosciuto: {quartiere_id!r}")
+        return str(profiles[quartiere_id]["profile"])
+
+    def terrain_profile_details(self, quartiere_id: str) -> dict[str, Any]:
+        """Dettagli completi profilo terreno (color, roughness, elevation, ...)."""
+        profiles = self._terrain.get("quartieri_profiles", {})
+        if quartiere_id not in profiles:
+            raise KeyError(f"Quartiere sconosciuto: {quartiere_id!r}")
+        return dict(profiles[quartiere_id])
+
+    def anchor_points(self) -> list[dict[str, Any]]:
+        """Anchor points per generazione heightmap. Copia difensiva."""
+        return [dict(a) for a in self._terrain.get("heightmap_anchors", [])]
+
+    # ------------------------------------------------------------------
+    # Query spaziali su feature lineari
+    # ------------------------------------------------------------------
+
+    def distance_to_river(self, location_id: str) -> float:
+        """Distanza minima in metri (proiezione xz, ignora elevazione)
+        da una location ai segmenti della polyline del Fiume che Gira.
+
+        Utile per autori AI: 'quanto e' vicino al fiume?'. Il Fiume e'
+        una polyline_closed (cfr. features.json) quindi consideriamo
+        tutti i segmenti incluso quello di chiusura.
+
+        RuntimeError se features.json non contiene fiume_che_gira.
+        KeyError se location_id sconosciuto.
+        """
+        loc = self.location(location_id)
+        river = self._features.get("fiume_che_gira")
+        if river is None:
+            raise RuntimeError(
+                "fiume_che_gira non presente in features.json; "
+                "impossibile calcolare distance_to_river."
+            )
+        wps = river.get("waypoints", [])
+        if len(wps) < 2:
+            raise RuntimeError(
+                "fiume_che_gira deve avere almeno 2 waypoints."
+            )
+        px, pz = loc.coords.x, loc.coords.z
+        n = len(wps)
+        best = math.inf
+        # polyline_closed: segmento i -> (i+1) % n
+        is_closed = river.get("type") == "polyline_closed"
+        last = n if is_closed else n - 1
+        for i in range(last):
+            a = wps[i]
+            b = wps[(i + 1) % n]
+            d = _point_to_segment_2d(px, pz, a["x"], a["z"], b["x"], b["z"])
+            if d < best:
+                best = d
+        return best
+
+
+def _point_to_segment_2d(
+    px: float, pz: float, ax: float, az: float, bx: float, bz: float
+) -> float:
+    """Distanza punto-segmento in 2D (piano xz). Non usa elevazione."""
+    dx = bx - ax
+    dz = bz - az
+    len_sq = dx * dx + dz * dz
+    if len_sq == 0.0:
+        # segmento degenere = punto
+        return math.sqrt((px - ax) ** 2 + (pz - az) ** 2)
+    t = ((px - ax) * dx + (pz - az) * dz) / len_sq
+    if t < 0.0:
+        t = 0.0
+    elif t > 1.0:
+        t = 1.0
+    qx = ax + t * dx
+    qz = az + t * dz
+    return math.sqrt((px - qx) ** 2 + (pz - qz) ** 2)

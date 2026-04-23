@@ -120,6 +120,84 @@ export type PathsDoc = {
 };
 
 // ---------------------------------------------------------------------------
+// Features (polyline/polygon/cluster canonici)
+// ---------------------------------------------------------------------------
+
+/**
+ * Whitelist dei tipi di feature accettati. Deve restare in parita'
+ * con `tools/tests/test_geography.py::ALLOWED_FEATURE_TYPES`.
+ */
+export type FeatureType =
+  | "polyline_open"
+  | "polyline_closed"
+  | "polygon"
+  | "concentric_rings"
+  | "structure_cluster"
+  | "point_cluster";
+
+export type Waypoint = { x: number; z: number; y?: number };
+
+export type Feature = {
+  type: FeatureType;
+  description?: string;
+  waypoints?: Waypoint[];
+  vertices?: Array<{ x: number; z: number }>;
+  center?: { x: number; z: number };
+  rings?: Array<{ radius_m: number; content: string }>;
+  structures?: Array<{
+    id: string;
+    position: Coords;
+    type: string;
+  }>;
+  points?: Array<{ id: string; position: Coords }>;
+  width_m_avg?: number;
+  avg_elevation_m?: number;
+  fonti?: string[];
+};
+
+export type FeaturesDoc = {
+  version: string;
+  notes?: string;
+  features: Record<string, Feature>;
+};
+
+// ---------------------------------------------------------------------------
+// Terrain profile per quartiere + heightmap anchor points
+// ---------------------------------------------------------------------------
+
+export type TerrainProfile =
+  | "grassy_plain"
+  | "warm_hill"
+  | "sandy_coast"
+  | "patchwork_cultivated"
+  | "rocky_mountain"
+  | "forest_margin";
+
+export type QuartiereTerrainDetails = {
+  profile: TerrainProfile;
+  base_color: string;
+  roughness: number;
+  avg_elevation_m: number;
+  trees_density: string;
+  water_proximity: string;
+};
+
+export type HeightmapAnchor = {
+  x: number;
+  z: number;
+  y: number;
+  label: string;
+};
+
+export type TerrainDoc = {
+  version: string;
+  notes?: string;
+  quartieri_profiles: Record<string, QuartiereTerrainDetails>;
+  heightmap_anchors: HeightmapAnchor[];
+  fonti?: string[];
+};
+
+// ---------------------------------------------------------------------------
 // Helpers scena
 // ---------------------------------------------------------------------------
 
@@ -225,11 +303,15 @@ export class IslandGeography {
   private readonly adj: Map<string, Array<[string, number]>>;
   private readonly edgeLookup: Map<string, Edge>;
   private readonly routes: NamedRoute[];
+  private readonly featuresMap: Record<string, Feature>;
+  private readonly terrainDoc: TerrainDoc | null;
 
   constructor(
     island: IslandGeographyData,
     locations: LocationsDoc,
     paths: PathsDoc,
+    features?: FeaturesDoc | null,
+    terrain?: TerrainDoc | null,
   ) {
     this.island = island;
     this.locs = new Map();
@@ -264,6 +346,8 @@ export class IslandGeography {
       this.edgeLookup.set(`${e.to} ${e.from}`, e);
     }
     this.routes = paths.named_routes.map((r) => ({ ...r }));
+    this.featuresMap = features?.features ?? {};
+    this.terrainDoc = terrain ?? null;
   }
 
   /** Costruisce da JSON già letti (client-side, test, ecc.) */
@@ -271,8 +355,10 @@ export class IslandGeography {
     island: IslandGeographyData,
     locations: LocationsDoc,
     paths: PathsDoc,
+    features?: FeaturesDoc | null,
+    terrain?: TerrainDoc | null,
   ): IslandGeography {
-    return new IslandGeography(island, locations, paths);
+    return new IslandGeography(island, locations, paths, features, terrain);
   }
 
   // ---------------- lookup ----------------
@@ -482,4 +568,102 @@ export class IslandGeography {
     });
     return out.map((r) => r.id);
   }
+
+  // ---------------- features (polyline/polygon/cluster) ----------------
+
+  /** Tutte le feature geografiche (river, forest, etc.). Copia difensiva. */
+  features(): Record<string, Feature> {
+    const out: Record<string, Feature> = {};
+    for (const [k, v] of Object.entries(this.featuresMap)) {
+      out[k] = { ...v };
+    }
+    return out;
+  }
+
+  /** Una feature per id. Throw se sconosciuta. */
+  feature(featureId: string): Feature {
+    const f = this.featuresMap[featureId];
+    if (!f) throw new Error(`Feature sconosciuta: ${featureId}`);
+    return { ...f };
+  }
+
+  // ---------------- terrain profile + heightmap anchors ----------------
+
+  /** Profilo terreno di un quartiere (es. 'sandy_coast'). */
+  terrainProfile(quartiereId: string): TerrainProfile {
+    const profiles = this.terrainDoc?.quartieri_profiles ?? {};
+    const p = profiles[quartiereId];
+    if (!p) throw new Error(`Quartiere sconosciuto: ${quartiereId}`);
+    return p.profile;
+  }
+
+  /** Dettagli completi profilo terreno. */
+  terrainProfileDetails(quartiereId: string): QuartiereTerrainDetails {
+    const profiles = this.terrainDoc?.quartieri_profiles ?? {};
+    const p = profiles[quartiereId];
+    if (!p) throw new Error(`Quartiere sconosciuto: ${quartiereId}`);
+    return { ...p };
+  }
+
+  /** Anchor points per generazione heightmap. Copia difensiva. */
+  anchorPoints(): HeightmapAnchor[] {
+    const anchors = this.terrainDoc?.heightmap_anchors ?? [];
+    return anchors.map((a) => ({ ...a }));
+  }
+
+  // ---------------- query spaziali su feature lineari ----------------
+
+  /**
+   * Distanza minima (m) da una location ai segmenti del Fiume che Gira
+   * (proiezione xz, ignora elevazione). Coerente con
+   * `tools/geography.py::distance_to_river`.
+   */
+  distanceToRiver(locationId: string): number {
+    const loc = this.location(locationId);
+    const river = this.featuresMap["fiume_che_gira"];
+    if (!river) {
+      throw new Error(
+        "fiume_che_gira non presente in features.json; distanceToRiver non disponibile.",
+      );
+    }
+    const wps = river.waypoints ?? [];
+    if (wps.length < 2) {
+      throw new Error("fiume_che_gira deve avere almeno 2 waypoints.");
+    }
+    const px = loc.coords.x;
+    const pz = loc.coords.z;
+    const n = wps.length;
+    const isClosed = river.type === "polyline_closed";
+    const last = isClosed ? n : n - 1;
+    let best = Number.POSITIVE_INFINITY;
+    for (let i = 0; i < last; i++) {
+      const a = wps[i];
+      const b = wps[(i + 1) % n];
+      const d = pointToSegment2d(px, pz, a.x, a.z, b.x, b.z);
+      if (d < best) best = d;
+    }
+    return best;
+  }
+}
+
+function pointToSegment2d(
+  px: number,
+  pz: number,
+  ax: number,
+  az: number,
+  bx: number,
+  bz: number,
+): number {
+  const dx = bx - ax;
+  const dz = bz - az;
+  const lenSq = dx * dx + dz * dz;
+  if (lenSq === 0) {
+    return Math.sqrt((px - ax) ** 2 + (pz - az) ** 2);
+  }
+  let t = ((px - ax) * dx + (pz - az) * dz) / lenSq;
+  if (t < 0) t = 0;
+  else if (t > 1) t = 1;
+  const qx = ax + t * dx;
+  const qz = az + t * dz;
+  return Math.sqrt((px - qx) ** 2 + (pz - qz) ** 2);
 }

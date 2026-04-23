@@ -158,6 +158,20 @@ def cmd_quartiere_of(geo: IslandGeography, args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_distance_to_river(
+    geo: IslandGeography, args: argparse.Namespace
+) -> int:
+    meters = geo.distance_to_river(args.loc)
+    if args.json:
+        _emit(
+            {"loc": args.loc, "distance_to_river_m": round(meters, 1)},
+            True,
+        )
+    else:
+        _emit(f"{meters:.0f} m dal Fiume che Gira", False)
+    return 0
+
+
 def cmd_visible_from(geo: IslandGeography, args: argparse.Namespace) -> int:
     ids = geo.visible_from(args.loc, elevation_bonus_m=args.bonus)
     if args.json:
@@ -239,6 +253,13 @@ def _build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("quartiere-of", help="quartiere contenente un luogo")
     s.add_argument("loc")
     s.set_defaults(func=cmd_quartiere_of)
+
+    s = sub.add_parser(
+        "distance-to-river",
+        help="distanza minima in metri dal Fiume che Gira",
+    )
+    s.add_argument("loc")
+    s.set_defaults(func=cmd_distance_to_river)
 
     s = sub.add_parser(
         "visible-from",

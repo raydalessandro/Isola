@@ -1,0 +1,123 @@
+{
+  "version": "1",
+  "notes": "Feature lineari e poligonali canoniche dell'Isola dei Tre Venti. Coordinate in metri, convenzione Three.js (x=est, z=sud, y=elevazione, origine=Albero Vecchio). Derivate da content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md §3-§8 e content/worldbuilding/GLOSSARIO_ISOLA.md §1.3. Il Fiume che Gira e la fascia costiera seguono §8: anello quasi chiuso che separa fascia costiera (500-800m) da terra interna. Villaggio, Orti, Foresta, Montagne sono dentro l'anello; Pontile, Amo, Case Basse stanno sulla fascia costiera sud. Coordinate plausibili a grana grossa, coerenti con locations.json, non misurate al metro.",
+  "features": {
+    "cluster_centro_villaggio": {
+      "type": "structure_cluster",
+      "description": "Edifici e landmark intorno all'Albero Vecchio. Cluster principale della Piazza, raggio ~80m.",
+      "center": {"x": 0, "z": 0},
+      "structures": [
+        {"id": "albero_vecchio", "position": {"x": 0, "z": 0, "y": 10}, "type": "tree_large"},
+        {"id": "il_pozzo", "position": {"x": 12, "z": -5, "y": 10}, "type": "well"},
+        {"id": "panca_di_pietra", "position": {"x": 18, "z": -2, "y": 10}, "type": "bench"},
+        {"id": "bottega_di_nodo", "position": {"x": -30, "z": 35, "y": 11}, "type": "workshop_thatched"},
+        {"id": "casetta_tonda_di_memolo", "position": {"x": 25, "z": 45, "y": 10}, "type": "cottage_round"},
+        {"id": "scuola_di_stria", "position": {"x": -120, "z": 160, "y": 12}, "type": "school"}
+      ],
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md"
+      ]
+    },
+    "fiume_che_gira": {
+      "type": "polyline_closed",
+      "description": "Anello d'acqua dolce quasi chiuso intorno alla terra interna (villaggio, orti, foresta, pendici delle montagne). Nasce dai ruscelli delle Montagne Gemelle, scorre antiorario, sfocia nel mare a sud attraverso La Bocca. La polyline è chiusa per comodita' di rendering; la 'bocca' reale e' la sezione tra l'ultimo e il primo vertice.",
+      "waypoints": [
+        {"x": 200, "z": 2700, "y": 2},
+        {"x": 1400, "z": 2300, "y": 4},
+        {"x": 2200, "z": 1500, "y": 6},
+        {"x": 2700, "z": 400, "y": 8},
+        {"x": 2700, "z": -700, "y": 10},
+        {"x": 2300, "z": -1700, "y": 14},
+        {"x": 1400, "z": -2100, "y": 18},
+        {"x": 300, "z": -2200, "y": 20},
+        {"x": -800, "z": -2100, "y": 18},
+        {"x": -1800, "z": -1700, "y": 14},
+        {"x": -2500, "z": -700, "y": 10},
+        {"x": -2600, "z": 400, "y": 8},
+        {"x": -2300, "z": 1500, "y": 6},
+        {"x": -1500, "z": 2300, "y": 4},
+        {"x": -200, "z": 2700, "y": 2}
+      ],
+      "width_m_avg": 4,
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md"
+      ]
+    },
+    "foresta_intrecciata": {
+      "type": "polygon",
+      "description": "Foresta dei margini ovest dell'isola, oltre gli Orti. Canopy interconnessa, radici connesse sotto terra, tracce invece di sentieri.",
+      "vertices": [
+        {"x": -2500, "z": -900},
+        {"x": -3300, "z": -400},
+        {"x": -3500, "z": 300},
+        {"x": -3400, "z": 900},
+        {"x": -2800, "z": 1100},
+        {"x": -2400, "z": 500}
+      ],
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md"
+      ]
+    },
+    "spiaggia_delle_conchiglie": {
+      "type": "polygon",
+      "description": "Spiaggia sulla costa-mare a est de La Bocca, raggiungibile dal piccolo ponte di legno dietro al Pontile. Bassa marea ricca di conchiglie mai uguali.",
+      "vertices": [
+        {"x": 100, "z": 3000},
+        {"x": 700, "z": 3050},
+        {"x": 900, "z": 3200},
+        {"x": 500, "z": 3300},
+        {"x": 100, "z": 3250}
+      ],
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md"
+      ]
+    },
+    "orti_del_cerchio": {
+      "type": "concentric_rings",
+      "description": "Orti disposti in tre fasce concentriche intorno al cluster degli Orti (ovest). Fascia esterna alberi da frutto, media cereali/legumi, interna erbe/ortaggi. Coerente con Bibbia §8.4.",
+      "center": {"x": -1700, "z": 0},
+      "rings": [
+        {"radius_m": 700, "content": "alberi_da_frutto"},
+        {"radius_m": 500, "content": "cereali_legumi"},
+        {"radius_m": 300, "content": "erbe_ortaggi"}
+      ],
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md"
+      ]
+    },
+    "pascoli_alti": {
+      "type": "polygon",
+      "description": "Altipiano erboso in pendenza dolce che sale verso le Montagne Gemelle. Pascolo di capre e pecore, capanne stagionali dei Pastori d'estate.",
+      "vertices": [
+        {"x": -600, "z": -1600},
+        {"x": 900, "z": -1600},
+        {"x": 1100, "z": -2200},
+        {"x": 600, "z": -2500},
+        {"x": -500, "z": -2500},
+        {"x": -800, "z": -2100}
+      ],
+      "avg_elevation_m": 180,
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md"
+      ]
+    },
+    "montagne_gemelle_peaks": {
+      "type": "point_cluster",
+      "description": "Le due cime delle Montagne Gemelle, separate dal Burrone. Pendici nord ripide e impraticabili.",
+      "points": [
+        {"id": "peak_west", "position": {"x": -150, "z": -2820, "y": 450}},
+        {"id": "peak_east", "position": {"x": 180, "z": -2780, "y": 445}}
+      ],
+      "fonti": [
+        "content/docs/ISOLA_TRE_VENTI_BIBLE_v2.md",
+        "content/worldbuilding/GLOSSARIO_ISOLA.md"
+      ]
+    }
+  }
+}

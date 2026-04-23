@@ -11,15 +11,22 @@ import fs from "node:fs";
 import path from "node:path";
 import {
   IslandGeography,
+  type FeaturesDoc,
   type IslandGeographyData,
   type LocationsDoc,
   type PathsDoc,
+  type TerrainDoc,
 } from "./geography";
 
 function resolveGeoDir(baseDir?: string): string {
   if (baseDir) return baseDir;
   // sotto Next (dev o build) il cwd è `web/`: saliamo di uno.
   return path.resolve(process.cwd(), "..", "world", "geography");
+}
+
+function readJsonIfExists<T>(filePath: string): T | null {
+  if (!fs.existsSync(filePath)) return null;
+  return JSON.parse(fs.readFileSync(filePath, "utf-8")) as T;
 }
 
 export function loadGeography(baseDir?: string): IslandGeography {
@@ -33,5 +40,10 @@ export function loadGeography(baseDir?: string): IslandGeography {
   const paths = JSON.parse(
     fs.readFileSync(path.join(dir, "paths.json"), "utf-8"),
   ) as PathsDoc;
-  return IslandGeography.fromData(island, locations, paths);
+  // features e terrain sono tolleranti: se mancano, retrocompat.
+  const features = readJsonIfExists<FeaturesDoc>(
+    path.join(dir, "features.json"),
+  );
+  const terrain = readJsonIfExists<TerrainDoc>(path.join(dir, "terrain.json"));
+  return IslandGeography.fromData(island, locations, paths, features, terrain);
 }

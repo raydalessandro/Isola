@@ -71,6 +71,11 @@ PARITY_QUERIES: list[dict] = [
     {"type": "nearby", "loc": "albero_vecchio", "radius_m": 250},
     {"type": "quartiere_of", "loc": "forno_di_fiamma"},
     {"type": "elevation", "loc": "grotta_di_grunto"},
+    # nuove query: feature enrichment
+    {"type": "distance_to_river", "loc": "albero_vecchio"},
+    {"type": "distance_to_river", "loc": "casa_del_mattino"},
+    {"type": "terrain_profile", "quartiere": "pontile"},
+    {"type": "anchor_points_count"},
 ]
 
 
@@ -102,6 +107,12 @@ class TestPythonTsParity(unittest.TestCase):
             return {"quartiere": self.geo.quartiere_of(q["loc"])}
         if t == "elevation":
             return {"value_m": self.geo.elevation(q["loc"])}
+        if t == "distance_to_river":
+            return {"value_m": self.geo.distance_to_river(q["loc"])}
+        if t == "terrain_profile":
+            return {"profile": self.geo.terrain_profile(q["quartiere"])}
+        if t == "anchor_points_count":
+            return {"count": len(self.geo.anchor_points())}
         raise ValueError(f"query sconosciuta: {t}")
 
     def _assert_match(self, py_out: dict, ts_out: dict, q: dict) -> None:
@@ -123,6 +134,12 @@ class TestPythonTsParity(unittest.TestCase):
             self.assertEqual(
                 py_out["quartiere"], ts_out["quartiere"], msg=f"query={q}"
             )
+        elif "profile" in py_out:
+            self.assertEqual(
+                py_out["profile"], ts_out["profile"], msg=f"query={q}"
+            )
+        elif "count" in py_out:
+            self.assertEqual(py_out["count"], ts_out["count"], msg=f"query={q}")
         else:
             self.fail(f"output Python non riconosciuto: {py_out}")
 
@@ -168,6 +185,22 @@ class TestPythonTsParity(unittest.TestCase):
     def test_parity_elevation(self) -> None:
         q = PARITY_QUERIES[9]
         self._assert_match(self._py_run(q), self.ts_results[9], q)
+
+    def test_parity_distance_to_river_albero(self) -> None:
+        q = PARITY_QUERIES[10]
+        self._assert_match(self._py_run(q), self.ts_results[10], q)
+
+    def test_parity_distance_to_river_casa_mattino(self) -> None:
+        q = PARITY_QUERIES[11]
+        self._assert_match(self._py_run(q), self.ts_results[11], q)
+
+    def test_parity_terrain_profile(self) -> None:
+        q = PARITY_QUERIES[12]
+        self._assert_match(self._py_run(q), self.ts_results[12], q)
+
+    def test_parity_anchor_points_count(self) -> None:
+        q = PARITY_QUERIES[13]
+        self._assert_match(self._py_run(q), self.ts_results[13], q)
 
 
 if __name__ == "__main__":
