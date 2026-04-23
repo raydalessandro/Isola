@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'Isola dei Tre Venti — Mappa navigabile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   VARIABILI — palette coerente con bozza C
+   ========================================================= */
+:root {
+  --cream: #f5ead5;
+  --cream-shade: #ebdebe;
+  --cream-deep: #e0ceaa;
+  --terracotta: #c8532c;
+  --terracotta-deep: #9c3d1e;
+  --olive: #5c6b3b;
+  --olive-light: #8a9a6b;
+  --sea: #1e5d6e;
+  --sea-light: #4a8595;
+  --ink: #2a2319;
+  --warm-brown: #6b4423;
+  --sun: #e8a547;
+  --sand: #d8bd8a;
+
+  /* Tokens motion */
+  --ease-soft: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-quiet: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', serif;
+  overflow: hidden;
+  position: relative;
+}
+
+/* texture carta leggera */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  background-image:
+    radial-gradient(ellipse at 15% 25%, rgba(200, 83, 44, 0.05), transparent 40%),
+    radial-gradient(ellipse at 85% 70%, rgba(92, 107, 59, 0.05), transparent 45%);
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 2;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 0 0.1 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.3; mix-blend-mode: multiply;
+}
+
+/* =========================================================
+   LAYOUT PRINCIPALE — mappa a sinistra, pannello a destra
+   ========================================================= */
+.stage {
+  position: relative;
+  width: 100%; height: 100vh;
+  display: flex;
+  z-index: 3;
+}
+
+/* area mappa (a sinistra quando pannello aperto, centrata quando chiuso) */
+.map-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  min-height: 100vh;
+  transition: padding-right 0.6s var(--ease-quiet);
+}
+
+/* intestazione in overlay */
+.topbar {
+  position: absolute;
+  top: 20px; left: 28px; right: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.topbar .brand {
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  color: var(--terracotta);
+  pointer-events: auto;
+  font-weight: 600;
+}
+.topbar .brand::before { content: '~ '; color: var(--warm-brown); opacity: 0.5; }
+
+.topbar .title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--warm-brown);
+  pointer-events: auto;
+}
+.topbar .title b {
+  font-style: normal;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* =========================================================
+   MAPPA SVG — cornice e svg
+   ========================================================= */
+.map-wrap {
+  position: relative;
+  width: min(85vh, 750px);
+  aspect-ratio: 1;
+  max-width: 90%;
+}
+
+.map-frame {
+  position: absolute;
+  inset: 0;
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  padding: 18px;
+  box-shadow: 10px 10px 0 rgba(42, 35, 25, 0.15);
+  transform: rotate(-1deg);
+  overflow: hidden;
+}
+
+.map-svg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+  cursor: default;
+  /* transizione sul viewBox per lo "zoom" */
+  transition: none;
+}
+
+/* =========================================================
+   HOTSPOT — pulsazione, hover, focus, stato visitato
+   ========================================================= */
+
+/* il gruppo hotspot è cliccabile; pointer cursor */
+.hotspot {
+  cursor: pointer;
+  transform-origin: center;
+  transition: transform 0.35s var(--ease-soft);
+  outline: none;
+}
+
+/* al focus da tastiera o hover: piccolo ingrandimento */
+.hotspot:hover,
+.hotspot:focus-visible {
+  transform: scale(1.15);
+}
+
+/* anello di focus visibile (per tastiera) */
+.hotspot:focus-visible .focus-ring {
+  opacity: 1;
+  stroke-dasharray: none;
+}
+
+.focus-ring {
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+/* anello pulsante che invita al click */
+.pulse-ring {
+  transform-origin: center;
+  animation: pulseRing 2.8s ease-out infinite;
+  transform-box: fill-box;
+}
+
+@keyframes pulseRing {
+  0%   { r: 14; opacity: 0.55; stroke-width: 2.5; }
+  100% { r: 36; opacity: 0;    stroke-width: 0.5; }
+}
+
+/* quando il luogo è visitato: anello sparisce e c'è un segno memoria */
+.hotspot.visited .pulse-ring { display: none; }
+.hotspot.visited .visited-mark { opacity: 1; }
+
+.visited-mark {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+/* luogo attualmente aperto (selezionato) */
+.hotspot.active .active-glow {
+  opacity: 1;
+}
+.active-glow {
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+/* =========================================================
+   TOOLTIP STILIZZATO — etichetta morbida
+   ========================================================= */
+.tooltip {
+  position: absolute;
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  border-radius: 22px;
+  padding: 8px 16px;
+  font-family: 'Caveat', cursive;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -140%) scale(0.85) rotate(-2deg);
+  transition: opacity 0.2s, transform 0.25s var(--ease-soft);
+  white-space: nowrap;
+  z-index: 20;
+}
+
+.tooltip.visible {
+  opacity: 1;
+  transform: translate(-50%, -140%) scale(1) rotate(-2deg);
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -7px; left: 50%;
+  width: 10px; height: 10px;
+  background: var(--cream);
+  border-right: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+/* =========================================================
+   HINT PRIMA VISITA
+   ========================================================= */
+.hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  background: var(--sun);
+  border: 2px solid var(--ink);
+  padding: 10px 22px;
+  border-radius: 26px;
+  font-family: 'Caveat', cursive;
+  font-size: 18px;
+  font-weight: 600;
+  box-shadow: 3px 3px 0 var(--ink);
+  white-space: nowrap;
+  z-index: 30;
+  animation: hintBob 2.4s ease-in-out infinite;
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.hint.fade {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px) rotate(-2deg);
+  pointer-events: none;
+}
+
+@keyframes hintBob {
+  0%, 100% { transform: translateX(-50%) rotate(-2deg) translateY(0); }
+  50%      { transform: translateX(-50%) rotate(-2deg) translateY(-5px); }
+}
+
+.hint::before {
+  content: '👆 ';
+  font-family: sans-serif;
+  font-size: 16px;
+  margin-right: 4px;
+}
+
+/* =========================================================
+   PANNELLO INFORMATIVO
+   ========================================================= */
+.panel {
+  position: absolute;
+  top: 0; right: 0;
+  width: min(440px, 90vw);
+  height: 100vh;
+  background: var(--cream-shade);
+  border-left: 3px solid var(--ink);
+  padding: 70px 36px 40px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.55s var(--ease-quiet);
+  z-index: 50;
+  box-shadow: -8px 0 24px rgba(42, 35, 25, 0.15);
+}
+
+.panel.open {
+  transform: translateX(0);
+}
+
+/* pulsante chiudi */
+.panel-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  width: 44px; height: 44px;
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: all 0.25s var(--ease-soft);
+  font-family: inherit;
+  color: var(--ink);
+}
+
+.panel-close:hover,
+.panel-close:focus-visible {
+  transform: translate(-1px, -1px) rotate(-8deg);
+  box-shadow: 4px 4px 0 var(--terracotta);
+  outline: none;
+}
+
+.panel-close svg {
+  width: 20px; height: 20px;
+}
+
+/* etichetta direzione */
+.panel-direction {
+  font-family: 'Caveat', cursive;
+  font-size: 19px;
+  color: var(--warm-brown);
+  opacity: 0.75;
+  margin-bottom: 4px;
+  transform: rotate(-1deg);
+  display: inline-block;
+}
+
+.panel-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin-bottom: 18px;
+}
+
+.panel-title .script {
+  font-family: 'Caveat', cursive;
+  font-weight: 600;
+  color: var(--terracotta);
+}
+
+.panel-evocative {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--ink);
+  padding: 18px 0;
+  border-top: 1.5px dashed var(--warm-brown);
+  border-bottom: 1.5px dashed var(--warm-brown);
+  margin-bottom: 28px;
+}
+
+/* Lista elementi presenti */
+.panel-here-label {
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  color: var(--terracotta);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transform: rotate(-0.5deg);
+}
+
+.panel-here-label::before {
+  content: '✦';
+  font-size: 18px;
+}
+
+.panel-here {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.here-item {
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 14px 18px;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 0.3s var(--ease-soft);
+}
+
+.here-item:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--terracotta);
+}
+
+.here-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 17px;
+  margin-bottom: 2px;
+}
+
+.here-kind {
+  font-family: 'Caveat', cursive;
+  font-size: 15px;
+  color: var(--warm-brown);
+  opacity: 0.8;
+  margin-bottom: 4px;
+}
+
+.here-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  opacity: 0.85;
+}
+
+/* sensazioni */
+.panel-senses {
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 3px 3px 0 var(--olive-light);
+  margin-bottom: 24px;
+}
+
+.sense-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.sense-row:last-child { margin-bottom: 0; }
+
+.sense-tag {
+  font-family: 'Caveat', cursive;
+  font-size: 16px;
+  color: var(--terracotta);
+  flex-shrink: 0;
+  width: 72px;
+  font-weight: 600;
+}
+
+.sense-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* progresso luoghi visitati */
+.progress {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1.5px dashed var(--warm-brown);
+  font-family: 'Caveat', cursive;
+  color: var(--warm-brown);
+  font-size: 17px;
+  text-align: center;
+}
+
+/* =========================================================
+   CONTATORE VISITE — piccolo in basso a sinistra
+   ========================================================= */
+.counter {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  border-radius: 24px;
+  padding: 10px 20px;
+  font-family: 'Caveat', cursive;
+  font-size: 17px;
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  z-index: 15;
+  transition: transform 0.3s var(--ease-soft);
+}
+
+.counter-num {
+  font-weight: 700;
+  color: var(--terracotta);
+  font-size: 20px;
+  margin: 0 2px;
+}
+
+/* tutti visitati: badge speciale */
+.counter.complete {
+  background: var(--sun);
+  transform: rotate(-3deg);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 860px) {
+  .panel {
+    width: 100%;
+    height: 75vh;
+    top: auto; bottom: 0;
+    border-left: none;
+    border-top: 3px solid var(--ink);
+    transform: translateY(100%);
+    padding: 30px 24px 40px;
+    box-shadow: 0 -8px 24px rgba(42, 35, 25, 0.15);
+  }
+  .panel.open { transform: translateY(0); }
+  .map-wrap { width: min(75vh, 95vw); }
+  .topbar .title { display: none; }
+  .counter { bottom: 14px; left: 14px; padding: 6px 14px; font-size: 14px; }
+  .hint { bottom: 14px; font-size: 15px; padding: 8px 16px; }
+}
+
+/* preferenze motion ridotto */
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01s !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========================================================
+     STRUTTURA: stage principale
+     - map-area: contiene SVG interattivo
+     - panel: laterale/bottom, compare al click
+======================================================== -->
+<div class="stage">
+
+  <div class="map-area" id="mapArea">
+
+    <!-- BARRA IN ALTO -->
+    <div class="topbar">
+      <div class="brand">Spirale bambini</div>
+      <div class="title"><b>L'Isola dei Tre Venti</b> · mappa</div>
+    </div>
+
+    <!-- CONTENITORE MAPPA -->
+    <div class="map-wrap">
+      <div class="map-frame">
+
+        <!-- SVG: mappa dell'isola con hotspot cliccabili -->
+        <svg class="map-svg" id="mapSvg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" aria-label="Mappa dell'Isola dei Tre Venti">
+
+          <defs>
+            <!-- Sfondo mare -->
+            <radialGradient id="sea-bg" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#c5d6d8"/>
+              <stop offset="100%" stop-color="#8eacb0"/>
+            </radialGradient>
+            <!-- Terreno isola -->
+            <radialGradient id="isola-g" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#d8bd8a"/>
+              <stop offset="100%" stop-color="#b89b68"/>
+            </radialGradient>
+            <!-- Effetto bordo ruvido "a mano" -->
+            <filter id="rough-big">
+              <feTurbulence baseFrequency="0.02" numOctaves="2" seed="5"/>
+              <feDisplacementMap in="SourceGraphic" scale="3"/>
+            </filter>
+            <!-- Effetto glow per hotspot attivo -->
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- Mare -->
+          <circle cx="250" cy="250" r="245" fill="url(#sea-bg)"/>
+
+          <!-- Onde sparse -->
+          <g opacity="0.3" stroke="#1e5d6e" fill="none" stroke-width="0.8" stroke-linecap="round">
+            <path d="M 30,100 Q 60,95 90,100"/>
+            <path d="M 410,120 Q 440,115 470,120"/>
+            <path d="M 60,380 Q 90,375 120,380"/>
+            <path d="M 380,410 Q 410,405 440,410"/>
+            <path d="M 20,240 Q 45,236 60,240"/>
+            <path d="M 450,280 Q 470,276 482,280"/>
+          </g>
+
+          <!-- Fiume che Gira (anello quasi chiuso, aperto a sud) -->
+          <path d="M 250,80 A 170,170 0 1,1 220,420 L 280,420 A 170,170 0 1,0 250,80 Z"
+                fill="none" stroke="#1e5d6e" stroke-width="2.5" stroke-dasharray="4,3" opacity="0.55"/>
+
+          <!-- Isola: terreno base -->
+          <path d="M 150,130 Q 100,200 110,290 Q 130,380 220,400 Q 310,405 370,370 Q 420,310 400,220 Q 380,130 300,105 Q 230,95 180,110 Q 160,120 150,130 Z"
+                fill="url(#isola-g)" stroke="#2a2319" stroke-width="2.5" filter="url(#rough-big)"/>
+
+          <!-- Tre venti: linee tratteggiate che si muovono dolcemente -->
+          <g opacity="0.55" fill="none" stroke-linecap="round" aria-hidden="true">
+            <path d="M 80,170 Q 250,155 420,175" stroke="#c8532c" stroke-width="2.2" stroke-dasharray="6,5" class="vento vento-taglio"/>
+            <path d="M 75,250 Q 250,238 425,255" stroke="#5c6b3b" stroke-width="2.2" stroke-dasharray="5,5" class="vento vento-intreccio"/>
+            <path d="M 85,325 Q 250,315 415,335" stroke="#1e5d6e" stroke-width="2.2" stroke-dasharray="4,5" class="vento vento-mulinello"/>
+          </g>
+
+          <!-- ============================================
+               HOTSPOT: ogni gruppo ha:
+               - data-place: chiave nell'oggetto PLACES
+               - role="button", tabindex, aria-label
+               - pulse-ring: anello pulsante invito
+               - active-glow: cerchio retroilluminazione attivo
+               - visited-mark: segno quando è stato visitato
+               - focus-ring: anello focus tastiera
+          ============================================ -->
+
+          <!-- VILLAGGIO (centro) -->
+          <g class="hotspot" data-place="villaggio"
+             role="button" tabindex="0"
+             aria-label="Il Villaggio, al centro dell'isola">
+            <!-- focus ring (tastiera) -->
+            <circle class="focus-ring" cx="250" cy="255" r="28" fill="none" stroke="#c8532c" stroke-width="2" stroke-dasharray="3,3"/>
+            <!-- active glow -->
+            <circle class="active-glow" cx="250" cy="255" r="30" fill="#e8a547" opacity="0" filter="url(#glow)"/>
+            <!-- pulse ring -->
+            <circle class="pulse-ring" cx="250" cy="255" r="14" fill="none" stroke="#e8a547" stroke-width="2.5"/>
+            <!-- segno visitato -->
+            <circle class="visited-mark" cx="270" cy="238" r="4" fill="#c8532c" stroke="#2a2319" stroke-width="1"/>
+            <!-- icona: Albero Vecchio stilizzato -->
+            <circle cx="250" cy="255" r="18" fill="#e8a547" stroke="#2a2319" stroke-width="2"/>
+            <circle cx="250" cy="250" r="8" fill="#5c6b3b" stroke="#2a2319" stroke-width="1.2"/>
+            <rect x="248.5" y="254" width="3" height="6" fill="#6b4423"/>
+            <!-- etichetta statica discreta -->
+            <text x="250" y="290" text-anchor="middle" font-family="Caveat" font-size="15" fill="#2a2319" font-weight="600" pointer-events="none">il Villaggio</text>
+          </g>
+
+          <!-- FORNO / quartiere di FUOCO (est) -->
+          <g class="hotspot" data-place="forno"
+             role="button" tabindex="0"
+             aria-label="Il Forno di Fiamma, a est">
+            <circle class="focus-ring" cx="350" cy="225" r="24" fill="none" stroke="#c8532c" stroke-width="2" stroke-dasharray="3,3"/>
+            <circle class="active-glow" cx="350" cy="225" r="26" fill="#c8532c" opacity="0" filter="url(#glow)"/>
+            <circle class="pulse-ring" cx="350" cy="225" r="14" fill="none" stroke="#c8532c" stroke-width="2.5"/>
+            <circle class="visited-mark" cx="368" cy="212" r="4" fill="#c8532c" stroke="#2a2319" stroke-width="1"/>
+            <!-- icona forno con fuoco -->
+            <path d="M 340,230 Q 340,214 350,208 Q 360,214 360,230 L 360,238 L 340,238 Z" fill="#c8532c" stroke="#2a2319" stroke-width="1.5"/>
+            <ellipse cx="350" cy="226" rx="4" ry="2.5" fill="#ffd89e">
+              <animate attributeName="ry" values="2.5;1.8;2.5" dur="1.5s" repeatCount="indefinite"/>
+            </ellipse>
+            <!-- fumetto del camino -->
+            <path d="M 346,206 Q 348,200 350,204 Q 352,198 354,204" stroke="#2a2319" stroke-width="1" fill="none" opacity="0.5"/>
+            <text x="350" y="258" text-anchor="middle" font-family="Caveat" font-size="13" fill="#c8532c" font-weight="600" pointer-events="none">Forno</text>
+          </g>
+
+          <!-- FORESTA / quartiere di TERRA (ovest) -->
+          <g class="hotspot" data-place="foresta"
+             role="button" tabindex="0"
+             aria-label="La Foresta Intrecciata, a ovest">
+            <circle class="focus-ring" cx="160" cy="228" r="26" fill="none" stroke="#5c6b3b" stroke-width="2" stroke-dasharray="3,3"/>
+            <circle class="active-glow" cx="160" cy="228" r="28" fill="#5c6b3b" opacity="0" filter="url(#glow)"/>
+            <circle class="pulse-ring" cx="160" cy="228" r="14" fill="none" stroke="#5c6b3b" stroke-width="2.5"/>
+            <circle class="visited-mark" cx="180" cy="216" r="4" fill="#c8532c" stroke="#2a2319" stroke-width="1"/>
+            <!-- tre alberelli -->
+            <circle cx="152" cy="226" r="7" fill="#5c6b3b" stroke="#2a2319" stroke-width="1.5"/>
+            <circle cx="167" cy="232" r="7" fill="#8a9a6b" stroke="#2a2319" stroke-width="1.5"/>
+            <circle cx="160" cy="218" r="6" fill="#6b7d4f" stroke="#2a2319" stroke-width="1.5"/>
+            <text x="160" y="258" text-anchor="middle" font-family="Caveat" font-size="13" fill="#5c6b3b" font-weight="600" pointer-events="none">Foresta</text>
+          </g>
+
+          <!-- PONTILE / quartiere d'ACQUA (sud) -->
+          <g class="hotspot" data-place="pontile"
+             role="button" tabindex="0"
+             aria-label="Il Pontile di Bartolo, a sud">
+            <circle class="focus-ring" cx="250" cy="372" r="26" fill="none" stroke="#1e5d6e" stroke-width="2" stroke-dasharray="3,3"/>
+            <circle class="active-glow" cx="250" cy="372" r="28" fill="#1e5d6e" opacity="0" filter="url(#glow)"/>
+            <circle class="pulse-ring" cx="250" cy="372" r="14" fill="none" stroke="#1e5d6e" stroke-width="2.5"/>
+            <circle class="visited-mark" cx="268" cy="358" r="4" fill="#c8532c" stroke="#2a2319" stroke-width="1"/>
+            <!-- pontile -->
+            <rect x="240" y="365" width="20" height="10" fill="#6b4423" stroke="#2a2319" stroke-width="1.5"/>
+            <line x1="245" y1="375" x2="245" y2="385" stroke="#2a2319" stroke-width="1.5"/>
+            <line x1="255" y1="375" x2="255" y2="385" stroke="#2a2319" stroke-width="1.5"/>
+            <!-- onde piccole -->
+            <path d="M 235,388 Q 242,385 250,388 Q 258,391 265,388" stroke="#1e5d6e" stroke-width="1" fill="none" opacity="0.6"/>
+            <text x="250" y="405" text-anchor="middle" font-family="Caveat" font-size="13" fill="#1e5d6e" font-weight="600" pointer-events="none">Pontile</text>
+          </g>
+
+          <!-- MONTAGNE / quartiere d'ARIA (nord) -->
+          <g class="hotspot" data-place="montagne"
+             role="button" tabindex="0"
+             aria-label="Le Montagne, a nord">
+            <circle class="focus-ring" cx="250" cy="152" r="28" fill="none" stroke="#4a8595" stroke-width="2" stroke-dasharray="3,3"/>
+            <circle class="active-glow" cx="250" cy="152" r="30" fill="#4a8595" opacity="0" filter="url(#glow)"/>
+            <circle class="pulse-ring" cx="250" cy="152" r="14" fill="none" stroke="#4a8595" stroke-width="2.5"/>
+            <circle class="visited-mark" cx="275" cy="138" r="4" fill="#c8532c" stroke="#2a2319" stroke-width="1"/>
+            <!-- due cime (Montagne Gemelle) -->
+            <path d="M 232,168 L 245,128 L 255,148 L 268,125 L 280,168 Z" fill="#8a9a6b" stroke="#2a2319" stroke-width="1.5"/>
+            <!-- piccola neve -->
+            <path d="M 241,142 L 245,138 L 250,142 M 262,140 L 268,133 L 274,143" stroke="#f5ead5" stroke-width="2" fill="none"/>
+            <text x="250" y="116" text-anchor="middle" font-family="Caveat" font-size="13" fill="#4a8595" font-weight="600" pointer-events="none">Montagne</text>
+          </g>
+
+          <!-- Rosa dei venti decorativa -->
+          <g transform="translate(70, 70)" stroke="#2a2319" stroke-width="1" fill="none" opacity="0.8" aria-hidden="true">
+            <circle r="14"/>
+            <path d="M 0,-12 L 0,12 M -12,0 L 12,0" stroke-width="0.8"/>
+            <path d="M 0,-14 L 2,-10 L -2,-10 Z" fill="#2a2319"/>
+            <text x="0" y="-18" text-anchor="middle" font-family="Caveat" font-size="11" fill="#2a2319" stroke="none">N</text>
+          </g>
+
+          <!-- scritta decorativa sul Fiume -->
+          <text x="250" y="452" text-anchor="middle" font-family="Caveat" font-size="15" fill="#6b4423" opacity="0.75" aria-hidden="true">~ ~ ~ il fiume gira ~ ~ ~</text>
+
+        </svg>
+
+      </div>
+
+      <!-- Tooltip (spostato via JS vicino all'hotspot in hover) -->
+      <div class="tooltip" id="tooltip" role="presentation"></div>
+
+      <!-- Hint prima visita -->
+      <div class="hint" id="hint">Clicca i punti per esplorare</div>
+    </div>
+
+    <!-- CONTATORE luoghi visitati -->
+    <div class="counter" id="counter" aria-live="polite">
+      <span>Esplorati</span>
+      <span class="counter-num" id="counterNum">0</span>
+      <span>su 5</span>
+    </div>
+
+  </div>
+
+  <!-- ========================================================
+       PANNELLO INFORMATIVO
+       Contenuto popolato da JS in base al luogo cliccato
+  ======================================================== -->
+  <aside class="panel" id="panel" role="dialog" aria-labelledby="panelTitle" aria-hidden="true">
+
+    <button class="panel-close" id="panelClose" aria-label="Chiudi">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <path d="M6 6 L18 18 M18 6 L6 18"/>
+      </svg>
+    </button>
+
+    <div class="panel-direction" id="panelDirection">—</div>
+    <h2 class="panel-title" id="panelTitle">—</h2>
+    <p class="panel-evocative" id="panelEvocative">—</p>
+
+    <div class="panel-senses" id="panelSenses" hidden>
+      <div class="sense-row"><span class="sense-tag">odore</span><span class="sense-text" id="senseSmell"></span></div>
+      <div class="sense-row"><span class="sense-tag">suono</span><span class="sense-text" id="senseSound"></span></div>
+      <div class="sense-row"><span class="sense-tag">luce</span><span class="sense-text" id="senseLight"></span></div>
+    </div>
+
+    <div class="panel-here-label">chi e cosa trovi qui</div>
+    <div class="panel-here" id="panelHere"></div>
+
+    <div class="progress" id="progress">~ esplora gli altri punti sull'isola ~</div>
+
+  </aside>
+
+</div>
+
+<!-- ========================================================
+     SCRIPT
+     Struttura:
+     1) Dati PLACES
+     2) Stato della mappa
+     3) Funzioni UI (pannello, tooltip, zoom, hint, suono)
+     4) Wiring eventi (click, hover, tastiera)
+======================================================== -->
+<script>
+(() => {
+  'use strict';
+
+  /* =========================================================
+     1. DATI — luoghi dell'isola
+     Ogni luogo ha: title, direction, evocative, senses, here.
+     Testi ancorati ai canonici (Bible §8, Riferimenti §7).
+     ========================================================= */
+  const PLACES = {
+    villaggio: {
+      title: 'Il <span class="script">Villaggio</span>',
+      direction: 'al centro dell\'isola',
+      // coordinate del centro hotspot in viewBox SVG (per zoom mirato)
+      cx: 250, cy: 255,
+      evocative: 'Qui tutto si incrocia. L\'Albero Vecchio sta fermo da sempre. A mezzogiorno la Piazza si riempie, poi si svuota piano.',
+      senses: {
+        smell: 'pane, terra smossa, frutta del mercato',
+        sound: 'voci, passi, un TOK-TOK lontano di Nodo',
+        light: 'sole verticale sulla Piazza'
+      },
+      here: [
+        { name: 'L\'Albero Vecchio', kind: 'luogo', desc: 'Vecchio per affetto, antico nei fatti. Da quanto sia lì, nessuno l\'ha contato.' },
+        { name: 'Le Vecchie del Mercato', kind: 'abitanti', desc: 'Siedono sulla Panca di Pietra accanto al Pozzo. Vedono tutto, parlano poco.' },
+        { name: 'Mèmolo', kind: 'riccio, abitante', desc: 'La sua casetta tonda è dietro un cespuglio sulla Piazza. Si dimentica sempre dove stava andando.' }
+      ]
+    },
+
+    forno: {
+      title: 'Il <span class="script">Forno</span> di Fiamma',
+      direction: 'a est · Quartiere di Fuoco',
+      cx: 350, cy: 225,
+      evocative: 'Il camino fuma prima dell\'alba. Fiamma è già sveglia, le mani piene di farina. Il pane profuma mezzo quartiere.',
+      senses: {
+        smell: 'pane caldo, legna bruciata',
+        sound: 'TOK-TOK ovattato dell\'impasto sull\'asse',
+        light: 'nitida, la prima del mattino'
+      },
+      here: [
+        { name: 'Fiamma', kind: 'volpe rossa, fornaia', desc: 'Grembiule terracotta, mani infarinate. Parla molto mentre impasta. Poi, a volte, diventa silenziosa.' },
+        { name: 'Il cortile della legna', kind: 'luogo', desc: 'Sul retro del Forno. Legna catastata in pile ordinate.' },
+        { name: 'Le Case del Mattino', kind: 'luogo', desc: 'Dove stanno fabbro, conceria, essiccatoio della frutta — chi si sveglia con la luce.' }
+      ]
+    },
+
+    foresta: {
+      title: 'La <span class="script">Foresta</span> Intrecciata',
+      direction: 'a ovest · Quartiere di Terra',
+      cx: 160, cy: 228,
+      evocative: 'Gli alberi si toccano. Sotto la terra le radici si passano le voci. Non ci sono sentieri — solo tracce.',
+      senses: {
+        smell: 'terra smossa al mattino, foglie umide la sera',
+        sound: 'zappe TUM-tum e voci dei Coltivatori',
+        light: 'verde filtrato, cangiante'
+      },
+      here: [
+        { name: 'Rovo', kind: 'tasso, ai margini', desc: 'Tana sotto un ceppo, tre uscite. Bandana scura stretta sulla fronte. Punge a parole, poi cede.' },
+        { name: 'Gli Orti del Cerchio', kind: 'luogo', desc: 'Tre fasce concentriche: orti piccoli, legumi e cereali, poi alberi da frutto.' },
+        { name: 'Salvia', kind: 'lepre, cura con le erbe', desc: 'Vive in una casa-tana ai margini degli Orti. Il giardino di erbe ordinato per file.' }
+      ]
+    },
+
+    pontile: {
+      title: 'Il <span class="script">Pontile</span> di Bartolo',
+      direction: 'a sud · Quartiere d\'Acqua',
+      cx: 250, cy: 372,
+      evocative: 'Le assi scure, i pali piantati nell\'acqua. Qui il Fiume finisce nel mare — si chiama La Bocca. Bartolo aspetta.',
+      senses: {
+        smell: 'sale, alga, sabbia bagnata',
+        sound: 'acqua contro i pali, gabbiani al mattino',
+        light: 'bassa e calda al tramonto'
+      },
+      here: [
+        { name: 'Bartolo', kind: 'tartaruga di mare, traghettatore', desc: 'Dorme nella barca quando fa caldo. "Il mare non ha fretta. E neanche io."' },
+        { name: 'La Spiaggia delle Conchiglie', kind: 'luogo', desc: 'Oltre il piccolo ponte di legno. Mai due conchiglie uguali.' },
+        { name: 'Amo', kind: 'lontra, pesca', desc: 'La sua casa è scavata nella scogliera, con una scaletta di pietra giù fino all\'acqua.' }
+      ]
+    },
+
+    montagne: {
+      title: 'Le <span class="script">Montagne</span> Gemelle',
+      direction: 'a nord · Quartiere d\'Aria',
+      cx: 250, cy: 152,
+      evocative: 'Due cime separate dal Burrone. Da quassù si vede tutta l\'isola. Il vento qui non smette mai.',
+      senses: {
+        smell: 'erba dei pascoli, pietra fredda salendo',
+        sound: 'vento sempre, e ogni tanto un «grunt» lontano',
+        light: 'più chiara, più fredda'
+      },
+      here: [
+        { name: 'La Roccia Alta', kind: 'luogo', desc: 'Due ore di cammino dal Villaggio. Lo sperone da cui si vede tutto.' },
+        { name: 'I Pascoli Alti', kind: 'luogo', desc: 'Prati in pendenza dolce. D\'estate le capanne stagionali dei Pastori.' },
+        { name: 'Grunto', kind: 'stambecco vecchio verde', desc: 'Vive solo in una grotta nel Burrone. Cicatrice lunga sul fianco. Parla poco, sa tanto.' }
+      ]
+    }
+  };
+
+  /* =========================================================
+     2. STATO — oggetto semplice osservabile
+     ========================================================= */
+  const state = {
+    luogoCorrente: null,
+    luoghiVisitati: new Set(),
+    hintDismissed: false
+  };
+
+  /* =========================================================
+     3. RIFERIMENTI DOM
+     ========================================================= */
+  const svg = document.getElementById('mapSvg');
+  const hotspots = svg.querySelectorAll('.hotspot');
+  const tooltip = document.getElementById('tooltip');
+  const panel = document.getElementById('panel');
+  const panelClose = document.getElementById('panelClose');
+  const hint = document.getElementById('hint');
+  const counter = document.getElementById('counter');
+  const counterNum = document.getElementById('counterNum');
+
+  const elDirection = document.getElementById('panelDirection');
+  const elTitle = document.getElementById('panelTitle');
+  const elEvocative = document.getElementById('panelEvocative');
+  const elSenses = document.getElementById('panelSenses');
+  const elSmell = document.getElementById('senseSmell');
+  const elSound = document.getElementById('senseSound');
+  const elLight = document.getElementById('senseLight');
+  const elHere = document.getElementById('panelHere');
+  const elProgress = document.getElementById('progress');
+
+  /* =========================================================
+     4. FUNZIONI UI
+     ========================================================= */
+
+  /**
+   * Aggiorna viewBox della SVG per "zoomare" su un punto.
+   * duration: ms dell'animazione
+   */
+  function zoomTo(cx, cy, zoom = 1.5, duration = 700) {
+    const baseW = 500;
+    const w = baseW / zoom;
+    const h = w;
+    const vbX = Math.max(0, Math.min(baseW - w, cx - w / 2));
+    const vbY = Math.max(0, Math.min(baseW - h, cy - h / 2));
+    animateViewBox(svg, vbX, vbY, w, h, duration);
+  }
+
+  /** reset zoom intero */
+  function zoomReset(duration = 700) {
+    animateViewBox(svg, 0, 0, 500, 500, duration);
+  }
+
+  /**
+   * Anima il viewBox SVG tra valori correnti e target.
+   * (transizioni CSS non funzionano su viewBox, va fatto a mano)
+   */
+  function animateViewBox(el, tx, ty, tw, th, duration) {
+    const current = el.getAttribute('viewBox').split(' ').map(Number);
+    const [sx, sy, sw, sh] = current;
+    const start = performance.now();
+
+    function step(now) {
+      const t = Math.min(1, (now - start) / duration);
+      // easing: easeInOutCubic
+      const e = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;
+      const nx = sx + (tx - sx) * e;
+      const ny = sy + (ty - sy) * e;
+      const nw = sw + (tw - sw) * e;
+      const nh = sh + (th - sh) * e;
+      el.setAttribute('viewBox', `${nx} ${ny} ${nw} ${nh}`);
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /**
+   * Apertura pannello luogo — popola contenuti e marca visitato
+   */
+  function openPlace(key) {
+    const place = PLACES[key];
+    if (!place) return;
+
+    // 1. Aggiorna stato
+    state.luogoCorrente = key;
+    const wasNew = !state.luoghiVisitati.has(key);
+    state.luoghiVisitati.add(key);
+
+    // 2. Aggiorna contatore (se luogo nuovo)
+    updateCounter();
+
+    // 3. Marca hotspot come attivo e visitato
+    hotspots.forEach(h => h.classList.remove('active'));
+    const activeHotspot = svg.querySelector(`.hotspot[data-place="${key}"]`);
+    if (activeHotspot) {
+      activeHotspot.classList.add('active');
+      activeHotspot.classList.add('visited');
+    }
+
+    // 4. Popola pannello
+    elDirection.textContent = place.direction;
+    elTitle.innerHTML = place.title;
+    elEvocative.textContent = place.evocative;
+
+    if (place.senses) {
+      elSmell.textContent = place.senses.smell;
+      elSound.textContent = place.senses.sound;
+      elLight.textContent = place.senses.light;
+      elSenses.hidden = false;
+    } else {
+      elSenses.hidden = true;
+    }
+
+    // Lista elementi "qui"
+    elHere.innerHTML = '';
+    (place.here || []).forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'here-item';
+      div.innerHTML = `
+        <div class="here-name">${item.name}</div>
+        <div class="here-kind">${item.kind}</div>
+        <div class="here-desc">${item.desc}</div>
+      `;
+      elHere.appendChild(div);
+    });
+
+    // Messaggio progresso
+    const totale = Object.keys(PLACES).length;
+    const visitati = state.luoghiVisitati.size;
+    if (visitati >= totale) {
+      elProgress.innerHTML = '✦ Hai esplorato tutta l\'isola ✦';
+    } else {
+      const rimasti = totale - visitati;
+      elProgress.innerHTML = `~ ${rimasti} ${rimasti === 1 ? 'punto' : 'punti'} ancora da esplorare ~`;
+    }
+
+    // 5. Mostra pannello
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+
+    // 6. Zoom leggero sul luogo
+    zoomTo(place.cx, place.cy, 1.4, 650);
+
+    // 7. Nascondi hint (non serve più dopo primo click)
+    dismissHint();
+
+    // 8. Piccolo suono soft (facoltativo, via WebAudio)
+    playSoftTone(wasNew ? 'new' : 'revisit');
+  }
+
+  /**
+   * Chiusura pannello + reset zoom
+   */
+  function closePanel() {
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+    hotspots.forEach(h => h.classList.remove('active'));
+    state.luogoCorrente = null;
+    zoomReset(700);
+  }
+
+  /**
+   * Aggiorna contatore visitati
+   */
+  function updateCounter() {
+    const n = state.luoghiVisitati.size;
+    const tot = Object.keys(PLACES).length;
+    counterNum.textContent = n;
+    if (n >= tot) counter.classList.add('complete');
+  }
+
+  /**
+   * TOOLTIP — mostra etichetta breve vicino all'hotspot
+   */
+  function showTooltip(hotspot) {
+    const key = hotspot.dataset.place;
+    const place = PLACES[key];
+    if (!place) return;
+
+    // Testo breve: usa il direction, tolto l'emphasis
+    const shortTitle = place.title.replace(/<[^>]+>/g, '');
+    tooltip.textContent = shortTitle;
+
+    // Calcola posizione dell'hotspot in coordinate pagina
+    const bbox = hotspot.getBBox();
+    const pt = svg.createSVGPoint();
+    pt.x = bbox.x + bbox.width / 2;
+    pt.y = bbox.y + bbox.height / 2;
+    const ctm = svg.getScreenCTM();
+    const screen = pt.matrixTransform(ctm);
+
+    // Converti in coordinate relative al map-wrap (padre del tooltip)
+    const wrap = tooltip.parentElement.getBoundingClientRect();
+    tooltip.style.left = (screen.x - wrap.left) + 'px';
+    tooltip.style.top  = (screen.y - wrap.top) + 'px';
+    tooltip.classList.add('visible');
+  }
+
+  function hideTooltip() {
+    tooltip.classList.remove('visible');
+  }
+
+  /**
+   * HINT — compare all'inizio, scompare al primo click o dopo 6s
+   */
+  function dismissHint() {
+    if (state.hintDismissed) return;
+    state.hintDismissed = true;
+    hint.classList.add('fade');
+  }
+
+  /**
+   * SUONO morbido facoltativo — WebAudio, onda sinusoidale breve.
+   * Nessun asset caricato. Volume basso. Rispetta autoplay policy.
+   */
+  let audioCtx = null;
+  function playSoftTone(kind) {
+    // facoltativo: crea AudioContext solo dopo un'interazione
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const freq = kind === 'new' ? 523 : 392; // Do5 nuovo, Sol4 revisit
+      const now = audioCtx.currentTime;
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.2, now + 0.15);
+
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.06, now + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.5);
+    } catch(e) { /* silenzio */ }
+  }
+
+  /* =========================================================
+     5. WIRING EVENTI
+     ========================================================= */
+
+  hotspots.forEach(h => {
+    const key = h.dataset.place;
+
+    // click
+    h.addEventListener('click', () => openPlace(key));
+
+    // tastiera: Invio/Spazio
+    h.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openPlace(key);
+      }
+    });
+
+    // hover → tooltip
+    h.addEventListener('mouseenter', () => showTooltip(h));
+    h.addEventListener('mouseleave', hideTooltip);
+
+    // focus → tooltip (per tastiera)
+    h.addEventListener('focus', () => showTooltip(h));
+    h.addEventListener('blur', hideTooltip);
+  });
+
+  // Chiudi pannello
+  panelClose.addEventListener('click', closePanel);
+
+  // ESC per chiudere
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && panel.classList.contains('open')) {
+      closePanel();
+    }
+  });
+
+  // Auto-dismiss hint dopo 8s se l'utente non ha cliccato
+  setTimeout(() => {
+    if (!state.hintDismissed) dismissHint();
+  }, 8000);
+
+  // click sul mare (zone non-hotspot della SVG) chiude pannello e resetta
+  svg.addEventListener('click', (e) => {
+    const onHotspot = e.target.closest('.hotspot');
+    if (!onHotspot && panel.classList.contains('open')) {
+      closePanel();
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
